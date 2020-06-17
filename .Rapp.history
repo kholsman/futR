@@ -1,0 +1,104 @@
+load("/Users/kholsman/GitHub/CEATTLE/runs/H16vK19_K19REF_0/Recruitment_files/Rec_figs/recruitment.Rdata")
+ls()
+AICtableK19_0<-AICtable
+load("/Users/kholsman/GitHub/CEATTLE/runs/H16vK19_K19REF_2/Recruitment_files/Rec_figs/recruitment.Rdata")
+AICtableK19_2<-AICtable
+load("/Users/kholsman/GitHub/CEATTLE/runs/H16vK19_2/Recruitment_files/Rec_figs/recruitment.Rdata")
+AICtableH16_2<-AICtable
+load("/Users/kholsman/GitHub/CEATTLE/runs/H16vK19_0/Recruitment_files/Rec_figs/recruitment.Rdata")
+AICtableH16_0<-AICtable
+head(AICtableH16_2[[1]])
+head(AICtableK19_2[[1]])
+head(AICtableK19_2[[2]])
+head(AICtableH16_2[[2]])
+max(AICtableH16_2[[2]]$R2)
+max(AICtableH16_2[[2]]$R2,na.rm=T)
+max(AICtableK19_2[[2]]$R2,na.rm=T)
+max(AICtableK19_2[[1]]$R2,na.rm=T);max(AICtableH16_2[[1]]$R2,na.rm=T)
+which(AICtableK19_2[[1]]$R2==max(AICtableK19_2[[1]]$R2,na.rm=T))
+nn<-which(AICtableK19_2[[1]]$R2==max(AICtableK19_2[[1]]$R2,na.rm=T))
+nnK19_2_1<-which(AICtableK19_2[[1]]$R2==max(AICtableK19_2[[1]]$R2,na.rm=T))
+nnK192_1<-which(AICtableK19_2[[1]]$R2==max(AICtableK19_2[[1]]$R2,na.rm=T))
+nnK190_1<-which(AICtableK19_0[[1]]$R2==max(AICtableK19_0[[1]]$R2,na.rm=T))
+nnK190_2<-which(AICtableK19_0[[2]]$R2==max(AICtableK19_0[[2]]$R2,na.rm=T))
+nnK192_2<-which(AICtableK19_2[[2]]$R2==max(AICtableK19_2[[2]]$R2,na.rm=T))
+nnK192_3<-which(AICtableK19_2[[3]]$R2==max(AICtableK19_2[[3]]$R2,na.rm=T))
+nnH162_3<-which(AICtableH16_2[[3]]$R2==max(AICtableH16_2[[3]]$R2,na.rm=T))
+for(m in c(0,2)){#
+  fl<-file.path(run_fldr,paste0("/H16vK19_",m,"/Recruitment_files/Rec_figs/recruitment.Rdata"))#
+  load(fl)#
+  eval(parse(text=paste("AICtableH16_",m,"<-AICtable")))#
+  fl<-file.path(run_fldr,paste0("/H16vK19_K19REF_",m,"/Recruitment_files/Rec_figs/recruitment.Rdata"))#
+  load(fl)#
+  eval(parse(text=paste("AICtableK19_",m,"<-AICtable")))#
+}
+run_fldr<-"/Users/kholsman/GitHub/CEATTLE/runs"#
+for(m in c(0,2)){#
+  fl<-file.path(run_fldr,paste0("/H16vK19_",m,"/Recruitment_files/Rec_figs/recruitment.Rdata"))#
+  load(fl)#
+  eval(parse(text=paste("AICtableH16_",m,"<-AICtable")))#
+  fl<-file.path(run_fldr,paste0("/H16vK19_K19REF_",m,"/Recruitment_files/Rec_figs/recruitment.Rdata"))#
+  load(fl)#
+  eval(parse(text=paste("AICtableK19_",m,"<-AICtable")))#
+}
+paste("AICtableK19_",m,"<-AICtable")
+run_fldr<-"/Users/kholsman/GitHub/CEATTLE/runs"#
+for(m in c(0,2)){#
+  fl<-file.path(run_fldr,paste0("/H16vK19_",m,"/Recruitment_files/Rec_figs/recruitment.Rdata"))#
+  load(fl)#
+  eval(parse(text=paste0("AICtableH16_",m,"<-AICtable")))#
+  fl<-file.path(run_fldr,paste0("/H16vK19_K19REF_",m,"/Recruitment_files/Rec_figs/recruitment.Rdata"))#
+  load(fl)#
+  eval(parse(text=paste0("AICtableK19_",m,"<-AICtable")))#
+}
+nnSSM<-nnMSM<-data.frame(H16=rep(0,3),K19=rep(0,3))
+nnMSM
+nnSSM<-nnMSM<-data.frame(H16=rep(0,3),K19=rep(0,3))#
+for(m in c(0,2)){#
+  for(s in 1:3){#
+    nnSSM[s,1]<-which(AICtableH16_0[[s]]$R2==max(AICtableH16_0[[s]]$R2,na.rm=T))#
+    nnSSM[s,2]<-which(AICtableK19_0[[s]]$R2==max(AICtableK19_0[[s]]$R2,na.rm=T))#
+    nnMSM[s,1]<-which(AICtableH16_2[[s]]$R2==max(AICtableH16_2[[s]]$R2,na.rm=T))#
+    nnMSM[s,2]<-which(AICtableK19_2[[s]]$R2==max(AICtableK19_2[[s]]$R2,na.rm=T))#
+  }#
+}
+nnSSM
+s<-1;AICtableH16_2[[s]][nnMSM[s,2]]
+s<-1;AICtableH16_2[[s]][nnMSM[s,2],]
+nnSSM<-nnMSM<-data.frame(H16=rep(0,3),K19=rep(0,3))#
+r2SSM<-r2MSM<-data.frame(H16=rep(0,3),K19=rep(0,3))#
+#
+for(m in c(0,2)){#
+  for(s in 1:3){#
+    r2SSM[s,1]<-max(AICtableH16_0[[s]]$R2,na.rm=T)#
+    r2SSM[s,2]<-max(AICtableK19_0[[s]]$R2,na.rm=T)#
+    r2MSM[s,1]<-max(AICtableH16_2[[s]]$R2,na.rm=T)#
+    r2MSM[s,2]<-max(AICtableK19_2[[s]]$R2,na.rm=T)#
+    nnSSM[s,1]<-which(AICtableH16_0[[s]]$R2==max(AICtableH16_0[[s]]$R2,na.rm=T))#
+    nnSSM[s,2]<-which(AICtableK19_0[[s]]$R2==max(AICtableK19_0[[s]]$R2,na.rm=T))#
+    nnMSM[s,1]<-which(AICtableH16_2[[s]]$R2==max(AICtableH16_2[[s]]$R2,na.rm=T))#
+    nnMSM[s,2]<-which(AICtableK19_2[[s]]$R2==max(AICtableK19_2[[s]]$R2,na.rm=T))#
+  }#
+}
+r2MSM
+s<-1;AICtableH16_2[[s]][nnMSM[s,1],]#
+s<-1;AICtableK19_2[[s]][nnMSM[s,2],]
+ls()
+TopR2_Ricker.txt
+topR2ricker
+topricker
+topR2n
+topname
+smry_RS
+names(smry_RS)
+names(smry_RS[[1]])
+head(smry_RS[[1]])
+s<-1;AICtableH16_2[[s]][nnMSM[s,1],]#
+s<-1;AICtableK19_2[[s]][nnMSM[s,2],]#
+#
+s<-2;AICtableH16_2[[s]][nnMSM[s,1],]#
+s<-2;AICtableK19_2[[s]][nnMSM[s,2],]
+s<-1;AICtableH16_2[[s]][nnMSM[s,1],]#
+s<-1;AICtableK19_2[[s]][nnMSM[s,2],]#
+s<-2;AICtableH16_2[[s]][nnMSM[s,1],]#
+s<-2;AICtableK19_2[[s]][nnMSM[s,2],]
