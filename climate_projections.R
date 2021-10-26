@@ -17,197 +17,23 @@
   # 1. Set things up
   #___________________________________________
   
-  # 1.0. define directories
-    main<-path.expand("~/GitHub/futR")
-    setwd(main)
-     
-  # 1.1. load libraries
-    library( Rceattle )
-    library( TMB )
-    library(reshape)
-    library(dplyr)
-    library(ggplot2)
-    library(lattice)
-    
-  # 1.2 input switches
-    run_est    <- FALSE  # run the ceattle estimation model?
-    REcompile  <- TRUE   # recompile futR 
-    bias_corr  <- TRUE   # bias correct sigma sensu Ludwig and Walters 1981 and Porch and Lauretta 2016
-    recruitAge <- 1      # what age (lag) is recruitment estimated in the model?
-    fityrsIN   <- 1980:2017  # what years of the recruiment data do you want to fit too (allows for leave one out analysis)
-    Eat_covIN  <- c(18, 20, 26, 28)   # specific to CEATTLE
-    Eat_covIN  <- -99    # specific to CEATTLE; nulled here using -99
-    
-  # 1.3 load data
-    load("data/env_covars.Rdata")
-    load("data/rec_dat.Rdata")
-    load("data/rec_dat_tmb.Rdata")
-    load("data/ration_tmb.Rdata")
+  # e.g., 
+  main  <-  getwd()
+  setwd(main)
   
-  # 1.4 load functions
-    source("R/futRfun.R")
-  
+  # load data, packages, setup, etc.
+  source("R/make.R")
+    
   #___________________________________________
-  # 2. run Rceattle() estimation mode
-  #___________________________________________
-
-    if( run_est ){   
-      # Rceattle based on Grant Adams TMB formulation of the EBS CEATTLE model
-        data(BS2017SS)
-        data(BS2017MS)
-
-        # 2.1 Run single species model est
-        ss_run <- Rceattle(
-          data_list    = BS2017SS,
-          inits        = NULL, # Initial parameters = 0
-          file_name    = NULL, # Don't save
-          debug        = 0, # Estimate
-          random_rec   = FALSE, # No random recruitment
-          msmMode      = 0, # Single species mode
-          avgnMode     = 0,
-          silent       = TRUE
-          )
-
-        # 2.2 Run multispecies model est
-        ms_run <- Rceattle(
-          data_list   = BS2017MS,
-          inits       = ss_run$estimated_params, # Initial parameters from ss run
-          file_name   = NULL, # Don't save
-          debug       = 0, # Estimate
-          random_rec  = FALSE, # No random recruitment
-          niter       = 10, # Number of iterations around predation/pop dy functions
-          msmMode     = 1, # Multi-species holsman mode
-          avgnMode    = 0 # Use average N
-        )
-
-        save( ss_run,file   =   "data/ss_run.Rdata" )
-        save( ms_run,file   =   "data/ms_run.Rdata" )
-    }else{
-
-        load( "data/ss_run.Rdata" )
-        load( "data/ms_run.Rdata" )
-
-    }
-
-  #___________________________________________
-  # 3. Compile futR	
+  # 2. Compile futR	
   #___________________________________________
   
-  compile('futR.cpp') # this will generate warnings - they can be ignored if "0" is returned
+  compile('src/futR.cpp') # this will generate warnings - they can be ignored if "0" is returned
 
- 
-  # 3.1 Set up model data list and map and covars for epsi_s 
-    # epsi_s environmental variabile from the age class year (assuming Jan rec, and summer = age0)
-  
-    PAR<-data.frame(
-      phases = c(
-          log_a        = 1, 
-          log_b        = 1 ,
-          #logit_tau    = 1,
-          rs_parm      = 1,
-          epsi_s       = 1,
-          logsigma     = 1),
-      estparams  = c(
-          log_a        = TRUE, 
-          log_b        = TRUE, 
-          #logit_tau    = FALSE,
-          rs_parm      = TRUE,
-          epsi_s       = FALSE,
-          logsigma     = TRUE))
-  
-   
-  
-      # For Kir : skip
-      if(1==10){
-          load("data/aclim_cmip5_BT.Rdata")  # Bottom Temp object called "allDat"
-          load("data/NPZcov.Rdata")
-          load("data/smry_RS.Rdata")
-          topmod  <-  colnames(NPZcov)[-1]
-          subCOV1 <-  NPZcov[NPZcov$year%in%(yearsIN-1),]  # off set by 1 year Rec in year y ~f(covars in y-1)
-          subCOV2 <-  allDat[allDat$t%in%(yearsIN-1),]     # off set by 1 year Rec in year y ~f(covars in y-1)
-          
-          covars                <-  subCOV1[,-1]
-          rownames(covars)      <-  subCOV1[,1]
-          tmp                   <-  as.matrix((t(covars)))
-          sub_cov               <-  matrix(0,dim(tmp)[1],dim(tmp)[2])  #empty matrix
-          
-          for(rr in 1:dim(tmp)[1])
-            sub_cov[rr,]        <-   (tmp[rr,])
-          colnames(sub_cov)     <-   subCOV1[,1]
-          nm                    <-   rownames(tmp)
-            env_covars            <-   sub_cov[c(1,2),]
-        
-        # set up recruitment input data file Years, SSB, Robs, sdSSB, sdRobs
-            rec_dat  <-  rec_dat_tmb  <-  list()
-            for(sp in 1:3){
-                est        <-  ms_run
-                smry_RSIN  <-  smry_RS[[sp]]
-                sdlist     <-  as.list(est$sdrep,"Std. Error")
-                estlist    <-  as.list(est$sdreNAp,"Estimate")
-                mpRsd      <-  sdlist$rec_dev[sp,-1]
-                
-                dataIN_tmb <-data.frame(
-                        years  = est$data_list$styr-1+(1:(est$data_list$nyrs))[-1],
-                        SSB    = est$quantities$biomassSSB[sp,-length(est$quantities$biomassSSB[sp,])],
-                        Robs   = est$quantities$R[sp,-1],
-                        sdSSB  = 0,
-                        sdRobs = mpRsd)
-          
-          
-                dataIN_admb<-data.frame(
-                   years  = smry_RSIN$Rec_years,
-                   SSB    = smry_RSIN$SSB.y.1.,
-                   Robs   = smry_RSIN$R_obs,
-                   sdSSB  = 0,
-                   sdRobs = mpRsd) 
-          
-                rec_dat[[sp]]     <-  dataIN_admb
-                rec_dat_tmb[[sp]] <-  dataIN_tmb
-                
-                if(sp==1)
-                  ration_tmb<- data.frame(sp1=as.numeric(scale(apply(est$quantities$ration2Age[-sp,-1,],3,sum)))[-length(smry_RSIN$Rec_years)],sp2=NA,sp3=NA)
-                if(sp>1)
-                  ration_tmb[,sp]    <-  (as.numeric(scale(apply(est$quantities$ration2Age[-sp,-1,],3,sum)))[-length(smry_RSIN$Rec_years)])
-              }
-          
-              save(env_covars,file =  "data/env_covars.Rdata")
-              save(rec_dat,file    =  "data/rec_dat.Rdata")
-              save(rec_dat_tmb,file    =  "data/rec_dat_tmb.Rdata")
-              save(ration_tmb,file =  "data/ration_tmb.Rdata")
-      }
-  
-  
-    rec        <-  rec_dat[[1]]
-    env        <-  env_covars
-    env[1,]    <-  as.numeric(scale(env_covars[1,]))
-    env[2,]    <-  as.numeric(scale(env_covars[2,]))
-    ration     <-  ration_tmb[,1]
-    version    <-  "futR"  # which TMB model to use
-
-    tau_set<-c(0,.01,.1,0.5,.8,1,1.2,1.5,2,5,10)
-  
-  # 3.2 Set up data
-  
-    PAR$phases
-    PAR$estparams
+  #___________________________________________
+  # 3. RUN FUTR()
+  #___________________________________________
     
-    # which parameters to estimate with futR?
-    estparams  = c(
-          log_a        = TRUE, 
-          log_b        = TRUE, 
-          #logit_tau     = TRUE,
-          rs_parm      = TRUE,
-          epsi_s       = FALSE,
-          logsigma     = TRUE)
-  
-    rec_noerr<-rec
-    rec_noerr$sdRobs<-0
-
-    #___________________________________________
-    # 4. RUN FUTR()
-    #___________________________________________
-    
-    #__________________________________________________________________
     # rectype/ typeIN:
         # 1 = Linear with biomass ( y-1 )  BLM
         # 2 = Linear LM
@@ -226,16 +52,22 @@
     
     # 4.1 First run with no observation error on SSB:
          # makeDat will make the input values, data, and phases for the model:
-          datlist  <-  makeDat(
+           datlist  <-  makeDat(
                     tauIN      =  1,
                     sigMethod  =  1, 
+                    tMethod    =  1,
                     estparams  =  estparams,
                     typeIN     =  4,
-                    dataIN     =  rec,
-                    covarsIN   =  env)
+                    rec_years  =  rec$years,
+                    Rec        =  rec$Robs,
+                    SSB        =  rec$SSB,
+                    sdSSB      =  rec$sdSSB,
+                    sdRec      =  rec$sdRobs,
+                    covars     =  NULL,
+                    covars_sd  =  NULL)
           
-          # run the model
-          mm1                 <-  runmod(dlistIN=datlist,version="futR",recompile=T,simulate=TRUE)
+          # run the basic model
+          mm1                 <-  runmod(dlistIN=datlist,version="src/futR",recompile=T,simulate=TRUE)
           df1                 <-  data.frame(estimate=as.vector(mm1$sim), parameter=names( mm1$mle)[row(mm1$sim)])
           densityplot( ~ estimate | parameter, data=df1, layout=c(5,1),ylim=c(0,10))
           
@@ -256,8 +88,12 @@
                     sigMethod  =  2, 
                     estparams  =  estparams,
                     typeIN     =  4,
-                    dataIN     =  rec,
-                    covarsIN   = env)
+                    rec_years  =  rec$years,
+                    Rec        =  rec$Robs,
+                    SSB        =  rec$SSB,
+                    sdSSB      =  rec$sdSSB,
+                    sdRec      =  rec$sdRobs,
+                    covars   =  env)
          
           # run the model
           mm2                 <-  runmod(dlistIN=datlist,version="futR",recompile=F,simulate=TRUE)
@@ -272,17 +108,19 @@
           df2_t0              <-  data.frame(estimate=as.vector(mm2_t0$sim), parameter=names( mm2_t0$mle)[row(mm2_t0$sim)])
           densityplot( ~ estimate | parameter, data=df2_t0, layout=c(5,1),ylim=c(0,10))
           
-          
-          
-          
+  
     # 4.3 Now run the model estimating sigma; specify sdR (random effects on SSB, random effects on Rec = sig+sdR)
           datlist   <-  makeDat(
                       tauIN      =  1,
                       sigMethod  =  3, 
                       estparams  =  estparams,
                       typeIN     =  4,
-                      dataIN     =  rec,
-                      covarsIN   =  env)
+                      rec_years  =  rec$years,
+                      Rec        =  rec$Robs,
+                      SSB        =  rec$SSB,
+                      sdSSB      =  rec$sdSSB,
+                      sdRec      =  rec$sdRobs,
+                      covars   =  env)
           
           # run the model
           mm3                 <-  runmod(dlistIN=datlist,version="futR",recompile=F,simulate=TRUE)
@@ -303,8 +141,12 @@
                     sigMethod    =  4, 
                     estparams    =  estparams,
                     typeIN       =  4,
-                    dataIN       =  rec,
-                    covarsIN     =  env)
+                    rec_years  =  rec$years,
+                    Rec        =  rec$Robs,
+                    SSB        =  rec$SSB,
+                    sdSSB      =  rec$sdSSB,
+                    sdRec      =  rec$sdRobs,
+                    covars     =  env)
         
           # run the model
           mm4                 <-  runmod(dlistIN=datlist,version="futR",recompile=F,simulate=TRUE)
@@ -363,7 +205,13 @@
             if(noSDR) rec$sdRobs<-0
             tmpp<-list()
         
-            datlist  <  -makeDat(tauIN=1,sigMethod=1, estparams=estparams,typeIN=4,dataIN=rec,covarsIN  = env)
+            datlist  <  -makeDat(tauIN=1,sigMethod=1, estparams=estparams,typeIN=4,
+                                 rec_years  =  rec$years,
+                                 Rec        =  rec$Robs,
+                                 SSB        =  rec$SSB,
+                                 sdSSB      =  rec$sdSSB,
+                                 sdRec      =  rec$sdRobs,
+                                 covars  = env)
               mm1<-runmod(dlistIN=datlist,version="futR",recompile=T)
               tmpp$mm1<-mm1;tmpp$mm1$datlist<-datlist
         
@@ -373,7 +221,13 @@
         
             # unbiased sigma
               # tauIN = 1; estparms$epsi_s = FALSE; estparms$sigma = TRUE; rciker
-            datlist<-makeDat(tauIN=1,sigMethod=2, estparams=estparams,typeIN=4,dataIN=rec,covarsIN  = env)
+            datlist<-makeDat(tauIN=1,sigMethod=2, estparams=estparams,typeIN=4,
+                             rec_years  =  rec$years,
+                             Rec        =  rec$Robs,
+                             SSB        =  rec$SSB,
+                             sdSSB      =  rec$sdSSB,
+                             sdRec      =  rec$sdRobs,
+                             covars  = env)
               mm2<-runmod(dlistIN=datlist,version="futR",recompile=F)
               tmpp$mm2<-mm2;tmpp$mm2$datlist<-datlist
             datlist$rs_dat$tau<-0.000001
@@ -383,14 +237,25 @@
             # est sigma; specify sdR (random effects on SSB, random effects on Rec = sig+sdR)
               # tauIN = 1; estparms$epsi_s = FALSE; estparms$sigma = TRUE; rciker
                estparams$epsi_s<-TRUE
-            datlist<-makeDat(tauIN=1,sigMethod=3, estparams=estparams,typeIN=4,dataIN=rec,covarsIN  = env)
+            datlist<-makeDat(tauIN=1,sigMethod=3, estparams=estparams,typeIN=4,
+                             rec_years  =  rec$years,
+                             Rec        =  rec$Robs,
+                             SSB        =  rec$SSB,
+                             sdSSB      =  rec$sdSSB,
+                             sdRec      =  rec$sdRobs,
+                             covars  = env)
               mm3<-runmod(dlistIN=datlist,version="futR",recompile=F)
                tmpp$mm3<-mm3;tmpp$mm3$datlist<-datlist
         
             # est sigma; specify sdR (random effects on SSB, random effects on Rec = sig+sdR)
               # tauIN = 1; estparms$epsi_s = FALSE; estparms$sigma = TRUE; rciker
             datlist<-makeDat(tauIN=.5,sigMethod=4, estparams=estparams,
-              typeIN=4,dataIN=rec,covarsIN  = env)
+              typeIN=4,
+              rec_years  =  rec$years,
+              Rec        =  rec$Robs,
+              SSB        =  rec$SSB,
+              sdSSB      =  rec$sdSSB,
+              sdRec      =  rec$sdRobs,covars  = env)
               mm4<-runmod(dlistIN=datlist,version="futR",recompile=F)
               tmpp$mm4<-mm4;tmpp$mm4$datlist<-datlist
         

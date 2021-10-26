@@ -43,7 +43,7 @@ Type objective_function<Type>::operator(  ) (  )
   DATA_VECTOR(  sdR );              // stdev of recruitment in a given year        ( 1,nyrs,"R" );
   //DATA_VECTOR(  Ration_scaled );    // Predator ration in a given year    ( 1,nyrs,"Ration" );
   DATA_MATRIX(  rs_cov );           // environmental covariates           rs_cov.allocate( 1,ncov,1,nyrs,"rs_cov" );
-  //DATA_VECTOR(  sdrs_cov );          // stdev environmental covariates     sdrs_cov.allocate( 1,ncov,1,nyrs,"rs_cov" );
+  DATA_VECTOR(  sdrs_cov );          // stdev environmental covariates     sdrs_cov.allocate( 1,ncov,1,nyrs,"rs_cov" );
   DATA_INTEGER( nyrs );
   DATA_IVECTOR( cov_type );         // covariate type if 1 then run ration cov_type.allocate( 1,ncov,"cov_type" );
   DATA_INTEGER( ncov );

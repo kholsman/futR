@@ -1,2 +1,0 @@
-# covariate phase for each covs 
-BottomTemp Eup_avg Nca_avg Cop_tot surf_sal_tmp Btm_sal_tmp NCA_top SST_tmp ColdPool DetBen_avg Jel_avg PhL_avg PhS_avg v_avg u_avg Area0to6 Area2to6 fallZtot fallZtot_large fallZavg fallEuphavg fallBTavg fallPhyL_avg fallJel_avg fallSSTavg springZtot springZtot_large springZavg springEuphavg springBTavg springPhyL_avg springJel_avg springSSTavg summerZtot_large summerZavg summerEuphavg summerBTavg summerPhyL_avg summerJel_avg summerSSTavg winterZavg winterBTavg winterSSTavg cross along annualZavg annualBTavg annualSSTavg

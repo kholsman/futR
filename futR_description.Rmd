@@ -72,13 +72,42 @@ devtools::install_github("kholsman/futR")
 The base function for fitting recruitment requires a data.frame of recruitment and spawning biomass:
 
 
-```{r pressure, echo=T,eval=F}
+```{r setup, echo=T,eval=F}
 
-library("futR")
+
+ #___________________________________________
+  # 1. Set things up
+  #___________________________________________
+  
+  # e.g., 
+  main  <-  getwd()
+  setwd(main)
+  
+  # load data, packages, setup, etc.
+  source("R/make.R")
+    
+  #___________________________________________
+  # 2. Compile futR	
+  #___________________________________________
+  
+  compile('futR.cpp') # this will generate warnings - they can be ignored if "0" is returned
+
+
 
 
 ```
 
+# Fit recruitment  
+
+Now we can fit a set of models with and without covariates. Let's start with some base models:
+
+```{r fit1, echo=T,eval=F}
+
+    # 1.5 set up mode for future R
+    mode = 1  # 1 = estimate simga, similar to ceattle approach
+
+
+```
 
 
 

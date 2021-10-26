@@ -1,2 +1,5 @@
 data/ignore
 NotShared
+.Rproj.user
+*NotShared
+
