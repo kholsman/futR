@@ -1,7 +1,6 @@
 ---
 title: "futR"
 author: "Kirstin Holsman"
-date: "3/20/2019"
 output:
   pdf_document:
     fig_caption: yes
