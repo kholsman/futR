@@ -19,19 +19,44 @@
   #___________________________________________
   # 2. run Rceattle() estimation mode
   #___________________________________________
+  # 
+  # if( run_est ){
+  #   cat("\n re-running R ceattle...")
+  #   
+  #   source("R/sub_scripts/est_Rceattle.R")
+  #          
+  # }else{
+  #            
+  #   load(file.path(in_dir,"ss_run.Rdata" ))
+  #   load(file.path(in_dir,"ms_run.Rdata" ))
+  #   
+  # }
   
-  if( run_est ){
-    cat("\n re-running R ceattle...")
-    
-    source("R/sub_scripts/est_Rceattle.R")
-           
-  }else{
-             
-    load(file.path(in_dir,"ss_run.Rdata" ))
-    load(file.path(in_dir,"ms_run.Rdata" ))
-    
-  }
 
+  
+  # Species stuff: (used for plotting and manipulating data)
+  #-------------------------------------------
+  sppINFO<-list(
+    plk=list(abv="plk",
+             guildIN="Walleye pollock",
+             plotSPP="walleye pollock",
+             bin2=c(seq(0,300,10),1000),
+             binJvAD=c(0,40,1000),
+             splistIN="W. Pollock",doNEBS=T,plotIT=T),
+    pcod=list(abv="pcod",
+              guildIN="Pacific cod",
+              plotSPP="Pacific cod",
+              bin2=c(seq(0,300,10),1000),
+              binJvAD=c(0,40,1000),
+              splistIN="P. Cod",doNEBS=T,plotIT=T),
+    atf=list(abv="atf",
+             guildIN="Arrowtooth or Kamchatka",
+             plotSPP="arrowtooth flounder",
+             bin2=c(seq(0,300,10),1000),
+             binJvAD=c(0,40,1000),
+             splistIN=c("Arrowtooth","Arrow or Kam", "Kamchat fl"),doNEBS=F,plotIT=T)
+  )
+  
     # Scenarios     <-  unique(covariates$Scenario)
     # A1B_n         <-  grep("A1B",Scenarios)
     # bio_n         <-  grep("bio",Scenarios)

@@ -1,8 +1,8 @@
 # ----------------------------------------
 # make.R
-# subset of Holsman et al. 2020 Nature Comm.
+# subset of Holsman et al. 2022 
 # kirstin.holsman@noaa.gov
-# updated 2020
+# updated 2022
 # ----------------------------------------
 
 source("R/packages.R")       # loads packages

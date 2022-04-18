@@ -111,57 +111,7 @@
       save(ration_tmb,file     =  file.path(in_dir,"ration_tmb.Rdata"))
     }
     
-    
-    rec        <-  rec_dat[[1]]
-    env        <-  env_covars
-    env[1,]    <-  as.numeric(scale(env_covars[1,]))
-    env[2,]    <-  as.numeric(scale(env_covars[2,]))
-    ration     <-  ration_tmb[,1]
-    
-    
-    tau_set<-c(0,.01,.1,0.5,.8,1,1.2,1.5,2,5,10)
-    
-    # 3.2 Set up data
-    
-    PAR$phases
-    PAR$estparams
-    
-    # which parameters to estimate with futR?
-    estparams  = c(
-      log_a        = TRUE, 
-      log_b        = TRUE, 
-      #logit_tau     = TRUE,
-      beta         = FALSE,
-      lambda       = TRUE,
-      epsi_s       = FALSE,
-      logsigma     = TRUE)
-    
-    rec_noerr<-rec
-    rec_noerr$sdRobs<-0
-
-   # Species stuff: (used for plotting and manipulating data)
-   #-------------------------------------------
-    sppINFO<-list(
-    plk=list(abv="plk",
-               guildIN="Walleye pollock",
-               plotSPP="walleye pollock",
-               bin2=c(seq(0,300,10),1000),
-               binJvAD=c(0,40,1000),
-               splistIN="W. Pollock",doNEBS=T,plotIT=T),
-      pcod=list(abv="pcod",
-                guildIN="Pacific cod",
-                plotSPP="Pacific cod",
-                bin2=c(seq(0,300,10),1000),
-                binJvAD=c(0,40,1000),
-                splistIN="P. Cod",doNEBS=T,plotIT=T),
-      atf=list(abv="atf",
-               guildIN="Arrowtooth or Kamchatka",
-               plotSPP="arrowtooth flounder",
-               bin2=c(seq(0,300,10),1000),
-               binJvAD=c(0,40,1000),
-               splistIN=c("Arrowtooth","Arrow or Kam", "Kamchat fl"),doNEBS=F,plotIT=T)
-    )
-    
+   
     # These switches for KHolsman during simulation updates:
     #-------------------------------------------
     retroFL         <-  "data/in/raw/retro_data2018_long_ext_bcs.dat"
