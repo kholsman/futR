@@ -2,14 +2,10 @@
 title: "futR"
 author: "Kirstin Holsman"
 output:
-  pdf_document:
-    fig_caption: yes
-    fig_height: 4
-    fig_width: 5
-    highlight: tango
-    keep_tex: yes
-    latex_engine: xelatex
   html_document:
+    df_print: paged
+  html_notebook:
+    toc: TRUE
     df_print: kable
     fig_caption: yes
     theme: flatly
@@ -21,21 +17,35 @@ output:
     fig_caption: yes
     fig_width: 4
     keep_md: yes
+  pdf_document:
+    toc: TRUE
+    fig_caption: yes
+    fig_height: 4
+    fig_width: 5
+    highlight: tango
+    keep_tex: yes
+    latex_engine: xelatex
 ---
 
-
+<!--  rmarkdown:html_vignette -->
+<!-- vignette: > -->
+<!--   %\VignetteIndexEntry{futR documentation} -->
+<!--   %\VignetteEngine{knitr::rmarkdown} -->
+<!--   %\VignetteEncoding{UTF-8} -->
 
 ```{r setup1, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r, echo = F}
+```{r, echo = F,eval=T}
  #knitr::opts_chunk$set(echo = TRUE)
  #source("R/make.R")       # loads packages, data, setup, etc.
  thisYr <- format(Sys.time(), "%Y")
  today  <- format(Sys.time(), "%b %d, %Y")
+ knitr::opts_knit$set(root.dir = '../')
  
 ```
+
 
 Repo maintained by:
 Kirstin Holsman  
@@ -45,7 +55,9 @@ NOAA Fisheries, Seattle WA
 *Last updated: `r today`*  
    
 ---
-## R futR
+
+<!-- # Overview {.tabset .tabset-dropdown} -->
+# Overview{.tabset}
 
 futR() is a generic Rpackage for fitting recruitment models to stock assessment estimates of spawning stock biomass and recruitment with or without climate covariates. The recruitment model is based on Template Model Builder (`TMB`) and formultations follow Maunder and Desriso (2011) using a generalized three parameter stock-recruitment model with environmental covariates (Deriso 1980; Schnute 1985). This includes Ricker (logistic), Beverton Holt, log-linear, and log-linear with biomass lagged by year 'y-1'. The model can be fit with and with out random effects on spawning stock biomass (SSB) and recruitment (R) (i.e., measurement error on SSB and rec) using the methods of  Porch and Lauretta (2016) and with the optional unbiased estimate of sigma (sensu Ludwid and Walters 1981, Porch and Lauretta 2016). Environmental covariates are optional but can be included as main effects or as interactions.
 
@@ -66,23 +78,18 @@ The projection package can then be installed to R directly:
 devtools::install_github("kholsman/futR")
 ```
 
-## Fitting Recruitment:
+## Setting up the package:
 
 The base function for fitting recruitment requires a data.frame of recruitment and spawning biomass:
 
 
-```{r setup, echo=T,eval=F}
+```{r setup, echo=T,eval=T}
 
 
- # rm(list=ls())
-   
+  # rm(list=ls())
   #___________________________________________
   # 1. Set things up
   #___________________________________________
-  
-  # e.g., 
-  main  <-  getwd()
-  setwd(main)
   
   # load data, packages, setup, etc.
   source("R/make.R")
@@ -123,32 +130,44 @@ Now we can fit a set of models with and without covariates. There are various sw
 * lamba = effects on post-spawning success (e.g., age 0+ survival)  
    
 
-# Fit recruitment  
+<!-- # Fit recruitment  {.tabset .tabset-pills} -->
+# Base model  {.tabset}
 
-Let's start with some base models.
+Let's start by fitting based models (no climate covariates) with different options for observation error.
 
-## 4.1 First run with no observation error on SSB
+### Observation error options (sigMethod):  
+0. No observation error (tau = 0)
+1. estimate sigma, random effects on SSB if tau >0, tau input
+2. unbiased sigma estimate, tau input
+3. as in 1 but with defined measurement error for rec (indep of random effects on Spawners/SSB)
+4. as in 1 but with  defined measurement error for rec and Spawners/SSB)
 
-```{r fit1, echo=T,eval=F}
+### Run this code first
+
+```{r base, echo=T,eval=T,message=F,results='hide'}
+  # load data, packages, setup, etc.
+  source("R/make.R")
 
   # set up some demo data:
   rec        <-  rec_dat[[1]]
   env        <-  env_covars
-  
   # z score the covariates:
   env[1,]    <-  as.numeric(scale(env_covars[1,]))
   env[2,]    <-  as.numeric(scale(env_covars[2,]))
   ration     <-  ration_tmb[,1]
-  
-  # we'll use this in a bit
-  tau_set<-c(0,.01,.1,0.5,.8,1,1.2,1.5,2,5,10)
-  
   # 3.2 Set up data
   PAR$phases
   PAR$estparams
-  
   # which parameters to estimate with futR?
-  estparams  = c(
+  phases  = c(
+    log_a        = 1, 
+    log_b        = 1, 
+    #logit_tau     = TRUE,
+    beta         = 1,
+    lambda       = 1,
+    epsi_s       = 1,
+    logsigma     = 1)
+   estparams  = c(
     log_a        = TRUE, 
     log_b        = TRUE, 
     #logit_tau     = TRUE,
@@ -156,14 +175,20 @@ Let's start with some base models.
     lambda       = TRUE,
     epsi_s       = FALSE,
     logsigma     = TRUE)
-  
-  rec_noerr<-rec
-  rec_noerr$sdRobs<-0
-  
-         # makeDat will make the input values, data, and phases for the model:
-           datlist  <-  makeDat(
+```
+
+### Now explore different sigMethod settings starting with sigMethod = 0. Note comparitive plots at the bottom of each tab.
+
+## sigMethod = 0
+
+No observation error (tau = 0) on either SSB or rec estimates.
+
+```{r fit0, echo=T,eval=T,message=F,results='hide'}
+    
+  # makeDat will make the input values, data, and phases for the model:
+  datlist  <-  makeDat(
                     tauIN      =  1,
-                    sigMethod  =  1, 
+                    sigMethod  =  1, # set to 0
                     tMethod    =  1,
                     estparams  =  estparams,
                     typeIN     =  4,
@@ -175,21 +200,255 @@ Let's start with some base models.
                     covars     =  NULL,
                     covars_sd  =  NULL)
           
-          # run the basic model
-          mm1                 <-  runmod(dlistIN=datlist,version="src/futR",recompile=T,simulate=TRUE)
-          df1                 <-  data.frame(estimate=as.vector(mm1$sim), parameter=names( mm1$mle)[row(mm1$sim)])
-          densityplot( ~ estimate | parameter, data=df1, layout=c(5,1),ylim=c(0,10))
-          
-          #now change tau
-          datlist$rs_dat$tau  <-  0.000001
-          
-          # re-run the model with tau 
-          mm1_t0              <-  runmod(dlistIN=datlist,version="futR",recompile=F,simulate=TRUE)
-          df1_t0              <-  data.frame(estimate=as.vector(mm1_t0$sim), parameter=names( mm1_t0$mle)[row(mm1_t0$sim)])
-          densityplot( ~ estimate | parameter, data=df1_t0, layout=c(5,1),ylim=c(0,10))
-     
+    # run the basic model
+  wd0 <- getwd()
+  setwd("src")
+  mm1_t0 <-  mm <-runmod(dlistIN=datlist,version='futR',recompile=T,simulate=TRUE,simnitr = 1000)
+  setwd(wd0)
+  df1_t0 <-  data.frame(model = "mm1_t0", 
+                     estimate=as.vector(mm$sim), 
+                     parameter=names( mm$mle)[row(mm$sim)])
+  rm(mm)
+  
+  mu   <- df1_t0%>%group_by(model,parameter)%>%summarise(grp.mean=mean(estimate))
+  peak <- df1_t0%>%group_by(model,parameter)%>%
+    count(parameter,round(estimate,1))%>%
+    slice(which.max(n))
+  names(peak)<- c("model","parameter","freq","n")
+```
+
+```{r plot0, fig.dim=c(10, 4),echo=F}
+  # now plot the density of each parm:
+  # now plot the density of each parm:
+  p <-
+    ggplot(data=df1_t0) +
+    geom_density( aes(x=estimate, color=model))+
+    facet_wrap(~parameter,scales="free")+ 
+    geom_vline(data=peak,aes(xintercept=freq, color = model), linetype="dashed", size=1)+
+    theme_kir_EBM()
+p
+```
+
+
+## sigMethod = 1
+
+Observation error (tau = 0) random effects on SSB if tau >0. 
+
+```{r fit1, echo=T,eval=T,message=F,results='hide'}
+ 
+  # makeDat will make the input values, data, and phases for the model:
+  datlist  <-  makeDat(
+                    tauIN      =  1,
+                    sigMethod  =  1, #estimate sigma, random effects on SSB if tau >0, tau input
+                    tMethod    =  1,
+                    estparams  =  estparams,
+                    typeIN     =  4,
+                    rec_years  =  rec$years,
+                    Rec        =  rec$Robs,
+                    SSB        =  rec$SSB,
+                    sdSSB      =  rec$sdSSB,
+                    sdRec      =  rec$sdRobs,
+                    covars     =  NULL,
+                    covars_sd  =  NULL)
+
+  datlist$rs_dat$tau  <-  0.000001  
+ 
+  # re-run the model with tau 
+  wd0 <- getwd()
+  setwd("src")
+  mm1_t1 <-  mm <-  runmod(dlistIN=datlist,version='futR',recompile=F,simulate=TRUE,simnitr = 1000)
+  setwd(wd0)
+  df1_t1 <-  data.frame(model = "mm1_t1", 
+                     estimate=as.vector(mm$sim), 
+                     parameter=names( mm$mle)[row(mm$sim)])
+  rm(mm)
+  df <- rbind(df1_t0, df1_t1)
+  mu   <- df%>%group_by(model,parameter)%>%summarise(grp.mean=mean(estimate))
+  peak <- df%>%group_by(model,parameter)%>%
+    count(parameter,round(estimate,1))%>%
+    slice(which.max(n))
+  names(peak)<- c("model","parameter","freq","n")
+ 
+   
 
 ```
+
+```{r, fig.dim=c(10, 4),echo=F}
+ # now plot the denisty of each parm:
+  p <-
+    ggplot(data=df) +
+    geom_density( aes(x=estimate, color=model))+
+    facet_wrap(~parameter,scales="free")+ 
+    geom_vline(data=peak,aes(xintercept=freq, color = model), linetype="dashed", size=1)+
+    theme_kir_EBM()
+p
+```
+
+## sigMethod = 2
+
+Unbiased sigma estimate, tau input in order to get observeation error via SSB rand effects.
+
+```{r fit2, echo=T,eval=T,message=F,results='hide'}
+  # makeDat will make the input values, data, and phases for the model:
+   datlist  <-  makeDat(
+                    tauIN      =  1,
+                    sigMethod  =  2, 
+                    tMethod    =  1,
+                    estparams  =  estparams,
+                    typeIN     =  4,
+                    rec_years  =  rec$years,
+                    Rec        =  rec$Robs,
+                    SSB        =  rec$SSB,
+                    sdSSB      =  rec$sdSSB,
+                    sdRec      =  rec$sdRobs,
+                    covars     =  NULL,
+                    covars_sd  =  NULL)
+  datlist$rs_dat$tau  <-  0.000001  
+    
+  # re-run the model with tau 
+  wd0 <- getwd()
+  setwd("src")
+  mm1_t2 <-  mm <- runmod(dlistIN=datlist,version='futR',recompile=F,simulate=TRUE,simnitr = 1000)
+  setwd(wd0)
+  df1_t2 <-  data.frame(model = "mm1_t2", 
+                     estimate=as.vector(mm$sim), 
+                     parameter=names( mm$mle)[row(mm$sim)])
+  rm(mm)
+  
+  df <- rbind(df, df1_t2)
+  mu   <- df%>%group_by(model,parameter)%>%summarise(grp.mean=mean(estimate))
+  peak <- df%>%group_by(model,parameter)%>%
+    count(parameter,round(estimate,1))%>%
+    slice(which.max(n))
+  names(peak)<- c("model","parameter","freq","n")
+
+```
+
+```{r plot2, fig.dim=c(10, 4),echo=F}
+ # now plot the density of each parm:
+  p <-
+    ggplot(data=df) +
+    geom_density( aes(x=estimate, color=model))+
+    facet_wrap(~parameter,scales="free")+ 
+    geom_vline(data=peak,aes(xintercept=freq, color = model), linetype="dashed", size=1)+
+    theme_kir_EBM()
+p
+```
+
+
+
+
+
+
+
+
+
+
+
+## sigMethod = 3
+
+Estimate sigma, observation error (tau = 0) random effects on SSB if tau >0,  but with defined measurement error for rec estimates (indep of random effects on Spawners/SSB)
+
+```{r fit3, echo=T,eval=T,message=F,results='hide'}
+  # makeDat will make the input values, data, and phases for the model:
+   datlist  <-  makeDat(
+                    tauIN      =  1,
+                    sigMethod  =  3, 
+                    tMethod    =  1,
+                    estparams  =  estparams,
+                    typeIN     =  4,
+                    rec_years  =  rec$years,
+                    Rec        =  rec$Robs,
+                    SSB        =  rec$SSB,
+                    sdSSB      =  rec$sdSSB,
+                    sdRec      =  rec$sdRobs,
+                    covars     =  NULL,
+                    covars_sd  =  NULL)
+  datlist$rs_dat$tau  <-  0.000001  
+    
+  # re-run the model with tau 
+  wd0 <- getwd()
+  setwd("src")
+  mm1_t3 <-  mm <- runmod(dlistIN=datlist,version='futR',recompile=F,simulate=TRUE,simnitr = 1000)
+  setwd(wd0)
+  df1_t3 <-  data.frame(model = "mm1_t3", 
+                     estimate=as.vector(mm$sim), 
+                     parameter=names( mm$mle)[row(mm$sim)])
+  rm(mm)
+  
+  df <- rbind(df, df1_t3)
+  mu   <- df%>%group_by(model,parameter)%>%summarise(grp.mean=mean(estimate))
+  peak <- df%>%group_by(model,parameter)%>%
+    count(parameter,round(estimate,1))%>%
+    slice(which.max(n))
+  names(peak)<- c("model","parameter","freq","n")
+
+```
+
+```{r plot3, fig.dim=c(10, 4),echo=F}
+ # now plot the density of each parm:
+  p <-
+    ggplot(data=df) +
+    geom_density( aes(x=estimate, color=model))+
+    facet_wrap(~parameter,scales="free")+ 
+    geom_vline(data=peak,aes(xintercept=freq, color = model), linetype="dashed", size=1)+
+    theme_kir_EBM()
+p
+```
+
+## sigMethod = 4
+
+Estimate sigma, observation error (tau = 0) random effects on SSB if tau >0, but with  defined measurement error for rec and Spawners/SSB)
+
+
+```{r fit4, echo=T,eval=T,message=F,results='hide'}
+  # makeDat will make the input values, data, and phases for the model:
+   datlist  <-  makeDat(
+                    tauIN      =  1,
+                    sigMethod  =  4, 
+                    tMethod    =  1,
+                    estparams  =  estparams,
+                    typeIN     =  4,
+                    rec_years  =  rec$years,
+                    Rec        =  rec$Robs,
+                    SSB        =  rec$SSB,
+                    sdSSB      =  rec$sdSSB,
+                    sdRec      =  rec$sdRobs,
+                    covars     =  NULL,
+                    covars_sd  =  NULL)
+  datlist$rs_dat$tau  <-  0.000001  
+    
+  # re-run the model with tau 
+  wd0 <- getwd()
+  setwd("src")
+  mm1_t4 <-  mm <- runmod(dlistIN=datlist,version='futR',recompile=F,simulate=TRUE,simnitr = 1000)
+  setwd(wd0)
+  df1_t4 <-  data.frame(model = "mm1_t4", 
+                     estimate=as.vector(mm$sim), 
+                     parameter=names( mm$mle)[row(mm$sim)])
+  rm(mm)
+  
+  df <- rbind(df, df1_t4)
+  mu   <- df%>%group_by(model,parameter)%>%summarise(grp.mean=mean(estimate))
+  peak <- df%>%group_by(model,parameter)%>%
+    count(parameter,round(estimate,1))%>%
+    slice(which.max(n))
+  names(peak)<- c("model","parameter","freq","n")
+
+```
+
+```{r plot4, fig.dim=c(10, 4),echo=F}
+ # now plot the density of each parm:
+  p <-
+    ggplot(data=df) +
+    geom_density( aes(x=estimate, color=model))+
+    facet_wrap(~parameter,scales="free")+ 
+    geom_vline(data=peak,aes(xintercept=freq, color = model), linetype="dashed", size=1)+
+    theme_kir_EBM()
+p
+```
+
+
 
 
 

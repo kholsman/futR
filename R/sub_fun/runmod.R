@@ -38,7 +38,8 @@ runmod<-function(
   maxeval    = 10000){
   
   if(recompile){  compile(paste0(version, ".cpp"))  }
-  dyn.load( dynlib(version) )
+  dyn.load( dynlib(version) ) 
+  
   
   model<- MakeADFun(
               data                 =  dlistIN$rs_dat,

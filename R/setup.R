@@ -5,15 +5,15 @@
 # updated 2020
 # ----------------------------------------
   
+   
     # set up directory paths:
     #-------------------------------------------
-    fun_dir         <- file.path(main,"R/sub_Fun")
-    in_dir          <- file.path(main,"data/in")
-    out_dir         <- file.path(main,"data/out")  
+    fun_dir         <- ("R/sub_Fun")
+    in_dir          <- ("data/in")
+    out_dir         <- ("data/out")  
     
     # switches and options:
     #-------------------------------------------
-    version         <-  "src/futR"  # which TMB model to use
     update.figs     <-  FALSE   # set to true to re-save figs
     update.inputs   <-  FALSE   
     update.outputs  <-  FALSE   # overwrite the existing Rdatafiles in data/out
@@ -35,23 +35,22 @@
     # epsi_s environmental variabile from the age class year (assuming Jan rec, and summer = age0)
     
     PAR <-data.frame(
-      phases = c(
+      phases     = c(
         log_a        = 1, 
-        log_b        = 1 ,
-        #logit_tau    = 1,
-        rs_parm      = 1,
+        log_b        = 1, 
+        #logit_tau     = 1,
+        beta         = 1,
+        lambda       = 1,
         epsi_s       = 1,
         logsigma     = 1),
       estparams  = c(
-        log_a        = TRUE, 
-        log_b        = TRUE, 
-        #logit_tau    = FALSE,
-        rs_parm      = TRUE,
-        epsi_s       = FALSE,
-        logsigma     = TRUE))
-    
-    
-    
+      log_a        = TRUE, 
+      log_b        = TRUE, 
+      #logit_tau     = TRUE,
+      beta         = FALSE,
+      lambda       = TRUE,
+      epsi_s       = FALSE,
+      logsigma     = TRUE))
     # For Kir : skip
     if(1==10){
       load("data/aclim_cmip5_BT.Rdata")  # Bottom Temp object called "allDat"
@@ -111,7 +110,8 @@
       save(ration_tmb,file     =  file.path(in_dir,"ration_tmb.Rdata"))
     }
     
-   
+    tau_set<-c(0,.01,.1,0.5,.8,1,1.2,1.5,2,5,10)
+    
     # These switches for KHolsman during simulation updates:
     #-------------------------------------------
     retroFL         <-  "data/in/raw/retro_data2018_long_ext_bcs.dat"
