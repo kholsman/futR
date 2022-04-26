@@ -130,6 +130,8 @@
     # or 12.0 cm (4.75 inches or 2 columns). 
 
     # set up color palettes
+    col <- viridis::viridis_pal(1,begin=.3,end=.4)
+    
     plt     <- c("Zissou1","Darjeeling1","Darjeeling2","FantasticFox1")
     blues   <- RColorBrewer::brewer.pal(5, "Blues")
     BG      <- RColorBrewer::brewer.pal(9, "GnBu")  #5

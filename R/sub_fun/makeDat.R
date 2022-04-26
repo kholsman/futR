@@ -9,8 +9,7 @@
 #' @param sdRec       optional sd of rec vector 
 #' @param sdSSB       optional sd of SSB vector a
 #' @param sigMethod   if set to 2 it will not estimate logsigma
-#' @param tMethod     apply 0-1 transformation to gamma for ricker model; if 1  = complementary loglog, if 2 = logit 
-#' @param typeIN      default is 3; Recruitment model formulation based Climate enhanced Rec~SSB functions from Holsman et al. 2019; 1 = Linear with biomass (y-1), 2 =  linear, 3 = Beverton holt, 4 = Ricker
+#' @param rectype      default is 3; Recruitment model formulation based Climate enhanced Rec~SSB functions from Holsman et al. 2019; 1 = Linear with biomass (y-1), 2 =  linear, 3 = Beverton holt, 4 = Ricker
 #' @param estparams   TRUE / FALSE for if parm will be estimated (default is init vals) c(log_a = TRUE, log_b=TRUE, rs_parm=FALSE, logsigma=TRUE)
 #' @param covars      default is NULL; data.frame of covariates (rows) of z-score scaled environmental covariates to evaluate in Rec for each year (columns). Must match  Rec and SSB row index
 #' @param covars_sd   default is NULL; data.frame of sd for covariates (rows) of z-score scaled environmental covariates to evaluate in Rec for each year (columns). Must match Rec and SSB row index
@@ -28,18 +27,18 @@
 #' @examples
 #'  
 makeDat <- function(
+  estMode = 1,  # estimate parameters
   rec_years,
   Rec,
   SSB,
   sdSSB = NULL,
   sdRec = NULL,
-  typeIN,
-  tauIN =  1,
+  rectype,
+  tauIN =  0,
   gammaIN = NULL,
   estparams  = c(
     log_a        = TRUE, 
     log_b        = TRUE, 
-    #logit_tau    = FALSE,
     gamma        = FALSE,
     beta         = FALSE,
     lambda       = TRUE,
@@ -47,31 +46,35 @@ makeDat <- function(
     logsigma     = TRUE),
   covars    = NULL,
   covars_sd = NULL,
+  beta_0    = NULL,
+  lambda_0  = NULL,
   startVal  = NULL,
   phases    = NULL,
   fityrs    = NULL ,
   REcompile = TRUE,
-  Eat_cov   = NULL,
-  tMethod   = 1,
-  sigMethod = NULL) {
+  sigMethod = 1) {
+  
+  if(tauIN == 0) 
+    tauIN <- 1e-3  # tau = 0 returns NAN
 
     inputs<-list(
       dataIN     = data.frame(rec_years,SSB,Rec,sdSSB,sdRec), 
-      typeIN     = typeIN,
+      rectype    = rectype,
       tauIN      = tauIN,
       estparams  = estparams,
       covars     = covars,
       covars_sd  = covars_sd,
+      beta_0     = beta_0,
+      lambda_0   = lambda_0,
       startVal   = startVal,
       phases     = phases,
       fityrs     = fityrs ,
-      #rationIN   = rationIN,
       REcompile  = REcompile,
-      #Eat_cov    = Eat_cov,
-      tMethod    = tMethod,
       sigMethod  = sigMethod)
 
     allyrs       <-  rec_years
+    estparams <- c(estparams,skipFit= FALSE)
+    if(estMode==0) estparams["skipFit"] <- FALSE
     # if(is.null(rationIN))
     #   rationIN<-rep(0,length(allyrs))
 
@@ -79,9 +82,11 @@ makeDat <- function(
     if(!is.null(fityrs))  
       ix           <-  which(allyrs%in%fityrs)
   
-    if(is.null(typeIN)) typeIN <-3
+    if(is.null(rectype)) 
+      rectype <-4
     
     rs_dat<-list()
+    rs_dat$estMode         <-  
     rs_dat$rectype         <-  
     rs_dat$years           <-  
     rs_dat$S_obs           <-  
@@ -94,17 +99,22 @@ makeDat <- function(
     rs_dat$cov_type        <-  
     rs_dat$ncov            <-  
     rs_dat$sigMethod       <- 
-    rs_dat$tMethod         <- 
+    # rs_dat$tMethod         <- 
     rs_dat$tau             <-  NA
     
-    rs_dat$rectype         <-  typeIN
-    rs_dat$tMethod         <-  tMethod
+    rs_dat$sigMethod       <-  sigMethod
+    rs_dat$estMode         <-  estMode
+    rs_dat$rectype         <-  rectype
     rs_dat$years           <-  allyrs[ix]
     rs_dat$S_obs           <-  SSB[ix]  #Rec[y]~  S_obs[y-1]
     rs_dat$R_obs           <-  Rec[ix]  #Rec[y]~  S_obs[y-1]
     #rs_dat$Ration_scaled   <-  rationIN[ix]
-    if(!is.null(covars)) 
+    if(!is.null(covars)){
       rs_dat$rs_cov        <-  covars[,ix]
+      rs_dat$beta_0        <-  beta_0
+      rs_dat$lambda_0      <-  lambda_0
+    }
+    
     rs_dat$sdrs_cov        <-  rs_dat$rs_cov*0
     if(!is.null(covars_sd)) 
       rs_dat$sdrs_cov      <-  covars_sd[,ix]
@@ -113,93 +123,93 @@ makeDat <- function(
     if(is.null(sdSSB))  { rs_dat$sdS <- rep(0,length(ix))}else{rs_dat$sdS <- sdSSB}
     if(is.null(sdRec))  { rs_dat$sdR <- rep(0,length(ix))}else{rs_dat$sdR <- sdRec}
     if(is.null(covars)){
-      rs_dat$rs_cov    <-   t(data.frame(NOcov=rep(0,length(ix))))
-      rs_dat$ncov      <-   NULL
-      estparams["beta"] <- FALSE
+      rs_dat$rs_cov    <- t(data.frame(NOcov=rep(0,length(ix))))
+      rs_dat$sdrs_cov  <- t(data.frame(NOcov=rep(0,length(ix))))
+      rs_dat$ncov      <- NULL
+      rs_dat$beta_0    <- t(data.frame(NOcov=rep(0,length(ix))))
+      rs_dat$lambda_0  <- t(data.frame(NOcov=rep(0,length(ix))))
+      estparams["beta"]   <- FALSE
       estparams["lambda"] <- FALSE
     }else{
       rs_dat$ncov      <-   dim(covars)[1]
       if(rs_dat$ncov==1){
-        rs_dat$rs_cov    <-    t(as.matrix(rs_dat$rs_cov))
-        rs_dat$sdrs_cov  <-    t(as.matrix(rs_dat$sdrs_cov))
+        rs_dat$rs_cov    <- t(as.matrix(rs_dat$rs_cov))
+        rs_dat$beta_0    <- t(as.matrix(rs_dat$beta_0))
+        rs_dat$lambda_0  <- t(as.matrix(rs_dat$lambda_0))
+        rs_dat$sdrs_cov  <- t(as.matrix(rs_dat$sdrs_cov))
       }
     }
     
-    gamma <- -2
-    if(!is.null(gammaIN)) gamma <- gammaIN
+    gamma <- 3
+    if(!is.null(gammaIN)) 
+      gamma <- gammaIN
     
-    rs_dat$cov_type  <-    rep(0,length(ix))
-    rs_dat$tMethod           <-   tMethod
-    rs_dat$cov_type          <-    rep(0,length(ix))
-    rs_dat$tMethod           <-    tMethod
+    rs_dat$cov_type <- rep(0,length(ix))
     
-    if(sigMethod!=2&estparams['logsigma']){
-      rs_dat$sigMethod           <-   sigMethod
-      estparams['logsigma']      <-   TRUE
+    if(sigMethod!=1){
+      estparams['epsi_s'] <- TRUE
     }else{
-      rs_dat$sigMethod           <-   sigMethod
-      estparams['logsigma']      <-   FALSE
+      estparams['epsi_s'] <- FALSE
+    }
+    if(sigMethod!=3){
+      estparams['logsigma'] <- TRUE
+    }else{
+      estparams['logsigma'] <- FALSE
     }
     
-    
-    # if(!is.null(Eat_cov))
-    #   rs_dat$cov_type[Eat_cov]   <-   1
-    
-    rs_dat$nyrs            <-  dim(rs_dat$rs_cov)[2]
-    rs_dat$ncov            <-  dim(rs_dat$rs_cov)[1]
+    rs_dat$nyrs <-  dim(rs_dat$rs_cov)[2]
+    rs_dat$ncov <-  dim(rs_dat$rs_cov)[1]
 
   #___________________________________________
   # 4.1 set initial conditions:
   
-    ln_mn_rec     <-  mean(log(Rec[ix]))
-    ln_mn_SSB     <-  mean(log(SSB[ix]))
+    ln_mn_rec <-  mean(log(Rec[ix]))
+    ln_mn_SSB <-  mean(log(SSB[ix]))
     
-
-    if(typeIN==1){
+    if(rectype==1){
       #Linear
-        tmp_a       =  .8*ln_mn_rec
-        tmp_b       =  1.0/log(ln_mn_SSB)
-        tmpg        =  0
+        tmp_a       =  (-.09*ln_mn_SSB)
+        tmp_b       =  1.0/log(ln_mn_rec) # not used
         aphase      =  1
-        bphase      = -4
-        gphase      = -4
+        bphase      =  -4
         sigma_phase =  2
-     }
+        estparams["log_b"] <- FALSE
+    }
+    
+    if(rectype==2){
+      #Linear with Biomass y-1
+      tmp_a       =  (-.09*ln_mn_SSB)
+      tmp_b       =  1.0/log(ln_mn_rec)
+      aphase      =  1
+      bphase      =  1
+      sigma_phase =  2
+      estparams["log_b"] <- TRUE
+    }
 
     
-    if(typeIN==2){
+    if(rectype==3){
       #BH
         tmp_a       =   1.2
-        tmp_b       =  -ln_mn_rec
-        tmpg        =   0
+        tmp_b       =   -0.8*ln_mn_rec
         bphase      =   1
         aphase      =   1
-        gphase      =  -4
         sigma_phase =   2
     }  
     
-    if(typeIN==3){
+    if(rectype==4){
       #Ricker
       tmp_a       =   1.2
-      tmp_b       =  -ln_mn_rec
-      tmpg        =   gamma
-      # if(tMethod ==1)
-      #   tmpg  = 1-exp(-exp(gamma)) 
-      # if(tMethod ==2)
-      #   tmpg  = exp(gamma)/(1+exp(gamma))
+      tmp_b       =  -0.8*ln_mn_rec
       bphase      =   1
       aphase      =   1
-      gphase      =   2
       sigma_phase =   2
     }
     
-    if(typeIN==4){
-      tmp_a       =  .8*ln_mn_rec
-      tmp_b       =   -ln_mn_rec
-      tmpg        =   1
+    if(rectype==5){
+      tmp_a       =  (.09*ln_mn_SSB)
+      tmp_b       =   .4*ln_mn_rec
       bphase      =   1
       aphase      =   1
-      gphase      =  -4
       sigma_phase =   2
     }
 
@@ -207,34 +217,38 @@ makeDat <- function(
       phases      <-   c(
         log_a        = aphase, 
         log_b        = bphase ,
-        gamma       = gphase,
-        #logit_tau    = sigma_phase,
-        beta         = aphase+1,
-        lambda       = aphase+1,
-        epsi_s       = aphase+2,
+        beta         = sigma_phase+1,
+        lambda       = sigma_phase+1,
+        epsi_s       = sigma_phase+2,
         logsigma     = sigma_phase)
     }
      
      parameters      <-   list(
       log_a        = tmp_a, 
       log_b        = tmp_b ,
-      #logit_tau    = -10,
-      gamma        = tmpg ,
       beta         = rep(0,rs_dat$ncov),
       lambda       = rep(0,rs_dat$ncov),
-      #epsi_s       = rep(0,rs_dat$nyrs),
       epsi_s       = 0,
-      logsigma     = log(.9))
+      logsigma     = log(.9),
+      skipFit      = 0)
 
-
+   # replace with startVal 
    if(!is.null(startVal)){
-    if(!any(names(startVal)%in%names(parameters))) stop("startVal names do not match parameters")
+    if(!any(names(startVal)%in%names(parameters))) 
+      stop("startVal names do not match parameters")
       tmpc<-which(names(startVal)%in%names(parameters))
       for(ii in 1:length(tmpc))
         parameters[[ names(startVal)[ii] ]]<-startVal[[ii]]
    }
-    maplist<-makeMap(param=parameters,estpar=estparams)
-    return(list(parameters = parameters, rs_dat = rs_dat, maplist= maplist,estparams = estparams, phases=phases,inputs=inputs))
+     # print(parameters)
+     # print(estparams)
+    maplist <- makeMap(param=parameters,estpar=estparams)
+ 
+    return(list(parameters = parameters, 
+                rs_dat = rs_dat, 
+                maplist= maplist,
+                estparams = estparams, 
+                phases=phases))
 }
 
 

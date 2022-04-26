@@ -10,6 +10,7 @@ lib_list <- c(
   # these for reshaping and manipulating data:
     "TMB",
     "reshape",
+    "tidyr",
     "dplyr", 
     "ggplot2",
     "lattice",
@@ -22,6 +23,7 @@ lib_list <- c(
     "kableExtra",
     
   # These for making plots:
+    "cowplot",
     "RColorBrewer",
     "ggplot2", 
     "wesanderson",

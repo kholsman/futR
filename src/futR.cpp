@@ -11,7 +11,7 @@
   // 1. Holsman, et al. 2020 Climate and trophic controls on groundfish        //
   // recruitment in Alaska.                                                    //
   // ------------------------------------------------------------------------- //
-  // 
+
   //  INDEX (following the fab G. Adams design)
   //  0. Load data
   //  1. Local parameters
@@ -28,137 +28,175 @@ Type objective_function<Type>::operator(  ) (  )
   // ------------------------------------------------------------------------- //
   // 0. LOAD DATA
   // ------------------------------------------------------------------------- //
-  // DATA_ARRAY(), DATA_FACTOR(), DATA_IARRAY(), DATA_IMATRIX(), DATA_INTEGER(), 
-  // DATA_IVECTOR(), DATA_MATRIX(), DATA_SCALAR(), DATA_SPARSE_MATRIX(), 
-  // DATA_STRING(), DATA_STRUCT(), DATA_UPDATE(), DATA_VECTOR()
-  DATA_INTEGER( rectype );         // Based Rec~S_hat functions. Options are 
-                                    // 1 ) Linear with biomass ( y-1 )
-                                    // 2 ) Beverton holt 
-                                    // 3 ) Ricker
-                                    // 4 ) exponential
-  DATA_VECTOR(  years );            // recruiment years                   ( age class+1 if rec is in age 1 )( 1,nyrs,"years" );
-  DATA_VECTOR(  S_obs );            // Spawning biomass (or Number) in previous year  ( 1,nyrs,"S_hat" );  
-  DATA_VECTOR(  R_obs );             // Recruitment in a given year        ( 1,nyrs,"Robs" );
-  DATA_VECTOR(  sdS );              // stdev of spawning biomass in previous year  ( 1,nyrs,"S_hat" );  
-  DATA_VECTOR(  sdR );              // stdev of recruitment in a given year        ( 1,nyrs,"R" );
-  //DATA_VECTOR(  Ration_scaled );    // Predator ration in a given year    ( 1,nyrs,"Ration" );
-  DATA_MATRIX(  rs_cov );           // environmental covariates           rs_cov.allocate( 1,ncov,1,nyrs,"rs_cov" );
-  DATA_VECTOR(  sdrs_cov );          // stdev environmental covariates     sdrs_cov.allocate( 1,ncov,1,nyrs,"rs_cov" );
+
+  // Based Rec~S_hat functions. rectype options are 
+  // 0 -- Linear 
+  // 1 -- Linear with biomass ( y-1 )
+  // 2 -- Beverton holt 
+  // 3 -- Ricker
+  // 4 -- exponential
+  
+  //0.1 -- switches
+  DATA_INTEGER( estMode);          // estimation mode?
+  DATA_INTEGER( rectype );         // which type of recruitment model
+  
+  //0.2 -- RS data attributes
+  DATA_VECTOR( years );            // recruiment years ( age class+1 if rec is in age 1 )( 1,nyrs,"years" );
+  DATA_VECTOR( S_obs );            // Spawning biomass (or Number) in previous year  ( 1,nyrs,"S_hat" );  
+  DATA_VECTOR( R_obs );            // Recruitment in a given year ( 1,nyrs,"Robs" );
+  DATA_VECTOR( sdS );              // stdev of spawning biomass in previous year  ( 1,nyrs,"S_hat" );  
+  DATA_VECTOR( sdR );              // stdev of recruitment in a given year ( 1,nyrs,"R" );
+  
+  //0.3 -- covariate attributes  
+  DATA_MATRIX( rs_cov );           // environmental covariates        rs_cov.allocate( 1,ncov,1,nyrs,"rs_cov" );
+  DATA_MATRIX( sdrs_cov );         // stdev environmental covariates  sdrs_cov.allocate( 1,ncov,1,nyrs,"sdrs_cov" );
+  DATA_MATRIX( beta_0 );           // 0,1 matrix of inclusion         beta_0.allocate( 1,ncov,1,nyrs,"beta_0" );
+  DATA_MATRIX( lambda_0 );         // 0,1 matrix of inclusion         lambda_0.allocate(1,ncov,1,nyrs,"lambda_0" );
   DATA_INTEGER( nyrs );
   DATA_IVECTOR( cov_type );         // covariate type if 1 then run ration cov_type.allocate( 1,ncov,"cov_type" );
   DATA_INTEGER( ncov );
-  DATA_INTEGER( sigMethod);         // apply bias correction to sigma? 0 = NO; 1 = yes
-  DATA_INTEGER( tMethod);           // apply 0-1 transformation to gamma for ricker model; 1 = complementary loglog (default); 2 = logit
-  DATA_SCALAR(  tau );
+  
+  //0.4 -- Observation error options
+  DATA_INTEGER( sigMethod);         // which method for estimating sigma
+  DATA_SCALAR( tau );               // scalar for observation and process error
   
   // ------------------------------------------------------------------------- //
   // 1. LOCAL PARAMETERS
   // ------------------------------------------------------------------------- //
-
-  // int nyrs  =   years.size(  );         // integer of years
-  // int ncov  =   rs_cov.size(  );        // integer of rs_cov
-  // 4.1 Set up phase values
   Type a       = Type(0.0);
   Type b       = Type(0.0);
-  Type g       = Type(0.0);
   Type Acovars = Type(0.0);
   Type Bcovars = Type(0.0);
-  Type k       = Type(0.0);                // declare number of parms (minus sig)
-  
-  //vector<Type>    R = R_obs * exp(epsi_r);    // annual random effect on Rec or deterministic estimated Rec error
+  Type k       = Type(0.0);                 // declare number of parms (minus sig)
   vector<Type>    S_hat( nyrs );            // declare local S
   vector<Type>    R_hat( nyrs );            // declare local R
+  matrix<Type>    cov( ncov,nyrs );         // declare local cov
    
   // ------------------------------------------------------------------------- //
   // 2. INIT CALCS
   // ------------------------------------------------------------------------- //
-  
-  
+
   // ------------------------------------------------------------------------- //
   // 3. MODEL PARAMETERS
   // ------------------------------------------------------------------------- //
-  
+ 
 	PARAMETER( log_a ); 
-	PARAMETER( log_b );   // b doesn't always have to be positive 
-	PARAMETER( gamma ); 
-	PARAMETER_VECTOR( beta ); 
-	PARAMETER_VECTOR( lambda ); 
-  //PARAMETER( logit_tau );
-  PARAMETER( epsi_s  );  // vector of error around SSB estimates
-  //PARAMETER_VECTOR( epsi_S  );  // vector of error around Spawner estimates
-  //PARAMETER_VECTOR( epsi_R  );  // vector of error around Rec estimates
-	PARAMETER( logsigma ); 
+	PARAMETER( log_b );         // b doesn't always have to be positive 
+	PARAMETER_VECTOR( beta );   // covariate effects on pre-spawning success
+	PARAMETER_VECTOR( lambda ); // covariate effects on post-spawning success
+  PARAMETER( epsi_s  );       // vector of error around SSB estimates
+	PARAMETER( logsigma );      // process error
+	PARAMETER( skipFit);        // used when projecting
 	
 	// ------------------------------------------------------------------------- //
 	// 4. REC MODEL
 	// ------------------------------------------------------------------------- //
-    
-    
-    // 4.1. Precalcs:
-    // 4.3 calculate recruitment:
-    // 1. Linear (gamma = 0)
-    // 2. Beverton Holt (gamma = -1)
-    // 3. Ricker (0 < gamma <1 )
-    // 4. Exponential (gamma=1, b<0)
+	  
+	 
+    S_hat = S_obs * exp(epsi_s);  // annual random effect on SSB or deterministic estimated SBB error
+
     switch ( rectype ) {
-      case 1: // Linear with biomass ( y-1 )  BLM
-        a = exp( log_a );
-        b = log_b;  // isn't used in the model
-        g = 0;
+      case 1: // Linear 
+        a = exp( log_a ); // must be positive
+        b = log_b;
         k = 1+ncov;
+        for( int i= 0; i< nyrs; i++ ){
+          Acovars = Type(0.0);  // Initialize
+          Bcovars = Type(0.0);  // Initialize
+         
+          for ( int c= 0; c< ncov; c++ ){
+            cov(c,i)     = rs_cov( c,i );
+            SIMULATE {
+              cov( c,i ) = rnorm( rs_cov( c,i ) , sdrs_cov( c,i )) ; // Simulate env
+            }
+            Acovars+= beta_0( c,i )*beta( c )*cov( c,i );
+            Bcovars+= lambda_0( c,i )*lambda( c )*cov( c,i );
+          }
+          R_hat(i)  =  exp(a+Acovars);
+        }
       break;
-      case 2:  // Beverton Holt
-        a = exp( log_a );
-        b = exp( log_b );
-        g = -1;
+      case 2: // Linear with biomass ( y-1 )  BLM
+        a = exp( log_a ); // must be positive
+        b = exp( log_b );   
         k = 2+ncov;
-        
+        for( int i= 0; i< nyrs; i++ ){
+          Acovars = Type(0.0);  // Initialize
+          Bcovars = Type(0.0);  // Initialize
+          
+          for ( int c= 0; c< ncov; c++ ){
+            cov(c,i)     = rs_cov( c,i );
+            SIMULATE {
+              cov( c,i ) = rnorm( rs_cov( c,i ) , sdrs_cov( c,i )) ; // Simulate env
+            }
+            Acovars+= beta_0( c,i )*beta( c )*cov( c,i );
+            Bcovars+= lambda_0( c,i )*lambda( c )*cov( c,i );
+          }
+          R_hat(i)  =  exp(a+Acovars+(b+Bcovars)*log(S_hat(i)));
+      }
       break;
-    case 3: // Ricker
+      case 3:  // Beverton Holt
+        a = exp( log_a );// must be positive
+        b = exp( log_b );// must be positive
+        k = 2+ncov;
+        for( int i= 0; i< nyrs; i++ ){
+          Acovars = Type(0.0);  // Initialize
+          Bcovars = Type(0.0);  // Initialize
+          
+          for ( int c= 0; c< ncov; c++ ){
+            cov(c,i)     = rs_cov( c,i );
+            SIMULATE {
+              cov( c,i ) = rnorm( rs_cov( c,i ) , sdrs_cov( c,i )) ; // Simulate env
+            }
+            Acovars+= beta_0( c,i )*beta( c )*cov( c,i );
+            Bcovars+= lambda_0( c,i )*lambda( c )*cov( c,i );
+          }
+          R_hat(i)  =  (a*S_hat(i)*exp(Acovars)) / (1+ b*(S_hat(i)*exp(Bcovars)) );
+        }
+      break;
+    case 4: // Ricker
       a = exp( log_a );
       b = exp( log_b );
-      switch ( tMethod ){
-        case 1:
-          // gamma = log(-log(1-g));
-          g  = 1-exp(-exp(gamma)) ;
-        break;
-        case 2:
-          //gamma = log((g/(1-g)));
-          g = exp(gamma)/(1+exp(gamma));
-        break;
-        default:
-          error( "Invalid 'tMethod'" );
+      k = 2+ncov;
+      for( int i= 0; i< nyrs; i++ ){
+        
+        Acovars = Type(0.0);  // Initialize
+        Bcovars = Type(0.0);  // Initialize
+        
+        for ( int c= 0; c< ncov; c++ ){
+          cov(c,i)     = rs_cov( c,i );
+          SIMULATE {
+            cov( c,i ) = rnorm( rs_cov( c,i ) , sdrs_cov( c,i )) ; // Simulate env
+          }
+          Acovars+= beta_0( c,i )*beta( c )*cov( c,i );
+          Bcovars+= lambda_0( c,i )*lambda( c )*cov( c,i );
+        }
+        //modified from mueter 2011 formulation
+        R_hat(i)= exp((a*exp(Acovars))-(b*exp(Bcovars)*S_hat(i))+log(S_hat(i))) ;
+        
       }
-      k = 3 + ncov;
       break;
-    case 4: // exponential
-      a     = exp( log_a );
-      g     =   1;
-      b     =   -1 * exp( log_b );
-      k     =   2+ncov;
-      
+    // case 5: // exponential
+    //   a     = exp( log_a );
+    //   b     = -.99*exp( log_a-log_b );
+    //   k     =  2+ncov;
+    //   Acovars = Type(0.0);  // Initialize
+    //   Bcovars = Type(0.0);  // Initialize
+    //   for( int i= 0; i< nyrs; i++ ){
+    //     for ( int c= 0; c< ncov; c++ ){
+    // Acovars+= beta_0( c,i )*beta( c )*rs_cov( c,i );
+    // Bcovars+= lambda_0( c,i )*lambda( c )*rs_cov( c,i );
+    //     }
+    //     R_hat(i)  =  exp(a+b*S_hat(i)+exp(Acovars));
+    //   }
+    //   
+    //   
     break;
     default:
       error( "Invalid 'rectype'" );
     }
     
-   // R_hat = 0.0;
-   S_hat = S_obs  * exp(epsi_s);  // annual random effect on SSB or deterministic estimated SBB error
-    for( int i= 0; i< nyrs; i++ )
-    {
-      Acovars = Type(0);  // Initialize
-      Bcovars = Type(0);  // Initialize
-      for ( int c= 0; c< ncov; c++ )
-      {
-        Acovars+= beta( c )*rs_cov( c,i );
-        Bcovars+= lambda( c )*rs_cov( c,i );
-      }
-
-     // R_hat(i)  =  a*S_hat(i)*exp(Acovars)*pow( Type(1.0) - (b*g*S_hat(i)*exp(Acovars)) ,Type(1.0)/g  )*exp(Bcovars);
-      R_hat(i)  =  a*S_obs(i)*exp(Acovars)*pow( Type(1.0) - (b*g*S_obs(i)*exp(Acovars)) ,Type(1.0)/g  )*exp(Bcovars);
-      
-    }
-    
+    vector<Type> ols_R     = (log(R_obs) - log(R_hat));
+    vector<Type> ols_S     = (log(S_obs) - log(S_hat));
      
   // ------------------------------------------------------------------------- //
   // 5. CALC OBJ FUN
@@ -170,125 +208,116 @@ Type objective_function<Type>::operator(  ) (  )
     // Inferences Regarding the Relationship  between Spawners and Recruits and the Irresolute
     // Case of Western Atlantic Bluefin Tuna (Thunnus thynnus). PLoS ONE 11(6): e0156767. 
     // doi:10.1371/journal.pone.0156767
-    
-    vector<Type> epsi_R     = log(R_obs) - log(R_hat);
-    vector<Type> epsi_S     = log(S_obs) - log(S_hat);
-   // matrix<Type> epsi_cov   = rs_cov     - rs_cov_hat;
-   // nll -= sum(dnorm(epsi_cov,Type(0.0),rs_cov_sd,true));
-    
-    Type sig   = exp(logsigma);
-    Type sig_R = Type(0.0);
-    Type sig_S = Type(0.0);
-    Type nll   = Type(0.0);
+
+    // pre-declare variables
+    Type sig    = Type(0.0);
+    Type sig_R  = Type(0.0);
+    Type sig_S  = Type(0.0);
+    Type mn_sdR = Type(0.0);
+    Type mn_sdS = Type(0.0);
     
     switch ( sigMethod ) {
-      case 1: // estimate sigma, random effects on SSB if tau >0
+    case 1: //  no observation error tau = 0
+        sig   =  exp(logsigma);   // -- process error of recruitment
+        sig_R =  sig;             // -- observation error of recruitment
+        sig_S =  Type(0.00001);   // -- Not used bc epsi_S  = 0
+        
+      break;
+      case 2: // estimate sigma, random effects on SSB if tau >0
         // observation errors sig_R and sig_S are statistically independent, random normal variables with similar variance sig_R
         // but because of lack of other info sig_R is a function of process error via the tau scalar see eq 4 in 
         // Porch, C. E., and M. V. Lauretta. 2016. 
-         sig  = exp(logsigma);  // process error of recruitment
-         sig_R = (1+tau)*sig;   // observation error of recruitment
-         sig_S = tau*(sig);     // observation error of spawners (can be same as sig_R)
-         nll -= sum(dnorm(epsi_R,Type(0.0),sig_R,true));
-         nll -= sum(dnorm(epsi_S,Type(0.0),sig_S,true));
-         SIMULATE {
-           
-           for( int i= 0; i< nyrs; i++ ){
-            R_hat(i) = exp(rnorm(Type(0.0),sig_R)+log(R_hat(i)));  // Simulate response
-            S_hat(i) = exp(rnorm(Type(0.0),sig_S)+log(S_hat(i)));    // Simulate response
-           }
-                         REPORT(R_hat);          // Report the simulation
-                         REPORT(S_hat);          // Report the simulation
-                         ADREPORT(R_hat);          // Report the simulation
-                         ADREPORT(S_hat);          // Report the simulation
-         }
+        
+         sig   = exp(logsigma);          // -- process error of recruitment
+         sig_R = (Type(1.0)+tau)*sig;    // -- observation error of recruitment
+         sig_S = tau*(sig);              // -- observation error of spawners (can be same as sig_R)
       break;
-      case 2:// as in case 1 but using an unbiased sigma (rather than biased estimate from MLE; sensu Ludwig and Walters 1982):
-        sig = 0.0;
-        for( int i= 0; i< nyrs; i++ )
-         sig =  ( ((epsi_R[i]*epsi_R[i])/(1+tau)) + ((epsi_S[i]*epsi_S[i])/(tau)) );
+      case 3:// as in case 1 but using an unbiased sigma (rather than biased estimate from MLE; sensu Ludwig and Walters 1982):
+         sig = Type(0.0);
+         for( int i = 0; i< nyrs; i++ )
+            sig +=  ( (ols_R[i]*ols_R[i])/(1+tau)) + ((ols_S[i]*ols_S[i])/(tau) );
          sig = (1/(nyrs-k))*sig;
-         sig_R = (1+tau)*sig;
+         sig_R = (Type(1.0)+tau)*sig;
          sig_S = tau*(sig);
-         nll -= sum(dnorm(epsi_R,Type(0.0),sig_R,true));
-         nll -= sum(dnorm(epsi_S,Type(0.0),sig_S,true));
-         SIMULATE {
-           for( int i= 0; i< nyrs; i++ ){
-            R_hat(i) = exp(rnorm(Type(0.0),sig_R)+log(R_hat(i)));    // Simulate response
-            S_hat(i) = exp(rnorm(Type(0.0),sig_S)+log(S_hat(i)));    // Simulate response
-           }
-           REPORT(R_hat);          // Report the simulation
-           REPORT(S_hat);          // Report the simulation
-           ADREPORT(R_hat);          // Report the simulation
-           ADREPORT(S_hat);          // Report the simulation
-         }
         break;
-      case 3:
+      case 4:
         // as in 1 but with defined measurement error for rec (indep of random effects on S_hat)
         // tau = 0 defaults to no random effects on Spawners
          sig  = exp(logsigma);
+         for( int i= 0; i< nyrs; i++ )
+           mn_sdR += sdR(i)/nyrs;
+         sig_R = sig + mn_sdR;
          sig_S = tau*(sig);
-         nll -= sum(dnorm(epsi_R,Type(0.0),sig + sdR,true));
-         nll -= sum(dnorm(epsi_S,Type(0.0),sig_S,true));
-         SIMULATE {
-           for( int i= 0; i< nyrs; i++ ){
-            R_hat(i) = exp(rnorm(Type(0.0),sig + sdR(i))+log(R_hat(i)));  // Simulate response
-            S_hat(i) = exp(rnorm(Type(0.0),sig_S)+log(S_hat(i)));    // Simulate response
-           }
-           REPORT(R_hat);          // Report the simulation
-           REPORT(S_hat);          // Report the simulation
-           ADREPORT(R_hat);          // Report the simulation
-           ADREPORT(S_hat);          // Report the simulation
-         }
       break;
-      case 4:// as in 1 but with defined measurement error for rec and SSB; tau = 0 defaults to no random effects on S, and sig for R
+      case 5:// as in 1 but with defined measurement error for rec and SSB; tau = 0 defaults to no random effects on S, and sig for R
         sig  = exp(logsigma);
-        sig_R =  ((1+tau)*sig);
-        sig_S =  (tau*(sig));
-        nll -= sum(dnorm(epsi_R,Type(0.0),sig_R + sdR,true));
-        nll -= sum(dnorm(epsi_S,Type(0.0),sig_S + sdS,true));
-        SIMULATE {
-          for( int i= 0; i< nyrs; i++ ){
-            R_hat(i) = exp(rnorm(Type(0.0),sig_R + sdR(i))+log(R_hat(i)));  // Simulate response
-            S_hat(i) = exp(rnorm(Type(0.0),sig_S + sdS(i))+log(S_hat(i)));    // Simulate response
-          }
-          REPORT(R_hat);          // Report the simulation
-          REPORT(S_hat);          // Report the simulation
-          ADREPORT(R_hat);          // Report the simulation
-          ADREPORT(S_hat);          // Report the simulation
+        for( int i = 0; i< nyrs; i++ ){
+          mn_sdR += sdR(i)/nyrs;
+          mn_sdS += sdS(i)/nyrs;
         }
+        sig_R =  ((Type(1.0)+tau)*sig) + mn_sdR;
+        sig_S =  (tau*(sig)) + mn_sdS;
       break;
       default:
         error( "Invalid 'sigMethod'" );
     }
+   
+    
+    
+    // ------------------------------------------------------------------------- //
+    // 6. END
+    // ------------------------------------------------------------------------- //
 
+    //calculate negative log-likelihood
+    Type nll_test  = Type(0.0);
+    for( int i = 0; i< nyrs; i++ )
+      nll_test += ((ols_R[i]/sig_R)*(ols_R[i]/sig_R)) + ((ols_S[i]/sig_S)*(ols_S[i]/sig_S));
+    nll_test =  0.5*(  (nyrs*log(2*3.141593*sig_S*sig_S)) + (nyrs*log(2*3.141593*sig_R*sig_R)) + nll_test);
+
+
+    Type nll = -sum(dnorm(log(R_obs),log(R_hat),sig_R,true));
+        nll += -sum(dnorm(log(S_obs),log(S_hat),sig_S,true));
+     
+    
+    if(estMode == 0)  nll  = skipFit;
+  
+    
+    SIMULATE {
+      //for( int i= 0; i< nyrs; i++ ){
+        R_obs = rnorm( log(R_hat) ,sig_R) ; // Simulate response
+        R_obs = exp(R_obs); // Simulate response
+        S_obs = rnorm( log(S_hat) ,sig_S) ; // Simulate response
+        S_obs = exp(S_obs); // Simulate response
+      //}
+       REPORT(R_obs);            // Report the simulation
+       REPORT(S_obs);            // Report the simulation
+    }
     
     
   // ------------------------------------------------------------------------- //
-  // 6. Report
+  // 7. Report
   // ------------------------------------------------------------------------- // 
-
+  
+  REPORT( nll );
+  REPORT( nll_test );
   REPORT( S_hat );
   REPORT( S_obs );
   REPORT( R_hat );
   REPORT( R_obs );
+  REPORT( cov );
   REPORT( sig_S );
   REPORT( sig_R );
   REPORT( sig );
   REPORT( tau );
-  REPORT (gamma);
-  REPORT(g);
   REPORT( log_a );
   REPORT( a );
   REPORT( log_b );
   REPORT( b );
   REPORT (logsigma);
-  REPORT( epsi_R );
-  REPORT( epsi_S );
-
+  REPORT( ols_R );
+  REPORT( ols_S );
   REPORT( beta );
   REPORT( lambda );
-
 
   ADREPORT( S_hat );
   ADREPORT( S_obs );
@@ -298,21 +327,15 @@ Type objective_function<Type>::operator(  ) (  )
   ADREPORT( sig_R );
   ADREPORT( sig );
   ADREPORT( tau );
-  ADREPORT (gamma);
-  ADREPORT(g);
   ADREPORT( log_a );
   ADREPORT( a );
   ADREPORT( log_b );
   ADREPORT( b );
   ADREPORT (logsigma);
-  ADREPORT( epsi_R );
-  ADREPORT( epsi_S ); 
+  ADREPORT( ols_R );
+  ADREPORT( ols_S ); 
   ADREPORT( beta );
   ADREPORT( lambda );
-  
-  // ------------------------------------------------------------------------- //
-  // 7. END
-  // ------------------------------------------------------------------------- //
   
   return nll;
   

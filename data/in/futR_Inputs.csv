@@ -1,0 +1,7 @@
+,phases,estimate
+log_a,1,TRUE
+log_b,1,TRUE
+beta,1,FALSE
+lambda,1,FALSE
+epsi_s,1,FALSE
+logsigma,1,TRUE
