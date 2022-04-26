@@ -311,7 +311,7 @@ The base function for fitting recruitment requires a data.frame of recruitment a
   # 2. Compile futR	(first time through - can skip this step after )
   #___________________________________________
 
-  recompile_model <- FALSE # to recompile the model set to TRUE
+  recompile_model <- TRUE # to recompile the model set to TRUE
 
    if(recompile_model){
     wd0 <- getwd()
@@ -320,8 +320,14 @@ The base function for fitting recruitment requires a data.frame of recruitment a
     setwd(wd0)
    }
   # this will generate warnings - they can be ignored if "0" is returned
+
+```
+
+*Note: If you get a compilation error try reinstalling RTools using the instructions [here](https://cran.r-project.org/bin/windows/Rtools/).*
+      
+```{r setup3, echo=T,eval=T,message=F,results='hide'}
   
-  # read in the data and create a datlist
+# read in the data and create a datlist
   datlist <- readMake_futR_data("data/in/futR_Inputs.xlsx" )
   
   # recruitment data:

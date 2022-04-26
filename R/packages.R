@@ -8,7 +8,9 @@
 
 lib_list <- c(
   # these for reshaping and manipulating data:
+    "Matrix", # needed for TMB
     "TMB",
+    "viridis",
     "reshape",
     "tidyr",
     "dplyr", 
@@ -37,7 +39,7 @@ lib_list <- c(
 
 # Install missing libraries:
 missing <- setdiff(lib_list, installed.packages()[, 1])
-if (length(missing) > 0) install.packages(missing)
+if (length(missing) > 0) install.packages(missing,repos = "http://cran.us.r-project.org", dependencies = TRUE)
 
 # Load libraries:
 for(lib in lib_list)
