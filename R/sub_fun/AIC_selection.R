@@ -18,9 +18,9 @@
 #'    list of input data from makeDat() function: "parameters" "rs_dat"     "maplist"    "estparams"  "phases"  
 #' @param returnAll   return all phases? TRUE/FALSE
 #' @param quiet       print out phases
-#' @export   tmp1 a dataframe of summary statistics for AICc of submodels         
+#' @return   tmp1 a dataframe of summary statistics for AICc of submodels         
 #' @examples
-#' 
+#' @export
 AICselection <- function (LL, 
                           npar, 
                           n, 

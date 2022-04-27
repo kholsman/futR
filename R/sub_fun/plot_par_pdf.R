@@ -1,10 +1,30 @@
+#' plot the pdf of each parameter estimated in the model
+#' 
+#' @email For more information contact author Kirstin Holsman (kirstin.holsman@noaa.gov)
+#' @weblink 
+#' @param df   dataframe of outputs from runmod(), e.g., mm <- runmod(...)
+#' * model     model name to be displayed on the legend
+#' * estimate  as.vector(mm$sim)
+#' * parameter names( mm$mle)[row(mm$sim)]
+#' @return list
 #'
-#'
-#'plot_par_pdf.R
-#'
-
-
-
+#' @examples
+#' # read in the data
+#' datlist <- datlist2 <-  readMake_futR_data("data/in/futR_Inputs.xlsx" )
+#' 
+#' # set the sigMethod to 1
+#' datlist2$rs_dat$sigMethod <-1
+#' mm      <- runmod(dlistIN   = datlist, version   = 'futR',recompile = FALSE,simulate  = TRUE,sim_nitr  = 1000)
+#' dfR4_s1 <-  data.frame(model = "sigMethod 1",estimate  = as.vector(mm$sim),parameter = names( mm$mle)[row(mm$sim)])
+#' plot_par_pdf(dfR4_s1)
+#' 
+#' #set the sigMethod to 4 (unbiased sigma)
+#' datlist2$rs_dat$sigMethod <- 4
+#' mm      <- runmod(dlistIN   = datlist2, version   = 'futR',recompile = FALSE,simulate  = TRUE,sim_nitr  = 1000)
+#' dfR4_s3 <-  data.frame(model = "sigMethod 4",estimate  = as.vector(mm$sim),parameter = names( mm$mle)[row(mm$sim)])
+#' #now compare plots
+#' plot_par_pdf(rbind(dfR4_s1,dfR4_s3))
+#' @export
 plot_par_pdf <- function(df = df1_t0){
   mu   <- df%>%group_by(model,parameter)%>%summarise(grp.mean=mean(estimate))
   peak <- df%>%group_by(model,parameter)%>%

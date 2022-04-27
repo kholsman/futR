@@ -4,10 +4,14 @@
 %
 \documentclass[
 ]{article}
+\title{futR()}
+\author{Kirstin Holsman}
+\date{}
+
 \usepackage{amsmath,amssymb}
 \usepackage{lmodern}
-\usepackage{ifxetex,ifluatex}
-\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+\usepackage{iftex}
+\ifPDFTeX
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
   \usepackage{textcomp} % provide euro and other symbols
@@ -113,13 +117,9 @@
 \usepackage[normalem]{ulem}
 \usepackage{makecell}
 \usepackage{xcolor}
-\ifluatex
+\ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
-
-\title{futR()}
-\author{Kirstin Holsman}
-\date{}
 
 \begin{document}
 \maketitle
@@ -159,9 +159,14 @@ function:
 For more information see Holsman et al.~2020 Climate and trophic
 controls on groundfish recruitment in Alaska.
 
-\hypertarget{recruitment-formulations-rectype}{%
-\section{Recruitment formulations
-(rectype):}\label{recruitment-formulations-rectype}}
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\hypertarget{futr-options}{%
+\section{futR() options}\label{futr-options}}
+
+\hypertarget{recruitment-models-rectype}{%
+\subsection{Recruitment models
+(rectype)}\label{recruitment-models-rectype}}
 
 There are four base model formulations available for estimating the
 relationship between recruitment and spawners (and/ or environmental
@@ -204,7 +209,7 @@ recruitment age (e.g., age 0+ survival)):
 \end{itemize}
 
 \hypertarget{rectype-1.-log-linear}{%
-\subsection{rectype = 1. Log-linear}\label{rectype-1.-log-linear}}
+\subsubsection{rectype = 1. Log-linear}\label{rectype-1.-log-linear}}
 
 When rectype is set to 1, the model fits a log-normal linear model
 without an index of spawners (i.e., the mean recruitment as a function
@@ -239,7 +244,7 @@ x_{n_k,1} & \dots  & x_{n_k,n_y}
 \]
 
 \hypertarget{rectype-2.-log-linear-with-spawners}{%
-\subsection{rectype = 2. Log-linear with
+\subsubsection{rectype = 2. Log-linear with
 spawners}\label{rectype-2.-log-linear-with-spawners}}
 
 When rectype is set to 2, the model fits a log-normal linear model as a
@@ -282,7 +287,8 @@ x_{n_k,1} & \dots  & x_{n_k,n_y}
 \]
 
 \hypertarget{rectype-3.-beverton-holt}{%
-\subsection{rectype = 3. Beverton Holt}\label{rectype-3.-beverton-holt}}
+\subsubsection{rectype = 3. Beverton
+Holt}\label{rectype-3.-beverton-holt}}
 
 The Beverton-Holt model is appropriate ``if there is a maximum abundance
 imposed by food availability or space, or if the predator can adjust its
@@ -337,7 +343,7 @@ x_{n_k,1} & \dots  & x_{n_k,n_y}
 \]
 
 \hypertarget{rectype-4.-ricker}{%
-\subsection{rectype = 4. Ricker}\label{rectype-4.-ricker}}
+\subsubsection{rectype = 4. Ricker}\label{rectype-4.-ricker}}
 
 When rectype is set to 4 the model fits a Ricker S/R curve. The Ricker
 model (Ricker,1954) is a dome shaped recruitment curve best used to
@@ -389,9 +395,11 @@ x_{n_k,1} & \dots  & x_{n_k,n_y}
 \end{array}\right]
 \]
 
-\hypertarget{observation-error-options-sigmethod}{%
-\section{Observation error options
-(sigMethod)}\label{observation-error-options-sigmethod}}
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\hypertarget{obs.-error-options-sigmethod}{%
+\subsection{Obs. error options
+(sigMethod)}\label{obs.-error-options-sigmethod}}
 
 Finally, for more advanced model fitting, various options for
 observation error on recruitment or spawning estimates is available
@@ -414,7 +422,7 @@ through alternative ``sigMethod'' selections:
 \end{enumerate}
 
 \hypertarget{sigmethod-1}{%
-\subsection{sigMethod = 1}\label{sigmethod-1}}
+\subsubsection{sigMethod = 1}\label{sigmethod-1}}
 
 The base model fits the lognormally distributed process error for
 recruitment (\(\sigma\)) using maximum likelihood (i.e., ordinary least
@@ -428,7 +436,7 @@ distributed observation error as:
 \(log\hat{S}_{i-1} \sim N(0,\sigma_S)\) where \(\sigma_S=0\)
 
 \hypertarget{sigmethod-2}{%
-\subsection{sigMethod = 2}\label{sigmethod-2}}
+\subsubsection{sigMethod = 2}\label{sigmethod-2}}
 
 The base model fits the lognormally distributed process error for
 recruitment (\(\sigma\)) using maximum likelihood (i.e., ordinary least
@@ -447,7 +455,7 @@ distributed observation error as:
 \(log\hat{S}_{i-1} \sim N(0,\sigma_S)\) where \(\sigma_S=\tau*\sigma\)
 
 \hypertarget{sigmethod-3}{%
-\subsection{sigMethod = 3}\label{sigmethod-3}}
+\subsubsection{sigMethod = 3}\label{sigmethod-3}}
 
 As in sigMethod = 2, except when sigMethod = 3 \(\sigma\) is estimated
 using the unbiased sigma estimate (sensu Ludwig and Walters 1982):
@@ -459,7 +467,7 @@ where
 \[\epsilon_{Si} = log(S_i) - log(\hat S_i) \]
 
 \hypertarget{sigmethod-4}{%
-\subsection{sigMethod = 4}\label{sigmethod-4}}
+\subsubsection{sigMethod = 4}\label{sigmethod-4}}
 
 As in sigMethod = 2 with observation error (random effects) on S if
 \(\tau >0\), but with defined measurement error (\(\gamma_{R,i}\)) for
@@ -471,7 +479,7 @@ that:
 \(log\hat{S}_{i-1} \sim N(0,\sigma_S\) where \(\sigma_S=\tau*\sigma\).
 
 \hypertarget{sigmethod-5}{%
-\subsection{sigMethod = 5}\label{sigmethod-5}}
+\subsubsection{sigMethod = 5}\label{sigmethod-5}}
 
 As in sigMethod = 2 with observation error (random effects) on S and R
 if \(\tau >0\), but with defined measurement errors (\(\gamma_{R,i}\)
@@ -488,11 +496,14 @@ offsets for each.
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\hypertarget{running-the-code}{%
-\section{Running the Code}\label{running-the-code}}
+\hypertarget{running-futr}{%
+\section{Running futR()}\label{running-futr}}
+
+\hypertarget{getting-started}{%
+\subsection{Getting started}\label{getting-started}}
 
 \hypertarget{step-1-installing-futr}{%
-\subsection{Step 1: Installing futR()}\label{step-1-installing-futr}}
+\subsubsection{Step 1: Installing futR()}\label{step-1-installing-futr}}
 
 The package can be installed from github using the devtools package:
 
@@ -511,7 +522,7 @@ The projection package can then be installed to R directly:
 \end{Shaded}
 
 \hypertarget{step-2-set-up-the-workspace}{%
-\subsection{Step 2: Set up the
+\subsubsection{Step 2: Set up the
 workspace}\label{step-2-set-up-the-workspace}}
 
 The base function for fitting recruitment requires a data.frame of
@@ -541,8 +552,16 @@ recruitment and spawning biomass:
     \FunctionTok{setwd}\NormalTok{(wd0)}
 \NormalTok{   \}}
   \CommentTok{\# this will generate warnings {-} they can be ignored if "0" is returned}
-  
-  \CommentTok{\# read in the data and create a datlist}
+\end{Highlighting}
+\end{Shaded}
+
+\emph{Note: If you get a compilation error try reinstalling RTools using
+the instructions
+\href{https://cran.r-project.org/bin/windows/Rtools/}{here}.}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# read in the data and create a datlist}
 \NormalTok{  datlist }\OtherTok{\textless{}{-}} \FunctionTok{readMake\_futR\_data}\NormalTok{(}\StringTok{"data/in/futR\_Inputs.xlsx"}\NormalTok{ )}
   
   \CommentTok{\# recruitment data:}
@@ -573,12 +592,12 @@ recruitment and spawning biomass:
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{explore-different-rs-relationship-fits}{%
-\section{Explore different R/S relationship
-fits}\label{explore-different-rs-relationship-fits}}
+\hypertarget{explore-recruitment-models}{%
+\subsection{Explore recruitment
+models}\label{explore-recruitment-models}}
 
 \hypertarget{rectype-1}{%
-\subsection{rectype = 1}\label{rectype-1}}
+\subsubsection{rectype = 1}\label{rectype-1}}
 
 Log-linear relationship (mean with variation with covars).
 \[ \mathrm{log}(\hat{R_i})= a+\sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i}}+\varepsilon_i \]
@@ -623,7 +642,7 @@ Log-linear relationship (mean with variation with covars).
 \includegraphics{futR_demo_files/figure-latex/plotR1-1.pdf}
 
 \hypertarget{rectype-2}{%
-\subsection{rectype = 2}\label{rectype-2}}
+\subsubsection{rectype = 2}\label{rectype-2}}
 
 Log-linear relationship with spawners and covariates.
 
@@ -671,7 +690,7 @@ Log-linear relationship with spawners and covariates.
 \includegraphics{futR_demo_files/figure-latex/plotR2-1.pdf}
 
 \hypertarget{rectype-3}{%
-\subsection{rectype = 3}\label{rectype-3}}
+\subsubsection{rectype = 3}\label{rectype-3}}
 
 Beverton holt relationship.
 
@@ -714,7 +733,7 @@ Beverton holt relationship.
 \includegraphics{futR_demo_files/figure-latex/plotR3-1.pdf}
 
 \hypertarget{rectype-4}{%
-\subsection{rectype = 4}\label{rectype-4}}
+\subsubsection{rectype = 4}\label{rectype-4}}
 
 Ricker relationship.
 
@@ -758,7 +777,7 @@ Ricker relationship.
 \includegraphics{futR_demo_files/figure-latex/plotR4-1.pdf}
 
 \hypertarget{rectype-4-with-covariates}{%
-\subsection{rectype = 4 with
+\subsubsection{rectype = 4 with
 covariates}\label{rectype-4-with-covariates}}
 
 Ricker relationship fit with covariates on pre-spawning success and
@@ -792,18 +811,12 @@ post-spawning survival.
 
 \includegraphics{futR_demo_files/figure-latex/plotR4_cov-1.pdf}
 
-\includegraphics{futR_demo_files/figure-latex/plotR4_covpar-1.pdf}
-
-\hypertarget{explore-observation-error-options-sigmethod}{%
-\section{Explore observation error options
-(sigMethod)}\label{explore-observation-error-options-sigmethod}}
+\hypertarget{explore-obs.-error-options}{%
+\subsection{Explore obs. error
+options}\label{explore-obs.-error-options}}
 
 Let's start by fitting based models (no climate covariates) with
 different options for observation error.
-
-\hypertarget{observation-error-options-sigmethod-1}{%
-\subsubsection{Observation error options
-(sigMethod):}\label{observation-error-options-sigmethod-1}}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -821,8 +834,7 @@ different options for observation error.
   as in 1 but with defined measurement error for rec and Spawners/SSB)
 \end{enumerate}
 
-\hypertarget{run-this-code-first}{%
-\subsubsection{Run this code first}\label{run-this-code-first}}
+\textbf{Run this code first}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -838,13 +850,11 @@ different options for observation error.
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{now-explore-different-sigmethod-settings-starting-with-sigmethod-0.-note-comparitive-plots-at-the-bottom-of-each-tab.}{%
-\subsubsection{Now explore different sigMethod settings starting with
-sigMethod = 0. Note comparitive plots at the bottom of each
-tab.}\label{now-explore-different-sigmethod-settings-starting-with-sigmethod-0.-note-comparitive-plots-at-the-bottom-of-each-tab.}}
+Now explore different sigMethod settings starting with sigMethod = 0.
+Note comparitive plots at the bottom of each tab.
 
 \hypertarget{sigmethod-1-1}{%
-\subsection{sigMethod = 1}\label{sigmethod-1-1}}
+\subsubsection{sigMethod = 1}\label{sigmethod-1-1}}
 
 The base model fits the lognormally distributed process error for
 recruitment (\(\sigma\)) using maximum likelihood (i.e., ordinary least
@@ -891,7 +901,7 @@ estimated for either spawners (S) or recruitment (R) estimates.
 \includegraphics{futR_demo_files/figure-latex/plot1-1.pdf}
 
 \hypertarget{sigmethod-2-1}{%
-\subsection{sigMethod = 2}\label{sigmethod-2-1}}
+\subsubsection{sigMethod = 2}\label{sigmethod-2-1}}
 
 The base model fits the lognormally distributed process error for
 recruitment (\(\sigma\)) using maximum likelihood (i.e., ordinary least
@@ -951,7 +961,7 @@ distributed observation error as:
 \includegraphics{futR_demo_files/figure-latex/plot2-1.pdf}
 
 \hypertarget{sigmethod-3-1}{%
-\subsection{sigMethod = 3}\label{sigmethod-3-1}}
+\subsubsection{sigMethod = 3}\label{sigmethod-3-1}}
 
 As in sigMethod = 2, except when sigMethod = 3 \(\sigma\) is estimated
 using the unbiased sigma estimate (sensu Ludwig and Walters 1982):
@@ -1005,7 +1015,7 @@ where
 \includegraphics{futR_demo_files/figure-latex/plot3-1.pdf}
 
 \hypertarget{sigmethod-4-1}{%
-\subsection{sigMethod = 4}\label{sigmethod-4-1}}
+\subsubsection{sigMethod = 4}\label{sigmethod-4-1}}
 
 As in sigMethod = 2 with observation error (random effects) on S if
 \(\tau >0\), but with defined measurement error (\(\gamma_{R,i}\)) for
@@ -1053,7 +1063,7 @@ that:
 \includegraphics{futR_demo_files/figure-latex/plot4-1.pdf}
 
 \hypertarget{sigmethod-5-1}{%
-\subsection{sigMethod = 5}\label{sigmethod-5-1}}
+\subsubsection{sigMethod = 5}\label{sigmethod-5-1}}
 
 As in sigMethod = 2 with observation error (random effects) on S and R
 if \(\tau >0\), but with defined measurement errors (\(\gamma_{R,i}\)

@@ -1,31 +1,58 @@
-#-------------------------------------
-# run the model
-#-------------------------------------
-#' runmod will run the futR.cpp recruitment model
-#' For more information contact author Kirstin Holsman (kirstin.holsman@noaa.gov)
-#' 
+#' run the futR() recruitment model
+#'
+#' runmod() will run the futR() recruitment model
+#' @import futR
+#' @email For more information contact author Kirstin Holsman (kirstin.holsman@noaa.gov)
 #' @weblink 
-#' @param version     recruitment model to run. Default is futR
-#' @param recompile   recompile the .cpp file? default is FALSE; only needed if .cpp file is altered
 #' @param dlistIN     list of input data and parameters used for the makeADfun() dependency
 #' * dlistIN$parameters  list of parameters for the TMB futR model:
-#'    [] datlist$parameters$log_a  starting value for alpha parameter
-#'    [] datlist$parameters$log_b  starting value for alpha parameter
-#'    [] datlist$parameters$rs_parm  starting value for alpha parameter   
-#'    [] datlist$parameters$sig_sobs  starting value for alpha parameter
-#'    [] datlist$parameters$logsigma  double with starting value ofr sigma
-#' * dlistIN$rs_dat
-#' * dlistIN$maplist
-#' * dlistIN$estparams
-#' * dlistIN$phases
-#' * dlistIN$inputs
-#' @export            returns tmpmod summary of the model including the mle
+#'    [] dlistIN$parameters$log_a    scalar starting value for log_a (intercept)
+#'    [] dlistIN$parameters$log_b    scalar starting value for log_b (slope) 
+#'    [] dlistIN$parameters$beta     vector of starting values for lambda (env. effects on pre-spawning)   
+#'    [] dlistIN$parameters$lambda   vector of starting values for beta (env. effects on post-spawning)   
+#'    [] dlistIN$parameters$epsi_s   starting value for epsi_s (error around S estimates) 
+#'    [] dlistIN$parameters$logsigma starting value for logsigma (process error)
+#'    [] dlistIN$parameters$skipFit  starting value for skipFit (switch used for projecting)
+#' * dlistIN$rs_dat list of data to read into the model
+#'    --- Observation Error inputs
+#'    [] tau        scalar for observation and process error
+#'    [] sigMethod  Integer (switch): which method for estimating sigma
+#'    --- Covariate inputs
+#'    [] ncov       Integer number of environmental covariates
+#'    [] cov_type   (defunct) vector of covariate type if 1 then run ration
+#'    [] nyrs       Integer number of years in the data
+#'    [] lambda_0   matrix (ncov, nyrs), binary (0,1) matrix of covar. inclusion in post-spawning effects
+#'    [] beta_0     matrix (ncov, nyrs), binary (0,1) matrix of covar. inclusion in pre-spawning effects
+#'    [] sdrs_cov   matrix (ncov, nyrs) of the stdev of environmental covariates
+#'    [] rs_cov     matrix (ncov, nyrs) of the of environmental covariates
+#'    --- RS data inputs
+#'    [] sdR        vector (nyrs) of stdev of recruitment in a given year
+#'    [] sdS        vector (nyrs) of stdev of spawnerindex in a given year
+#'    [] R_obs      vector (nyrs) of recruitment in a given year
+#'    [] S_obs      vector (nyrs) of spawner index in a given year
+#'    [] years      vector (nyrs) recruiment year
+#'    --- Switches
+#'    [] rectype    Integer (switch) which type of recruitment model: 1 = loglinear, 2 = loglinear ~f(S), 3 = Beverton-holt, 4 = Ricker
+#'    [] estMode    Integer (switch) should the model run in estimation mode (y=1,no=0)?
+#' * dlistIN$maplist   list of the map for the TMB model
+#' * dlistIN$estparams vector of T/F of which parameters will be estimated
+#' * dlistIN$phases    (defunct) phases for estimating parameters
+#' * dlistIN$inputs    archive of intputs for this function
+#' @param version     recruitment model to run. Default is 'futR'
+#' @param src_fldr    subfolder where model is located. Default is 'src'
+#' @param silentIN    T/F , default = 'TRUE'
+#' @param se.fit      T/F , default = 'TRUE'
+#' @param simulate    T/F , simulate the model? default = 'FALSE'
+#' @param sim_nitr    number of iterations for the simulate function
+#' @param recompile   recompile the .cpp file? default is 'FALSE'
+#' @param maxitr      10000  Max iterations for fitting the objective function
+#' @param maxeval     10000  Max evaluations for fitting the objective function
+#' @return returns  summary of the model including the mle
 #' 
-#' @email             For more information contact author Kirstin Holsman (kirstin.holsman@noaa.gov)
 #' @examples
-#' 
-#' mod<-estRec(dataINUSE  =  dataIN_admb)
-#' 
+#' datlist <- readMake_futR_data("data/in/futR_Inputs.xlsx" )
+#' mm      <- runmod(dlistIN   = datlist, version   = 'futR',recompile = FALSE,simulate  = TRUE,sim_nitr  = 1000)  
+#' @export
 runmod<-function(
   dlistIN,
   src_fldr   = "src",

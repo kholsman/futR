@@ -1,20 +1,24 @@
-#-------------------------------------
-# makeMap
-#-------------------------------------
-
-#' makeMap will create a map list for reading into the futR function
+#' makeMap will create a map list for reading into the runmod() function
 #'
 #' This function prepares the estimated data for futR
+#' This function is a subset of makeDat()
 #' For more information contact author Kirstin Holsman (kirstin.holsman@noaa.gov)
 #' @weblink 
-#' @param parameters  parameters for the tmb function
-#' @param estpar      a vector of integers indicating phase. NA results in no estimation.
+#' @param parameters  list of starting values and parameters for the TMB futR() model
+#' @param estpar      vector of T/F of which parameters will be estimated
 #' @export            maplist a list with map values
 #' @email             For more information contact author Kirstin Holsman (kirstin.holsman@noaa.gov)
 #' @examples
 #' 
-#' mod<-estRec(dataINUSE  =  dataIN_admb)
+#' datlist   <- readMake_futR_data("data/in/futR_Inputs.xlsx" )
 #' 
+#' estparams <- datlist$estparams
+#' estparams
+#' 
+#' parameters <- atlist$parameters
+#' parameters
+#' maplist <- makeMap(param=parameters,estpar=estparams)
+#' @export
 makeMap<-function(param=parameters,estpar=estparams){
   mapseq  <- 1:length(unlist(param))
   ixx     <- 0

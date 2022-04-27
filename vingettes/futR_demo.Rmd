@@ -2,14 +2,14 @@
 title: "futR()"
 author: "Kirstin Holsman"
 output:
-  html_document:
-    df_print: paged
-    toc: true
-    toc_depth: 4
-    number_sections: true
-    toc_float:
-      collapsed: false
-      smooth_scroll: true
+  pdf_document:
+    toc: TRUE
+    fig_caption: yes
+    fig_height: 4
+    fig_width: 5
+    highlight: tango
+    keep_tex: yes
+    latex_engine: xelatex
   header-includes:
   - \usepackage{knputenc}
   - \usepackage{unicode-math}
@@ -20,14 +20,14 @@ output:
     fig_caption: yes
     fig_width: 4
     keep_md: yes
-  pdf_document:
-    toc: TRUE
-    fig_caption: yes
-    fig_height: 4
-    fig_width: 5
-    highlight: tango
-    keep_tex: yes
-    latex_engine: xelatex
+  html_document:
+    df_print: paged
+    toc: true
+    toc_depth: 4
+    number_sections: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
 ---
 
 
@@ -45,7 +45,7 @@ output:
 ```{r setup1, echo = F,eval=T}
  knitr::opts_chunk$set(echo = TRUE,warning = FALSE, message = FALSE) 
  #knitr::opts_chunk$set(echo = TRUE)
- #source("R/make.R")       # loads packages, data, setup, etc.
+ #source("R/01_make.R")       # loads packages, data, setup, etc.
  knitr::opts_knit$set(root.dir = '../')
  
 ```
@@ -305,17 +305,17 @@ The base function for fitting recruitment requires a data.frame of recruitment a
   # rm(list=ls()) ; dir()
 
   # load data, packages, setup, etc.
-  source("R/make.R")
+  source("R/01_make.R")
 
   #___________________________________________
   # 2. Compile futR	(first time through - can skip this step after )
   #___________________________________________
 
-  recompile_model <- TRUE # to recompile the model set to TRUE
+  recompile_model <- FALSE # to recompile the model set to TRUE
 
    if(recompile_model){
     wd0 <- getwd()
-    setwd("src")
+    setwd("src/TMB")
       recompile('futR')
     setwd(wd0)
    }

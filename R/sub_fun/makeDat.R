@@ -245,10 +245,10 @@ makeDat <- function(
     maplist <- makeMap(param=parameters,estpar=estparams)
  
     return(list(parameters = parameters, 
-                rs_dat = rs_dat, 
-                maplist= maplist,
-                estparams = estparams, 
-                phases=phases))
+                rs_dat     = rs_dat, 
+                maplist    = maplist,
+                estparams  = estparams, 
+                phases     = phases))
 }
 
 

@@ -1,11 +1,48 @@
 Package: futR
 Type: Package
-Title: What the Package Does (Title Case)
+Title: R package for fitting and evaluating environmentally enhanced recruitment models 
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Authors@R: 
+    person(given = "Kirstin",
+           family = "Holsman",
+           role = c("aut", "cre"),
+           email = "kirstin.holsman@noaa.gov")
+Maintainer: The package maintainer <kirstin.holsman@noaa.gov>
+Description: futR() is a generic Rpackage for fitting recruitment models to indices of spawning biomass (or numbers) and recruitment with or without climate covariates. The recruitment model is based on Template Model Builder (`TMB`) and standard stock-recruitment models modified to include the effects of environmental covariates (Deriso 1980; Schnute 1985). This includes Ricker (logistic), Beverton Holt, log-linear, and log-linear with biomass lagged by year 'y-1'. The model can be fit with and with out random effects on spawning stock biomass (SSB) and recruitment (R) (i.e., measurement error on SSB and rec) using the methods of  Porch and Lauretta (2016) and with the optional unbiased estimate of sigma (sensu Ludwid and Walters 1981, Porch and Lauretta 2016). Environmental covariates are optional and can be included to influence pre-spawning and post-spawning success.
+License: GPL-2
 Encoding: UTF-8
 LazyData: true
+RoxygenNote: 7.1.2
+Imports: 
+    Matrix,
+    TMB,
+    writexl,
+    viridis,
+    reshape,
+    tidyr,
+    dplyr, 
+    ggplot2,
+    lattice,
+    purrr,
+    readxl,
+    knitr,
+    kableExtra,
+    cowplot,
+    RColorBrewer,
+    ggplot2, 
+    wesanderson,
+    scales,
+    ggforce,
+    grid,
+    processx,
+    plotly,
+    extrafont
+LinkingTo: 
+    TMB
+Remotes: kaskr/TMB_contrib_R/TMBhelper
+Suggests: 
+    rmarkdown,
+    knitr
+VignetteBuilder: rmarkdown
+Depends: 
+    R (>= 2.10)
