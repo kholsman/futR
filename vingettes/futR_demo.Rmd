@@ -892,6 +892,15 @@ Note that $\tau = 0$ defaults to the input variance for S and R as offsets for e
 
 
 
+```{r makeReadME, echo=FALSE,eval=F, include =F}
+
+# source("R/make.R")
+ # copy and paste this into R window (won't work within markdown)
+ rmd2md(rmd_fl = "futR_demo",md_fl = "README")
+
+
+```
+
 
 
 

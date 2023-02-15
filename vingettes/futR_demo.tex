@@ -537,17 +537,17 @@ recruitment and spawning biomass:
   \CommentTok{\# rm(list=ls()) ; dir()}
 
   \CommentTok{\# load data, packages, setup, etc.}
-  \FunctionTok{source}\NormalTok{(}\StringTok{"R/make.R"}\NormalTok{)}
+  \FunctionTok{source}\NormalTok{(}\StringTok{"R/01\_make.R"}\NormalTok{)}
 
   \CommentTok{\#\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_}
   \CommentTok{\# 2. Compile futR (first time through {-} can skip this step after )}
   \CommentTok{\#\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_}
 
-\NormalTok{  recompile\_model }\OtherTok{\textless{}{-}} \ConstantTok{TRUE} \CommentTok{\# to recompile the model set to TRUE}
+\NormalTok{  recompile\_model }\OtherTok{\textless{}{-}} \ConstantTok{FALSE} \CommentTok{\# to recompile the model set to TRUE}
 
    \ControlFlowTok{if}\NormalTok{(recompile\_model)\{}
 \NormalTok{    wd0 }\OtherTok{\textless{}{-}} \FunctionTok{getwd}\NormalTok{()}
-    \FunctionTok{setwd}\NormalTok{(}\StringTok{"src"}\NormalTok{)}
+    \FunctionTok{setwd}\NormalTok{(}\StringTok{"src/TMB"}\NormalTok{)}
       \FunctionTok{recompile}\NormalTok{(}\StringTok{\textquotesingle{}futR\textquotesingle{}}\NormalTok{)}
     \FunctionTok{setwd}\NormalTok{(wd0)}
 \NormalTok{   \}}
