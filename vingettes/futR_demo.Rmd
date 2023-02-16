@@ -272,9 +272,11 @@ As in sigMethod = 2 with observation error (random effects) on S and R if $\tau 
 
 Note that $\tau = 0$ defaults to the input variance for S and R as offsets for each.
    
-
+![](../Figs/recplot5.jpg){width=80%}
 
 ---
+
+
 
 # Running futR() 
 
@@ -327,7 +329,7 @@ The base function for fitting recruitment requires a data.frame of recruitment a
       
 ```{r setup3, echo=T,eval=T,message=F,results='hide'}
   
-# read in the data and create a datlist
+ # read in the data and create a datlist
   datlist <- readMake_futR_data("data/in/futR_Inputs.xlsx" )
   
   # recruitment data:
@@ -398,8 +400,15 @@ $$ \mathrm{log}(\hat{R_i})= a+\sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i}}+
   df      <- dfR1
   r1_fit  <- getFit(mm, nm = "recType = 1")
   rec_fit <- r1_fit
- rm(mm)
- print(rec_fit)
+  rm(mm)
+  
+  if(1 == 10){
+   print(rec_fit)
+   jpeg("Figs/recplot1.jpg")
+   print(plot_rs(rec_fit))
+   dev.off()
+  }
+   
 
 ```
 
@@ -408,6 +417,7 @@ $$ \mathrm{log}(\hat{R_i})= a+\sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i}}+
    plot_rs(rec_fit)
 
 ```
+
 
 ### rectype = 2
 
@@ -449,8 +459,13 @@ $$\mathrm{log}(\hat{R_i})= a + \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i}}
   df      <- rbind(dfR1,dfR2)
   r2_fit  <- getFit(mm, nm = "recType = 2")
   rec_fit <- rbind(rec_fit,r2_fit)
-
  rm(mm)
+ if(1==10){
+   jpeg("Figs/recplot2.jpg")
+   print(plot_rs(rec_fit))
+   dev.off()
+ }
+
 ```
 
 ```{r plotR2, fig.dim=c(8, 8),echo=F}
@@ -499,8 +514,13 @@ $$\hat{R_i}=\frac{ a \hat{S_i}e^{ \left( \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_
   df      <- rbind(df,dfR3)
   r3_fit  <- getFit(mm, nm = "recType = 3")
   rec_fit <- rbind(rec_fit,r3_fit)
- rm(mm)
-
+  rm(mm)
+  
+  if(1==10){
+     jpeg("Figs/recplot3.jpg")
+     print(plot_rs(rec_fit))
+     dev.off()
+  }
 
 ```
 
@@ -549,7 +569,9 @@ $$\mathrm{log}\hat{R_i}= a\left( \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i
   r4_fit  <- getFit(mm, nm = "recType = 4")
   rec_fit <- rbind(rec_fit,r4_fit)
  rm(mm)
-
+ jpeg("Figs/recplot4.jpg")
+ print(plot_rs(rec_fit))
+ dev.off()
 
 ```
 
@@ -589,7 +611,9 @@ $$\mathrm{log}\hat{R_i}= a\left( \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i
   r4_fit_c  <- getFit(mm, nm = "recType = 4 with covar")
   rec_fit <- rbind(r4_fit,r4_fit_c)
  rm(mm)
-
+ jpeg("Figs/recplot5.jpg")
+ print(plot_rs(rec_fit))
+ dev.off()
 
 ```
 
@@ -673,7 +697,9 @@ The base model fits the lognormally distributed process error for recruitment ($
     count(parameter,round(estimate,1))%>%
     slice(which.max(n))
   names(peak)<- c("model","parameter","freq","n")
-
+ jpeg("Figs/plotpar1.jpg")
+ print(plot_par_pdf(df_S1))
+ dev.off()
 ```
 
 ```{r plot1, fig.dim=c(10, 4),echo=F}
@@ -727,7 +753,9 @@ $log\hat{S}_{i-1} \sim N(0,\sigma_S)$ where $\sigma_S=\tau*\sigma$
     count(parameter,round(estimate,1))%>%
     slice(which.max(n))
   names(peak)<- c("model","parameter","freq","n")
-
+jpeg("Figs/plotpar2.jpg")
+ print(plot_par_pdf(df))
+ dev.off()
 
 
 ```
@@ -784,6 +812,9 @@ where
     count(parameter,round(estimate,1))%>%
     slice(which.max(n))
   names(peak)<- c("model","parameter","freq","n")
+  jpeg("Figs/plotpar3.jpg")
+  print(plot_par_pdf(df))
+  dev.off()
 
 ```
 
@@ -834,6 +865,9 @@ As in sigMethod = 2 with observation error (random effects) on S if $\tau >0$,  
     count(parameter,round(estimate,1))%>%
     slice(which.max(n))
   names(peak)<- c("model","parameter","freq","n")
+  jpeg("Figs/plotpar4.jpg")
+  print(plot_par_pdf(df))
+  dev.off()
 
 ```
 
@@ -881,6 +915,9 @@ Note that $\tau = 0$ defaults to the input variance for S and R as offsets for e
   rm(mm)
 
   df <- rbind(df, df_S5)
+  jpeg("Figs/plotpar5.jpg")
+ print(plot_par_pdf(df))
+ dev.off()
   
 
 ```

@@ -494,6 +494,8 @@ of random effects on spawners) such that:
 Note that \(\tau = 0\) defaults to the input variance for S and R as
 offsets for each.
 
+\includegraphics{Figs/recplot5.jpg}
+
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
 \hypertarget{running-futr}{%
@@ -561,7 +563,7 @@ the instructions
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{\# read in the data and create a datlist}
+ \CommentTok{\# read in the data and create a datlist}
 \NormalTok{  datlist }\OtherTok{\textless{}{-}} \FunctionTok{readMake\_futR\_data}\NormalTok{(}\StringTok{"data/in/futR\_Inputs.xlsx"}\NormalTok{ )}
   
   \CommentTok{\# recruitment data:}
@@ -634,8 +636,14 @@ Log-linear relationship (mean with variation with covars).
 \NormalTok{  df      }\OtherTok{\textless{}{-}}\NormalTok{ dfR1}
 \NormalTok{  r1\_fit  }\OtherTok{\textless{}{-}} \FunctionTok{getFit}\NormalTok{(mm, }\AttributeTok{nm =} \StringTok{"recType = 1"}\NormalTok{)}
 \NormalTok{  rec\_fit }\OtherTok{\textless{}{-}}\NormalTok{ r1\_fit}
- \FunctionTok{rm}\NormalTok{(mm)}
- \FunctionTok{print}\NormalTok{(rec\_fit)}
+  \FunctionTok{rm}\NormalTok{(mm)}
+  
+  \ControlFlowTok{if}\NormalTok{(}\DecValTok{1} \SpecialCharTok{==} \DecValTok{10}\NormalTok{)\{}
+   \FunctionTok{print}\NormalTok{(rec\_fit)}
+   \FunctionTok{jpeg}\NormalTok{(}\StringTok{"Figs/recplot1.jpg"}\NormalTok{)}
+   \FunctionTok{print}\NormalTok{(}\FunctionTok{plot\_rs}\NormalTok{(rec\_fit))}
+   \FunctionTok{dev.off}\NormalTok{()}
+\NormalTok{  \}}
 \end{Highlighting}
 \end{Shaded}
 
@@ -682,8 +690,12 @@ Log-linear relationship with spawners and covariates.
 \NormalTok{  df      }\OtherTok{\textless{}{-}} \FunctionTok{rbind}\NormalTok{(dfR1,dfR2)}
 \NormalTok{  r2\_fit  }\OtherTok{\textless{}{-}} \FunctionTok{getFit}\NormalTok{(mm, }\AttributeTok{nm =} \StringTok{"recType = 2"}\NormalTok{)}
 \NormalTok{  rec\_fit }\OtherTok{\textless{}{-}} \FunctionTok{rbind}\NormalTok{(rec\_fit,r2\_fit)}
-
  \FunctionTok{rm}\NormalTok{(mm)}
+ \ControlFlowTok{if}\NormalTok{(}\DecValTok{1}\SpecialCharTok{==}\DecValTok{10}\NormalTok{)\{}
+   \FunctionTok{jpeg}\NormalTok{(}\StringTok{"Figs/recplot2.jpg"}\NormalTok{)}
+   \FunctionTok{print}\NormalTok{(}\FunctionTok{plot\_rs}\NormalTok{(rec\_fit))}
+   \FunctionTok{dev.off}\NormalTok{()}
+\NormalTok{ \}}
 \end{Highlighting}
 \end{Shaded}
 
@@ -726,7 +738,13 @@ Beverton holt relationship.
 \NormalTok{  df      }\OtherTok{\textless{}{-}} \FunctionTok{rbind}\NormalTok{(df,dfR3)}
 \NormalTok{  r3\_fit  }\OtherTok{\textless{}{-}} \FunctionTok{getFit}\NormalTok{(mm, }\AttributeTok{nm =} \StringTok{"recType = 3"}\NormalTok{)}
 \NormalTok{  rec\_fit }\OtherTok{\textless{}{-}} \FunctionTok{rbind}\NormalTok{(rec\_fit,r3\_fit)}
- \FunctionTok{rm}\NormalTok{(mm)}
+  \FunctionTok{rm}\NormalTok{(mm)}
+  
+  \ControlFlowTok{if}\NormalTok{(}\DecValTok{1}\SpecialCharTok{==}\DecValTok{10}\NormalTok{)\{}
+     \FunctionTok{jpeg}\NormalTok{(}\StringTok{"Figs/recplot3.jpg"}\NormalTok{)}
+     \FunctionTok{print}\NormalTok{(}\FunctionTok{plot\_rs}\NormalTok{(rec\_fit))}
+     \FunctionTok{dev.off}\NormalTok{()}
+\NormalTok{  \}}
 \end{Highlighting}
 \end{Shaded}
 
@@ -771,6 +789,9 @@ Ricker relationship.
 \NormalTok{  r4\_fit  }\OtherTok{\textless{}{-}} \FunctionTok{getFit}\NormalTok{(mm, }\AttributeTok{nm =} \StringTok{"recType = 4"}\NormalTok{)}
 \NormalTok{  rec\_fit }\OtherTok{\textless{}{-}} \FunctionTok{rbind}\NormalTok{(rec\_fit,r4\_fit)}
  \FunctionTok{rm}\NormalTok{(mm)}
+ \FunctionTok{jpeg}\NormalTok{(}\StringTok{"Figs/recplot4.jpg"}\NormalTok{)}
+ \FunctionTok{print}\NormalTok{(}\FunctionTok{plot\_rs}\NormalTok{(rec\_fit))}
+ \FunctionTok{dev.off}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
 
@@ -806,6 +827,9 @@ post-spawning survival.
 \NormalTok{  r4\_fit\_c  }\OtherTok{\textless{}{-}} \FunctionTok{getFit}\NormalTok{(mm, }\AttributeTok{nm =} \StringTok{"recType = 4 with covar"}\NormalTok{)}
 \NormalTok{  rec\_fit }\OtherTok{\textless{}{-}} \FunctionTok{rbind}\NormalTok{(r4\_fit,r4\_fit\_c)}
  \FunctionTok{rm}\NormalTok{(mm)}
+ \FunctionTok{jpeg}\NormalTok{(}\StringTok{"Figs/recplot5.jpg"}\NormalTok{)}
+ \FunctionTok{print}\NormalTok{(}\FunctionTok{plot\_rs}\NormalTok{(rec\_fit))}
+ \FunctionTok{dev.off}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
 
@@ -895,6 +919,9 @@ estimated for either spawners (S) or recruitment (R) estimates.
     \FunctionTok{count}\NormalTok{(parameter,}\FunctionTok{round}\NormalTok{(estimate,}\DecValTok{1}\NormalTok{))}\SpecialCharTok{\%\textgreater{}\%}
     \FunctionTok{slice}\NormalTok{(}\FunctionTok{which.max}\NormalTok{(n))}
   \FunctionTok{names}\NormalTok{(peak)}\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"model"}\NormalTok{,}\StringTok{"parameter"}\NormalTok{,}\StringTok{"freq"}\NormalTok{,}\StringTok{"n"}\NormalTok{)}
+ \FunctionTok{jpeg}\NormalTok{(}\StringTok{"Figs/plotpar1.jpg"}\NormalTok{)}
+ \FunctionTok{print}\NormalTok{(}\FunctionTok{plot\_par\_pdf}\NormalTok{(df\_S1))}
+ \FunctionTok{dev.off}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
 
@@ -955,6 +982,9 @@ distributed observation error as:
     \FunctionTok{count}\NormalTok{(parameter,}\FunctionTok{round}\NormalTok{(estimate,}\DecValTok{1}\NormalTok{))}\SpecialCharTok{\%\textgreater{}\%}
     \FunctionTok{slice}\NormalTok{(}\FunctionTok{which.max}\NormalTok{(n))}
   \FunctionTok{names}\NormalTok{(peak)}\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"model"}\NormalTok{,}\StringTok{"parameter"}\NormalTok{,}\StringTok{"freq"}\NormalTok{,}\StringTok{"n"}\NormalTok{)}
+\FunctionTok{jpeg}\NormalTok{(}\StringTok{"Figs/plotpar2.jpg"}\NormalTok{)}
+ \FunctionTok{print}\NormalTok{(}\FunctionTok{plot\_par\_pdf}\NormalTok{(df))}
+ \FunctionTok{dev.off}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1009,6 +1039,9 @@ where
     \FunctionTok{count}\NormalTok{(parameter,}\FunctionTok{round}\NormalTok{(estimate,}\DecValTok{1}\NormalTok{))}\SpecialCharTok{\%\textgreater{}\%}
     \FunctionTok{slice}\NormalTok{(}\FunctionTok{which.max}\NormalTok{(n))}
   \FunctionTok{names}\NormalTok{(peak)}\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"model"}\NormalTok{,}\StringTok{"parameter"}\NormalTok{,}\StringTok{"freq"}\NormalTok{,}\StringTok{"n"}\NormalTok{)}
+  \FunctionTok{jpeg}\NormalTok{(}\StringTok{"Figs/plotpar3.jpg"}\NormalTok{)}
+  \FunctionTok{print}\NormalTok{(}\FunctionTok{plot\_par\_pdf}\NormalTok{(df))}
+  \FunctionTok{dev.off}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1057,6 +1090,9 @@ that:
     \FunctionTok{count}\NormalTok{(parameter,}\FunctionTok{round}\NormalTok{(estimate,}\DecValTok{1}\NormalTok{))}\SpecialCharTok{\%\textgreater{}\%}
     \FunctionTok{slice}\NormalTok{(}\FunctionTok{which.max}\NormalTok{(n))}
   \FunctionTok{names}\NormalTok{(peak)}\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"model"}\NormalTok{,}\StringTok{"parameter"}\NormalTok{,}\StringTok{"freq"}\NormalTok{,}\StringTok{"n"}\NormalTok{)}
+  \FunctionTok{jpeg}\NormalTok{(}\StringTok{"Figs/plotpar4.jpg"}\NormalTok{)}
+  \FunctionTok{print}\NormalTok{(}\FunctionTok{plot\_par\_pdf}\NormalTok{(df))}
+  \FunctionTok{dev.off}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1106,6 +1142,9 @@ offsets for each.
   \FunctionTok{rm}\NormalTok{(mm)}
 
 \NormalTok{  df }\OtherTok{\textless{}{-}} \FunctionTok{rbind}\NormalTok{(df, df\_S5)}
+  \FunctionTok{jpeg}\NormalTok{(}\StringTok{"Figs/plotpar5.jpg"}\NormalTok{)}
+ \FunctionTok{print}\NormalTok{(}\FunctionTok{plot\_par\_pdf}\NormalTok{(df))}
+ \FunctionTok{dev.off}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
 
