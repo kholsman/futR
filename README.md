@@ -339,6 +339,8 @@ and *l**o**g**Ŝ*<sub>*i* − 1</sub> ∼ *N*(0, *σ*<sub>*S*</sub> w
 Note that *τ* = 0 defaults to the input variance for S and R as offsets
 for each.
 
+<img src="../Figs/recplot5.jpg" style="width:80.0%" />
+
 ------------------------------------------------------------------------
 
 # Running futR()
@@ -393,7 +395,7 @@ recruitment and spawning biomass:
 instructions [here](https://cran.r-project.org/bin/windows/Rtools/).*
 
 ``` r
-# read in the data and create a datlist
+ # read in the data and create a datlist
   datlist <- readMake_futR_data("data/in/futR_Inputs.xlsx" )
   
   # recruitment data:
@@ -461,8 +463,14 @@ $$ \\mathrm{log}(\\hat{R_i})= a+\\sum\_{k=1}^{n_k}{\\theta_i^{\\beta}\\beta_k X\
   df      <- dfR1
   r1_fit  <- getFit(mm, nm = "recType = 1")
   rec_fit <- r1_fit
- rm(mm)
- print(rec_fit)
+  rm(mm)
+  
+  if(1 == 10){
+   print(rec_fit)
+   jpeg("Figs/recplot1.jpg")
+   print(plot_rs(rec_fit))
+   dev.off()
+  }
 ```
 
 ![](futR_demo_files/figure-markdown_github/plotR1-1.png)
@@ -506,8 +514,12 @@ $$\\mathrm{log}(\\hat{R_i})= a + \\sum\_{k=1}^{n_k}{\\theta_i^{\\beta}\\beta_k X
   df      <- rbind(dfR1,dfR2)
   r2_fit  <- getFit(mm, nm = "recType = 2")
   rec_fit <- rbind(rec_fit,r2_fit)
-
  rm(mm)
+ if(1==10){
+   jpeg("Figs/recplot2.jpg")
+   print(plot_rs(rec_fit))
+   dev.off()
+ }
 ```
 
 ![](futR_demo_files/figure-markdown_github/plotR2-1.png)
@@ -549,7 +561,13 @@ $$\\hat{R_i}=\\frac{ a \\hat{S_i}e^{ \\left( \\sum\_{k=1}^{n_k}{\\theta_i^{\\bet
   df      <- rbind(df,dfR3)
   r3_fit  <- getFit(mm, nm = "recType = 3")
   rec_fit <- rbind(rec_fit,r3_fit)
- rm(mm)
+  rm(mm)
+  
+  if(1==10){
+     jpeg("Figs/recplot3.jpg")
+     print(plot_rs(rec_fit))
+     dev.off()
+  }
 ```
 
 ![](futR_demo_files/figure-markdown_github/plotR3-1.png)
@@ -591,6 +609,9 @@ $$\\mathrm{log}\\hat{R_i}= a\\left( \\sum\_{k=1}^{n_k}{\\theta_i^{\\beta}\\beta_
   r4_fit  <- getFit(mm, nm = "recType = 4")
   rec_fit <- rbind(rec_fit,r4_fit)
  rm(mm)
+ jpeg("Figs/recplot4.jpg")
+ print(plot_rs(rec_fit))
+ dev.off()
 ```
 
 ![](futR_demo_files/figure-markdown_github/plotR4-1.png)
@@ -622,6 +643,9 @@ $$\\mathrm{log}\\hat{R_i}= a\\left( \\sum\_{k=1}^{n_k}{\\theta_i^{\\beta}\\beta_
   r4_fit_c  <- getFit(mm, nm = "recType = 4 with covar")
   rec_fit <- rbind(r4_fit,r4_fit_c)
  rm(mm)
+ jpeg("Figs/recplot5.jpg")
+ print(plot_rs(rec_fit))
+ dev.off()
 ```
 
 ![](futR_demo_files/figure-markdown_github/plotR4_cov-1.png)
@@ -701,6 +725,9 @@ estimated for either spawners (S) or recruitment (R) estimates.
     count(parameter,round(estimate,1))%>%
     slice(which.max(n))
   names(peak)<- c("model","parameter","freq","n")
+ jpeg("Figs/plotpar1.jpg")
+ print(plot_par_pdf(df_S1))
+ dev.off()
 ```
 
 ![](futR_demo_files/figure-markdown_github/plot1-1.png)
@@ -760,6 +787,9 @@ distributed observation error as:
     count(parameter,round(estimate,1))%>%
     slice(which.max(n))
   names(peak)<- c("model","parameter","freq","n")
+jpeg("Figs/plotpar2.jpg")
+ print(plot_par_pdf(df))
+ dev.off()
 ```
 
 ![](futR_demo_files/figure-markdown_github/plot2-1.png)
@@ -812,6 +842,9 @@ and
     count(parameter,round(estimate,1))%>%
     slice(which.max(n))
   names(peak)<- c("model","parameter","freq","n")
+  jpeg("Figs/plotpar3.jpg")
+  print(plot_par_pdf(df))
+  dev.off()
 ```
 
 ![](futR_demo_files/figure-markdown_github/plot3-1.png)
@@ -858,6 +891,9 @@ such that:
     count(parameter,round(estimate,1))%>%
     slice(which.max(n))
   names(peak)<- c("model","parameter","freq","n")
+  jpeg("Figs/plotpar4.jpg")
+  print(plot_par_pdf(df))
+  dev.off()
 ```
 
 ![](futR_demo_files/figure-markdown_github/plot4-1.png)
@@ -904,6 +940,9 @@ for each.
   rm(mm)
 
   df <- rbind(df, df_S5)
+  jpeg("Figs/plotpar5.jpg")
+ print(plot_par_pdf(df))
+ dev.off()
 ```
 
 ![](futR_demo_files/figure-markdown_github/plot5-1.png)
