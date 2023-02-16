@@ -187,36 +187,36 @@ theme_hrbrmstr_an <- function(...) {
 #' 
 
 theme_kir <- function(base_family="Hind",
-                           base_size = 11,
-                           strip_text_family = "Hind Medium",
-                           strip_text_size = 12,
-                           plot_title_family="Hind",
-                           plot_title_size = 18,
-                           plot_title_margin = 10,
-                           plot_title_just ="r",
-                           xangle=0,
-                           plot_margin = margin(30, 30, 30, 30),
-                           subtitle_family="Hind Medium",
-                           subtitle_size = 12,
-                           subtitle_face ="plain",
-                           subtitle_margin = 15,
-                           panel_face ="plain",
-                           caption_family="Hind Light",
-                           caption_size = 9,
-                           caption_margin = 10,
-                           axis_title_family = subtitle_family,
-                           axis_title_size = 9,
-                           axis_title_just = "cm",
-                           xaxis_size=9,
-                           yaxis_size=9,
-                           grid = TRUE,
-                           axis = FALSE,
-                           sub_title_size =10,
-                           sub_title_col = "black",
-                           sub_title_just ="c",
-                           panel_dist_y =2,
-                           panel_dist_x= 2,
-                           ticks = FALSE) {
+                      base_size = 11,
+                      strip_text_family = "Hind Medium",
+                      strip_text_size = 12,
+                      plot_title_family="Hind",
+                      plot_title_size = 18,
+                      plot_title_margin = 10,
+                      plot_title_just ="r",
+                      xangle=0,
+                      plot_margin = margin(30, 30, 30, 30),
+                      subtitle_family="Hind Medium",
+                      subtitle_size = 12,
+                      subtitle_face ="plain",
+                      subtitle_margin = 15,
+                      panel_face ="plain",
+                      caption_family="Hind Light",
+                      caption_size = 9,
+                      caption_margin = 10,
+                      axis_title_family = subtitle_family,
+                      axis_title_size = 9,
+                      axis_title_just = "cm",
+                      xaxis_size=9,
+                      yaxis_size=9,
+                      grid = TRUE,
+                      axis = FALSE,
+                      sub_title_size =10,
+                      sub_title_col = "black",
+                      sub_title_just ="c",
+                      panel_dist_y =2,
+                      panel_dist_x= 2,
+                      ticks = FALSE) {
   
   ret <- theme_minimal(base_family=base_family, base_size=base_size)
   
@@ -278,7 +278,7 @@ theme_kir <- function(base_family="Hind",
   yj <- switch(tolower(substr(axis_title_just, 2, 2)), b=0, l=0, m=0.5, c=0.5, r=1, t=1)
   
   j_t <- switch(tolower(substr(plot_title_just, 1, 1)), b=0, l=0, m=0.5, c=0.5, r=1, t=1)
-
+  
   ret <- ret + theme(axis.text.x=element_text(margin=margin(t=0),angle = xangle,size=xaxis_size))
   ret <- ret + theme(axis.text.y=element_text(margin=margin(r=0),size=yaxis_size))
   ret <- ret + theme(axis.title=element_text(size=axis_title_size, family=axis_title_family))
@@ -287,7 +287,7 @@ theme_kir <- function(base_family="Hind",
   ret <- ret + theme(strip.text=element_text(hjust=j_t, size=strip_text_size, face="bold", family=strip_text_family))
   ret <- ret + theme(strip.text.x=element_text(face=panel_face))
   ret <- ret + theme(strip.text.y=element_text(face=panel_face))
-
+  
   ret <- ret + theme(panel.spacing.x=grid::unit(panel_dist_y, "lines"))
   ret <- ret + theme(panel.spacing.y=grid::unit(panel_dist_x, "lines"))
   ret <- ret + theme(plot.title=element_text(hjust=0, size=plot_title_size, margin=margin(b=plot_title_margin), face="bold", family=plot_title_family))
@@ -303,16 +303,16 @@ theme_kir <- function(base_family="Hind",
 #'
 #' @export
 theme_kir_an <- function(...) {
-      theme_kir(base_family="ArialNarrow",
-                 plot_title_family="ArialNarrow-Bold",
-                 subtitle_family="ArialNarrow-Italic",
-                 caption_family="ArialNarrow",
-                 axis_title_size = 12,
-                 ...)
+  theme_kir(base_family="ArialNarrow",
+            plot_title_family="ArialNarrow-Bold",
+            subtitle_family="ArialNarrow-Italic",
+            caption_family="ArialNarrow",
+            axis_title_size = 12,
+            ...)
 }
 
 theme_kir2<-function (base_size = 11, base_family = "", base_line_size = base_size/22, 
-          base_rect_size = base_size/22) 
+                      base_rect_size = base_size/22) 
 {
   half_line <- base_size/2
   theme_grey(base_size = base_size, base_family = base_family, 
@@ -326,7 +326,7 @@ theme_kir2<-function (base_size = 11, base_family = "", base_line_size = base_si
           legend.key = element_rect(fill = "white", colour = NA), 
           strip.background = element_rect(fill = "grey70",colour = NA), 
           strip.text = element_text(colour = "white", size = rel(0.8), 
-          margin = margin(0.8 * half_line, 0.8 * half_line, 0.8 * half_line, 0.8 * half_line)), 
+                                    margin = margin(0.8 * half_line, 0.8 * half_line, 0.8 * half_line, 0.8 * half_line)), 
           complete = TRUE)
 }
 

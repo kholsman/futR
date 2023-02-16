@@ -42,7 +42,7 @@
 #' datlist <- readMake_futR_data("data/in/futR_Inputs.xlsx" )
 #' mm      <- runmod(datlist   = datlist, version   = 'futR',recompile = TRUE,simulate  = TRUE,sim_nitr  = 1000)  
 #' @export
-readMake_futR_data <- function(fn= "data/in/futR_Inputs.xlsx"){
+makefutR_data <- function(fn= "data/in/futR_Inputs.xlsx"){
   
   tmp            <- data.frame(readxl::read_xlsx(fn, sheet = "rec_data" ))
   ec             <- data.frame(readxl::read_xlsx(fn, sheet = "covar_val" ,skip=3)) 
