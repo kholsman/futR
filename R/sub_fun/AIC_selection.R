@@ -2,7 +2,7 @@
 # AICselection
 #-------------------------------------
 #' AICselection runs AIC information criterion analysis on resulting set of recruitment models
-#' For more information contact author Kirstin Holsman (kirstin.holsman@noaa.gov)
+#' For more information contact  Kirstin Holsman (kirstin.holsman@noaa.gov)
 #' @weblink 
 #' @param data data.frame with models = rows and the following data for each model (columns):
 #' * data$LL  vector of logliklihoods of each model
