@@ -82,7 +82,7 @@ spawning biomass is not available, or when recruitment is more strongly
 driven by environmental conditions than by spawning biomass (e.g.,
 hatchery production). The general formulation is as follows:
 
-$$ \\mathrm{log}(\\hat{R_i})= a+\\sum\_{k=1}^{n_k}{\\theta_i^{\\beta}\\beta_k X\_{k,i}}+\\varepsilon_i $$
+$$ \\mathrm{ln}(\\hat{R_i})= a+\\sum\_{k=1}^{n_k}{\\theta_i^{\\beta}\\beta_k X\_{k,i}}+\\varepsilon_i $$
 
 where *ε*<sub>*i*</sub> represents a normally distributed independent
 random variable with mean 0 and variance *σ*<sub>*R*</sub><sup>2</sup>
@@ -113,7 +113,7 @@ When rectype is set to 2, the model fits a log-normal linear model as a
 function of the index of spawners $\\hat{S_i}$ in the year *i* and
 annual changes in environmental covariates, *X*):
 
-$$\\mathrm{log}(\\hat{R_i})= a + \\sum\_{k=1}^{n_k}{\\theta_i^{\\beta}\\beta_k X\_{k,i}}+ (b+\\sum\_{k=1}^{n_k}{\\theta_i^{\\lambda}\\lambda_k X\_{k,i}})\* \\hat{S_i}+\\varepsilon_i$$
+$$\\mathrm{ln}(\\hat{R_i})= a + \\sum\_{k=1}^{n_k}{\\theta_i^{\\beta}\\beta_k X\_{k,i}}+ (b+\\sum\_{k=1}^{n_k}{\\theta_i^{\\lambda}\\lambda_k X\_{k,i}})\* \\hat{S_i}+\\varepsilon_i$$
 
 where *ε*<sub>*i*</sub> represents a normally distributed independent
 random variable with mean 0 and variance *σ*<sub>*R*</sub><sup>2</sup>
@@ -218,7 +218,7 @@ $$\\hat{R_i}= a\\hat{S_i}e^{a-b\\hat{S_i}} e^{\\varepsilon_i} $$
 the general Ricker formulation can be rewritten in linear form and
 expanded to include covariates (modified from Mueter et al. 2011):
 
-$$\\mathrm{log}\\hat{R_i}= a \\sum\_{k=1}^{n_k}{\\theta_i^{\\beta}\\beta_k X\_{k,i}} -b\\hat{S_i}\\sum\_{k=1}^{n_k}{\\theta_i^{\\lambda}\\lambda_k X\_{k,i}}+\\mathrm{ln}\\hat{S_i}+\\varepsilon_i $$
+$$\\mathrm{ln}\\hat{R_i}= a \\sum\_{k=1}^{n_k}{\\theta_i^{\\beta}\\beta_k X\_{k,i}} -b\\hat{S_i}\\sum\_{k=1}^{n_k}{\\theta_i^{\\lambda}\\lambda_k X\_{k,i}}+\\mathrm{ln}\\hat{S_i}+\\varepsilon_i $$
 
 where *ε*<sub>*i*</sub> represents a normally distributed independent
 random variable with mean 0 and variance *σ*<sub>*R*</sub><sup>2</sup>
@@ -690,7 +690,7 @@ Note comparitive plots at the bottom of each tab.
 
 The base model fits the lognormally distributed process error for
 recruitment (*σ*) using maximum likelihood (i.e., ordinary least
-squares). When sigMethod - 0, no observation error (*τ* = 0) is
+squares). When sigMethod =1 , no observation error (*τ* = 0) is
 estimated for either spawners (S) or recruitment (R) estimates.
 
 ``` r
@@ -737,7 +737,7 @@ estimated for either spawners (S) or recruitment (R) estimates.
 
 The base model fits the lognormally distributed process error for
 recruitment (*σ*) using maximum likelihood (i.e., ordinary least
-squares). Additionally, when sigMethod = 1 and *τ* is input
+squares). Additionally, when sigMethod = 2 and *τ* is input
 (0 \< *τ* \< 1), observation errors are estimated for recruitment and
 spawners. Observation errors are statistically independent, random
 normal variables with similar variance but because of lack of other
