@@ -13,7 +13,7 @@ Repo maintained by: Kirstin Holsman
 Alaska Fisheries Science Center  
 NOAA Fisheries, Seattle WA  
 **<kirstin.holsman@noaa.gov>**  
-<!-- *Last updated: Feb 15, 2023*   -->
+<!-- *Last updated: Feb 27, 2023*   -->
 
 ------------------------------------------------------------------------
 
@@ -83,6 +83,7 @@ driven by environmental conditions than by spawning biomass (e.g.,
 hatchery production). The general formulation is as follows:
 
 $$ \\mathrm{log}(\\hat{R_i})= a+\\sum\_{k=1}^{n_k}{\\theta_i^{\\beta}\\beta_k X\_{k,i}}+\\varepsilon_i $$
+
 where *ε*<sub>*i*</sub> represents a normally distributed independent
 random variable with mean 0 and variance *σ*<sub>*R*</sub><sup>2</sup>
 (i.e., *ε*<sub>*i*</sub> ∼ N(0,*σ*<sub>*R*</sub><sup>2</sup>), a is the
@@ -396,7 +397,7 @@ instructions [here](https://cran.r-project.org/bin/windows/Rtools/).*
 
 ``` r
  # read in the data and create a datlist
-  datlist <- readMake_futR_data("data/in/futR_Inputs.xlsx" )
+  datlist <- makefutR_data("data/in/futR_Inputs.xlsx" )
   
   # recruitment data:
   datlist$rs_dat$R_obs
@@ -451,7 +452,7 @@ $$ \\mathrm{log}(\\hat{R_i})= a+\\sum\_{k=1}^{n_k}{\\theta_i^{\\beta}\\beta_k X\
                     covars_sd  =  NULL)
 
   # run the basic model
-  Rec1 <-  mm <-runmod(dlistIN   = datlist,
+  Rec1 <-  mm <-runRecMod(dlistIN   = datlist,
                           version   = 'futR',
                           recompile = FALSE,
                           simulate  = TRUE,
@@ -502,7 +503,7 @@ $$\\mathrm{log}(\\hat{R_i})= a + \\sum\_{k=1}^{n_k}{\\theta_i^{\\beta}\\beta_k X
                     covars_sd  =  NULL)
 
   # run the basic model
-  Rec2 <-  mm <-runmod(dlistIN   = datlist,
+  Rec2 <-  mm <-runRecMod(dlistIN   = datlist,
                           version   = 'futR',
                           recompile = FALSE,
                           simulate  = TRUE,
@@ -549,7 +550,7 @@ $$\\hat{R_i}=\\frac{ a \\hat{S_i}e^{ \\left( \\sum\_{k=1}^{n_k}{\\theta_i^{\\bet
                     covars_sd  =  NULL)
 
   # run the basic model
-  Rec3 <-  mm <-runmod(dlistIN   = datlist,
+  Rec3 <-  mm <-runRecMod(dlistIN   = datlist,
                           version   = 'futR',
                           recompile = FALSE,
                           simulate  = TRUE,
@@ -595,7 +596,7 @@ $$\\mathrm{log}\\hat{R_i}= a\\left( \\sum\_{k=1}^{n_k}{\\theta_i^{\\beta}\\beta_
                     covars_sd  =  NULL)
 
   # run the basic model
-  Rec4 <-  mm <-runmod(dlistIN   = datlist,
+  Rec4 <-  mm <-runRecMod(dlistIN   = datlist,
                           version   = 'futR',
                           recompile = FALSE,
                           simulate  = TRUE,
@@ -625,11 +626,11 @@ $$\\mathrm{log}\\hat{R_i}= a\\left( \\sum\_{k=1}^{n_k}{\\theta_i^{\\beta}\\beta_
 
 ``` r
   # read in the data and create a datlist (rather than hand code it)
-  datlist <- readMake_futR_data("data/in/futR_Inputs.xlsx" )
+  datlist <- makefutR_data("data/in/futR_Inputs.xlsx" )
   
   
   # run the basic model
-  Rec4_covar <-  mm <-runmod(dlistIN   = datlist,
+  Rec4_covar <-  mm <-runRecMod(dlistIN   = datlist,
                           version   = 'futR',
                           recompile = FALSE,
                           simulate  = TRUE,
@@ -709,7 +710,7 @@ estimated for either spawners (S) or recruitment (R) estimates.
 
   # run the basic model
 
-  m_S1 <-  mm <-runmod(dlistIN   = datlist,
+  m_S1 <-  mm <-runRecMod(dlistIN   = datlist,
                        version   = 'futR',
                        recompile = F,
                        simulate  = TRUE,
@@ -769,7 +770,7 @@ distributed observation error as:
 
   # re-run the model with tau
 
-  m_S2  <-  mm <-  runmod(dlistIN  = datlist,
+  m_S2  <-  mm <-  runRecMod(dlistIN  = datlist,
                           version  = 'futR',
                           recompile= F,
                           simulate = TRUE,
@@ -825,7 +826,7 @@ and
 
   # re-run the model with tau
 
-  m_S3 <-  mm <- runmod(dlistIN   = datlist,
+  m_S3 <-  mm <- runRecMod(dlistIN   = datlist,
                         version   = 'futR',
                         recompile = F,
                         simulate  = TRUE,
@@ -878,7 +879,7 @@ such that:
                     covars_sd  =  NULL)
 
   # re-run the model with tau
-  m_S4 <-  mm <- runmod(dlistIN=datlist,version='futR',recompile=F,simulate=TRUE,sim_nitr = 1000)
+  m_S4 <-  mm <- runRecMod(dlistIN=datlist,version='futR',recompile=F,simulate=TRUE,sim_nitr = 1000)
 
   df_S4 <-  data.frame(model = "sigMethod 4",
                      estimate=as.vector(mm$sim),
@@ -932,7 +933,7 @@ for each.
 
   # re-run the model with tau
 
-  m_S5 <-  mm <- runmod(dlistIN=datlist,version='futR',recompile=F,simulate=TRUE,sim_nitr = 1000)
+  m_S5 <-  mm <- runRecMod(dlistIN=datlist,version='futR',recompile=F,simulate=TRUE,sim_nitr = 1000)
 
   df_S5 <-  data.frame(model = "sigMethod 5",
                      estimate=as.vector(mm$sim),
