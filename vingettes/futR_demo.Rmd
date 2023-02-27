@@ -101,7 +101,8 @@ In addition, the main effect of environmental covariates is optional through est
 When rectype is set to 1, the model fits a log-normal linear model without an index of spawners (i.e., the mean recruitment as a function of annual changes in environmental covariates, ${X}$). This model is best for evaluating recruitment variation when an index of spawners or spawning biomass is not available, or when recruitment is more strongly driven by environmental conditions than by spawning biomass (e.g., hatchery production).
 The general formulation is as follows:
 
-$$ \mathrm{log}(\hat{R_i})= a+\sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i}}+\varepsilon_i $$
+$$ \mathrm{log}(\hat{R_i})= a+\sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i}}+\varepsilon_i $$  
+
 where $\varepsilon_i$ represents a normally distributed independent random variable with mean 0 and variance $\sigma^2_R$ (i.e., $\varepsilon_i\sim \mathrm N(0,\sigma^2_R)$, $\mathrm a$ is the estimated intercept, ${X}$ is a matrix of environmental covariates, $\beta$ is a vector of estimated parameters representing covariate effects on mean recruitment, and ${\theta^{\beta}}$ is a binary vector of length $n_k$ of covariate inclusion. (i.e., ${\theta^{\beta}} \in \{0,1 \}$).
  
 $$\mathbf{X} = \left[\begin{array}
@@ -388,7 +389,7 @@ $$ \mathrm{log}(\hat{R_i})= a+\sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i}}+
                     covars_sd  =  NULL)
 
   # run the basic model
-  Rec1 <-  mm <-runmod(dlistIN   = datlist,
+  Rec1 <-  mm <-runRecMod(dlistIN   = datlist,
                           version   = 'futR',
                           recompile = FALSE,
                           simulate  = TRUE,
@@ -447,7 +448,7 @@ $$\mathrm{log}(\hat{R_i})= a + \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i}}
                     covars_sd  =  NULL)
 
   # run the basic model
-  Rec2 <-  mm <-runmod(dlistIN   = datlist,
+  Rec2 <-  mm <-runRecMod(dlistIN   = datlist,
                           version   = 'futR',
                           recompile = FALSE,
                           simulate  = TRUE,
@@ -502,7 +503,7 @@ $$\hat{R_i}=\frac{ a \hat{S_i}e^{ \left( \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_
                     covars_sd  =  NULL)
 
   # run the basic model
-  Rec3 <-  mm <-runmod(dlistIN   = datlist,
+  Rec3 <-  mm <-runRecMod(dlistIN   = datlist,
                           version   = 'futR',
                           recompile = FALSE,
                           simulate  = TRUE,
@@ -555,7 +556,7 @@ $$\mathrm{log}\hat{R_i}= a\left( \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i
                     covars_sd  =  NULL)
 
   # run the basic model
-  Rec4 <-  mm <-runmod(dlistIN   = datlist,
+  Rec4 <-  mm <-runRecMod(dlistIN   = datlist,
                           version   = 'futR',
                           recompile = FALSE,
                           simulate  = TRUE,
@@ -597,7 +598,7 @@ $$\mathrm{log}\hat{R_i}= a\left( \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i
   
   
   # run the basic model
-  Rec4_covar <-  mm <-runmod(dlistIN   = datlist,
+  Rec4_covar <-  mm <-runRecMod(dlistIN   = datlist,
                           version   = 'futR',
                           recompile = FALSE,
                           simulate  = TRUE,
@@ -681,7 +682,7 @@ The base model fits the lognormally distributed process error for recruitment ($
 
   # run the basic model
 
-  m_S1 <-  mm <-runmod(dlistIN   = datlist,
+  m_S1 <-  mm <-runRecMod(dlistIN   = datlist,
                        version   = 'futR',
                        recompile = F,
                        simulate  = TRUE,
@@ -735,7 +736,7 @@ $log\hat{S}_{i-1} \sim N(0,\sigma_S)$ where $\sigma_S=\tau*\sigma$
 
   # re-run the model with tau
 
-  m_S2  <-  mm <-  runmod(dlistIN  = datlist,
+  m_S2  <-  mm <-  runRecMod(dlistIN  = datlist,
                           version  = 'futR',
                           recompile= F,
                           simulate = TRUE,
@@ -795,7 +796,7 @@ where
 
   # re-run the model with tau
 
-  m_S3 <-  mm <- runmod(dlistIN   = datlist,
+  m_S3 <-  mm <- runRecMod(dlistIN   = datlist,
                         version   = 'futR',
                         recompile = F,
                         simulate  = TRUE,
@@ -852,7 +853,7 @@ As in sigMethod = 2 with observation error (random effects) on S if $\tau >0$,  
                     covars_sd  =  NULL)
 
   # re-run the model with tau
-  m_S4 <-  mm <- runmod(dlistIN=datlist,version='futR',recompile=F,simulate=TRUE,sim_nitr = 1000)
+  m_S4 <-  mm <- runRecMod(dlistIN=datlist,version='futR',recompile=F,simulate=TRUE,sim_nitr = 1000)
 
   df_S4 <-  data.frame(model = "sigMethod 4",
                      estimate=as.vector(mm$sim),
@@ -907,7 +908,7 @@ Note that $\tau = 0$ defaults to the input variance for S and R as offsets for e
 
   # re-run the model with tau
 
-  m_S5 <-  mm <- runmod(dlistIN=datlist,version='futR',recompile=F,simulate=TRUE,sim_nitr = 1000)
+  m_S5 <-  mm <- runRecMod(dlistIN=datlist,version='futR',recompile=F,simulate=TRUE,sim_nitr = 1000)
 
   df_S5 <-  data.frame(model = "sigMethod 5",
                      estimate=as.vector(mm$sim),

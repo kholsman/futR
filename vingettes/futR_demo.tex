@@ -220,6 +220,7 @@ driven by environmental conditions than by spawning biomass (e.g.,
 hatchery production). The general formulation is as follows:
 
 \[ \mathrm{log}(\hat{R_i})= a+\sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i}}+\varepsilon_i \]
+
 where \(\varepsilon_i\) represents a normally distributed independent
 random variable with mean 0 and variance \(\sigma^2_R\) (i.e.,
 \(\varepsilon_i\sim \mathrm N(0,\sigma^2_R)\), \(\mathrm a\) is the
@@ -494,7 +495,7 @@ of random effects on spawners) such that:
 Note that \(\tau = 0\) defaults to the input variance for S and R as
 offsets for each.
 
-\includegraphics{Figs/recplot5.jpg}
+\includegraphics[width=0.8\textwidth,height=\textheight]{../Figs/recplot5.jpg}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
@@ -564,7 +565,7 @@ the instructions
 \begin{Shaded}
 \begin{Highlighting}[]
  \CommentTok{\# read in the data and create a datlist}
-\NormalTok{  datlist }\OtherTok{\textless{}{-}} \FunctionTok{readMake\_futR\_data}\NormalTok{(}\StringTok{"data/in/futR\_Inputs.xlsx"}\NormalTok{ )}
+\NormalTok{  datlist }\OtherTok{\textless{}{-}} \FunctionTok{makefutR\_data}\NormalTok{(}\StringTok{"data/in/futR\_Inputs.xlsx"}\NormalTok{ )}
   
   \CommentTok{\# recruitment data:}
 \NormalTok{  datlist}\SpecialCharTok{$}\NormalTok{rs\_dat}\SpecialCharTok{$}\NormalTok{R\_obs}
@@ -624,7 +625,7 @@ Log-linear relationship (mean with variation with covars).
                     \AttributeTok{covars\_sd  =}  \ConstantTok{NULL}\NormalTok{)}
 
   \CommentTok{\# run the basic model}
-\NormalTok{  Rec1 }\OtherTok{\textless{}{-}}\NormalTok{  mm }\OtherTok{\textless{}{-}}\FunctionTok{runmod}\NormalTok{(}\AttributeTok{dlistIN   =}\NormalTok{ datlist,}
+\NormalTok{  Rec1 }\OtherTok{\textless{}{-}}\NormalTok{  mm }\OtherTok{\textless{}{-}}\FunctionTok{runRecMod}\NormalTok{(}\AttributeTok{dlistIN   =}\NormalTok{ datlist,}
                           \AttributeTok{version   =} \StringTok{\textquotesingle{}futR\textquotesingle{}}\NormalTok{,}
                           \AttributeTok{recompile =} \ConstantTok{FALSE}\NormalTok{,}
                           \AttributeTok{simulate  =} \ConstantTok{TRUE}\NormalTok{,}
@@ -678,7 +679,7 @@ Log-linear relationship with spawners and covariates.
                     \AttributeTok{covars\_sd  =}  \ConstantTok{NULL}\NormalTok{)}
 
   \CommentTok{\# run the basic model}
-\NormalTok{  Rec2 }\OtherTok{\textless{}{-}}\NormalTok{  mm }\OtherTok{\textless{}{-}}\FunctionTok{runmod}\NormalTok{(}\AttributeTok{dlistIN   =}\NormalTok{ datlist,}
+\NormalTok{  Rec2 }\OtherTok{\textless{}{-}}\NormalTok{  mm }\OtherTok{\textless{}{-}}\FunctionTok{runRecMod}\NormalTok{(}\AttributeTok{dlistIN   =}\NormalTok{ datlist,}
                           \AttributeTok{version   =} \StringTok{\textquotesingle{}futR\textquotesingle{}}\NormalTok{,}
                           \AttributeTok{recompile =} \ConstantTok{FALSE}\NormalTok{,}
                           \AttributeTok{simulate  =} \ConstantTok{TRUE}\NormalTok{,}
@@ -726,7 +727,7 @@ Beverton holt relationship.
                     \AttributeTok{covars\_sd  =}  \ConstantTok{NULL}\NormalTok{)}
 
   \CommentTok{\# run the basic model}
-\NormalTok{  Rec3 }\OtherTok{\textless{}{-}}\NormalTok{  mm }\OtherTok{\textless{}{-}}\FunctionTok{runmod}\NormalTok{(}\AttributeTok{dlistIN   =}\NormalTok{ datlist,}
+\NormalTok{  Rec3 }\OtherTok{\textless{}{-}}\NormalTok{  mm }\OtherTok{\textless{}{-}}\FunctionTok{runRecMod}\NormalTok{(}\AttributeTok{dlistIN   =}\NormalTok{ datlist,}
                           \AttributeTok{version   =} \StringTok{\textquotesingle{}futR\textquotesingle{}}\NormalTok{,}
                           \AttributeTok{recompile =} \ConstantTok{FALSE}\NormalTok{,}
                           \AttributeTok{simulate  =} \ConstantTok{TRUE}\NormalTok{,}
@@ -775,7 +776,7 @@ Ricker relationship.
                     \AttributeTok{covars\_sd  =}  \ConstantTok{NULL}\NormalTok{)}
 
   \CommentTok{\# run the basic model}
-\NormalTok{  Rec4 }\OtherTok{\textless{}{-}}\NormalTok{  mm }\OtherTok{\textless{}{-}}\FunctionTok{runmod}\NormalTok{(}\AttributeTok{dlistIN   =}\NormalTok{ datlist,}
+\NormalTok{  Rec4 }\OtherTok{\textless{}{-}}\NormalTok{  mm }\OtherTok{\textless{}{-}}\FunctionTok{runRecMod}\NormalTok{(}\AttributeTok{dlistIN   =}\NormalTok{ datlist,}
                           \AttributeTok{version   =} \StringTok{\textquotesingle{}futR\textquotesingle{}}\NormalTok{,}
                           \AttributeTok{recompile =} \ConstantTok{FALSE}\NormalTok{,}
                           \AttributeTok{simulate  =} \ConstantTok{TRUE}\NormalTok{,}
@@ -809,11 +810,11 @@ post-spawning survival.
 \begin{Shaded}
 \begin{Highlighting}[]
   \CommentTok{\# read in the data and create a datlist (rather than hand code it)}
-\NormalTok{  datlist }\OtherTok{\textless{}{-}} \FunctionTok{readMake\_futR\_data}\NormalTok{(}\StringTok{"data/in/futR\_Inputs.xlsx"}\NormalTok{ )}
+\NormalTok{  datlist }\OtherTok{\textless{}{-}} \FunctionTok{makefutR\_data}\NormalTok{(}\StringTok{"data/in/futR\_Inputs.xlsx"}\NormalTok{ )}
   
   
   \CommentTok{\# run the basic model}
-\NormalTok{  Rec4\_covar }\OtherTok{\textless{}{-}}\NormalTok{  mm }\OtherTok{\textless{}{-}}\FunctionTok{runmod}\NormalTok{(}\AttributeTok{dlistIN   =}\NormalTok{ datlist,}
+\NormalTok{  Rec4\_covar }\OtherTok{\textless{}{-}}\NormalTok{  mm }\OtherTok{\textless{}{-}}\FunctionTok{runRecMod}\NormalTok{(}\AttributeTok{dlistIN   =}\NormalTok{ datlist,}
                           \AttributeTok{version   =} \StringTok{\textquotesingle{}futR\textquotesingle{}}\NormalTok{,}
                           \AttributeTok{recompile =} \ConstantTok{FALSE}\NormalTok{,}
                           \AttributeTok{simulate  =} \ConstantTok{TRUE}\NormalTok{,}
@@ -903,7 +904,7 @@ estimated for either spawners (S) or recruitment (R) estimates.
 
   \CommentTok{\# run the basic model}
 
-\NormalTok{  m\_S1 }\OtherTok{\textless{}{-}}\NormalTok{  mm }\OtherTok{\textless{}{-}}\FunctionTok{runmod}\NormalTok{(}\AttributeTok{dlistIN   =}\NormalTok{ datlist,}
+\NormalTok{  m\_S1 }\OtherTok{\textless{}{-}}\NormalTok{  mm }\OtherTok{\textless{}{-}}\FunctionTok{runRecMod}\NormalTok{(}\AttributeTok{dlistIN   =}\NormalTok{ datlist,}
                        \AttributeTok{version   =} \StringTok{\textquotesingle{}futR\textquotesingle{}}\NormalTok{,}
                        \AttributeTok{recompile =}\NormalTok{ F,}
                        \AttributeTok{simulate  =} \ConstantTok{TRUE}\NormalTok{,}
@@ -964,7 +965,7 @@ distributed observation error as:
 
   \CommentTok{\# re{-}run the model with tau}
 
-\NormalTok{  m\_S2  }\OtherTok{\textless{}{-}}\NormalTok{  mm }\OtherTok{\textless{}{-}}  \FunctionTok{runmod}\NormalTok{(}\AttributeTok{dlistIN  =}\NormalTok{ datlist,}
+\NormalTok{  m\_S2  }\OtherTok{\textless{}{-}}\NormalTok{  mm }\OtherTok{\textless{}{-}}  \FunctionTok{runRecMod}\NormalTok{(}\AttributeTok{dlistIN  =}\NormalTok{ datlist,}
                           \AttributeTok{version  =} \StringTok{\textquotesingle{}futR\textquotesingle{}}\NormalTok{,}
                           \AttributeTok{recompile=}\NormalTok{ F,}
                           \AttributeTok{simulate =} \ConstantTok{TRUE}\NormalTok{,}
@@ -1022,7 +1023,7 @@ where
 
   \CommentTok{\# re{-}run the model with tau}
 
-\NormalTok{  m\_S3 }\OtherTok{\textless{}{-}}\NormalTok{  mm }\OtherTok{\textless{}{-}} \FunctionTok{runmod}\NormalTok{(}\AttributeTok{dlistIN   =}\NormalTok{ datlist,}
+\NormalTok{  m\_S3 }\OtherTok{\textless{}{-}}\NormalTok{  mm }\OtherTok{\textless{}{-}} \FunctionTok{runRecMod}\NormalTok{(}\AttributeTok{dlistIN   =}\NormalTok{ datlist,}
                         \AttributeTok{version   =} \StringTok{\textquotesingle{}futR\textquotesingle{}}\NormalTok{,}
                         \AttributeTok{recompile =}\NormalTok{ F,}
                         \AttributeTok{simulate  =} \ConstantTok{TRUE}\NormalTok{,}
@@ -1077,7 +1078,7 @@ that:
                     \AttributeTok{covars\_sd  =}  \ConstantTok{NULL}\NormalTok{)}
 
   \CommentTok{\# re{-}run the model with tau}
-\NormalTok{  m\_S4 }\OtherTok{\textless{}{-}}\NormalTok{  mm }\OtherTok{\textless{}{-}} \FunctionTok{runmod}\NormalTok{(}\AttributeTok{dlistIN=}\NormalTok{datlist,}\AttributeTok{version=}\StringTok{\textquotesingle{}futR\textquotesingle{}}\NormalTok{,}\AttributeTok{recompile=}\NormalTok{F,}\AttributeTok{simulate=}\ConstantTok{TRUE}\NormalTok{,}\AttributeTok{sim\_nitr =} \DecValTok{1000}\NormalTok{)}
+\NormalTok{  m\_S4 }\OtherTok{\textless{}{-}}\NormalTok{  mm }\OtherTok{\textless{}{-}} \FunctionTok{runRecMod}\NormalTok{(}\AttributeTok{dlistIN=}\NormalTok{datlist,}\AttributeTok{version=}\StringTok{\textquotesingle{}futR\textquotesingle{}}\NormalTok{,}\AttributeTok{recompile=}\NormalTok{F,}\AttributeTok{simulate=}\ConstantTok{TRUE}\NormalTok{,}\AttributeTok{sim\_nitr =} \DecValTok{1000}\NormalTok{)}
 
 \NormalTok{  df\_S4 }\OtherTok{\textless{}{-}}  \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{model =} \StringTok{"sigMethod 4"}\NormalTok{,}
                      \AttributeTok{estimate=}\FunctionTok{as.vector}\NormalTok{(mm}\SpecialCharTok{$}\NormalTok{sim),}
@@ -1134,7 +1135,7 @@ offsets for each.
 
   \CommentTok{\# re{-}run the model with tau}
 
-\NormalTok{  m\_S5 }\OtherTok{\textless{}{-}}\NormalTok{  mm }\OtherTok{\textless{}{-}} \FunctionTok{runmod}\NormalTok{(}\AttributeTok{dlistIN=}\NormalTok{datlist,}\AttributeTok{version=}\StringTok{\textquotesingle{}futR\textquotesingle{}}\NormalTok{,}\AttributeTok{recompile=}\NormalTok{F,}\AttributeTok{simulate=}\ConstantTok{TRUE}\NormalTok{,}\AttributeTok{sim\_nitr =} \DecValTok{1000}\NormalTok{)}
+\NormalTok{  m\_S5 }\OtherTok{\textless{}{-}}\NormalTok{  mm }\OtherTok{\textless{}{-}} \FunctionTok{runRecMod}\NormalTok{(}\AttributeTok{dlistIN=}\NormalTok{datlist,}\AttributeTok{version=}\StringTok{\textquotesingle{}futR\textquotesingle{}}\NormalTok{,}\AttributeTok{recompile=}\NormalTok{F,}\AttributeTok{simulate=}\ConstantTok{TRUE}\NormalTok{,}\AttributeTok{sim\_nitr =} \DecValTok{1000}\NormalTok{)}
 
 \NormalTok{  df\_S5 }\OtherTok{\textless{}{-}}  \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{model =} \StringTok{"sigMethod 5"}\NormalTok{,}
                      \AttributeTok{estimate=}\FunctionTok{as.vector}\NormalTok{(mm}\SpecialCharTok{$}\NormalTok{sim),}
