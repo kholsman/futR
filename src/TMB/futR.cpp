@@ -171,7 +171,10 @@ Type objective_function<Type>::operator(  ) (  )
           Bcovars+= lambda_0( c,i )*lambda( c )*cov( c,i );
         }
         //modified from mueter 2011 formulation
-        R_hat(i)= exp((a*exp(Acovars))-(b*exp(Bcovars)*S_hat(i))+log(S_hat(i))) ;
+        R_hat(i)= exp( (a+Acovars)-( (b+Bcovars)*S_hat(i))+log(S_hat(i))  ) ;
+        
+        //modified from mueter 2011 formulation old way - not right?
+        //R_hat(i)= exp((a*exp(Acovars))-(b*exp(Bcovars)*S_hat(i))+log(S_hat(i))) ;
         
       }
       break;

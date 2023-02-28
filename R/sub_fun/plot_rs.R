@@ -33,10 +33,7 @@ plot_rs <- function(rec_df = rec_fit, cbp = "Dark2", obscol = "gray"){
     ylab("Recruitment")+    
     coord_cartesian(ylim = c(0, Rmax),xlim = c(0, Smax))+
     geom_point (aes(x=S_obs,y = R_hat, color = model))+ 
-    theme_minimal()+
-    # theme_kir_EBM()+
-    scale_color_brewer(palette = cbp)
-
+    theme_minimal()
   
   prt <- ggplot(data =  rec_df) +
     geom_point (aes(x=year,y = R_obs),color=obscol,size =2)+ 
@@ -45,9 +42,7 @@ plot_rs <- function(rec_df = rec_fit, cbp = "Dark2", obscol = "gray"){
     ylab("Recruitment")+    
     geom_point (aes(x=year,y = R_hat, color = model))+ 
     geom_line (aes(x=year,y = R_hat, color = model))+ 
-    theme_minimal()+
-    # theme_kir_EBM()+
-    scale_color_brewer(palette = cbp)
+    theme_minimal()
   #display.brewer.all()
   #col(1)
   library("cowplot")

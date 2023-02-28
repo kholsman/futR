@@ -182,11 +182,20 @@ $$
    
 ### rectype = 4. Ricker
 
-When rectype is set to 4 the model fits a  Ricker S/R curve. The Ricker model (Ricker,1954) is a dome shaped recruitment curve best used to describe populations with strong density dependence (e.g., cannibalism). The model estimates recruitment in  year $i$ and a fucntion of the index of spawners contributing to that year's recruitment $\hat{S_i}$ (e.g., spawning biomass in year $i-1$). If specified, the model also includes the additional effects of annual changes in environmental conditions ${X}$); inclusion of environmental covariates on each of the terms in the model can therefore be used to model annual variation in spawning habitat and carrying capacity (covariates on the $a$ term below) or environmental changes in other density dependent processes like cannibalism (covariates on the $b$ term below):
+When rectype is set to 4 the model fits a  Ricker S/R curve. The Ricker model (Ricker,1954) is a dome shaped recruitment curve best used to describe populations with strong density dependence (e.g., cannibalism). The model estimates recruitment in  year $i$ and a function of the index of spawners contributing to that year's recruitment $\hat{S_i}$ (e.g., spawning biomass in year $i-1$). If specified, the model also includes the additional effects of annual changes in environmental conditions ${X}$); inclusion of environmental covariates on each of the terms in the model can therefore be used to model annual variation in spawning habitat and carrying capacity (covariates on the $a$ term below) or environmental changes in other density dependent processes like cannibalism (covariates on the $b$ term below):
+
 $$\hat{R_i}= a\hat{S_i}e^{a-b\hat{S_i}} e^{\varepsilon_i} $$
+
 the general Ricker formulation can be rewritten in linear form and expanded to include covariates (modified from Mueter et al. 2011):
 
-$$\mathrm{ln}\hat{R_i}= a \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i}} -b\hat{S_i}\sum_{k=1}^{n_k}{\theta_i^{\lambda}\lambda_k X_{k,i}}+\mathrm{ln}\hat{S_i}+\varepsilon_i $$
+<!-- $$\mathrm{ln}\hat{R_i}= a \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i}} -b\hat{S_i}\sum_{k=1}^{n_k}{\theta_i^{\lambda}\lambda_k X_{k,i}}+\mathrm{ln}\hat{S_i}+\varepsilon_i $$ -->
+
+<!-- $$\mathrm{ln}\hat{R_i}= ae^{\left( \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i}} \right)}-be^{\left( \sum_{k=1}^{n_k}{\theta_i^{\lambda}\lambda_k X_{k,i}}\right)}\hat{S_i}+\mathrm{ln}\hat{S_i}+\varepsilon_i $$ -->
+
+$$\mathrm{ln}\hat{R_i}= \left(a+ \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i}} \right)-\left(b+ \sum_{k=1}^{n_k}{\theta_i^{\lambda}\lambda_k X_{k,i}}\right)\hat{S_i}+\mathrm{ln}\hat{S_i}+\varepsilon_i $$
+
+R_hat(i)= exp( (a+Acovars)-( (b+Bcovars)*S_hat(i))+log(S_hat(i))  ) ;
+
 
 where $\varepsilon_i$ represents a normally distributed independent random variable with mean 0 and variance $\sigma^2_R$ (i.e., $\varepsilon_i\sim \mathrm N(0,\sigma^2_R)$, $\mathrm a$ is the estimated slope of the model near $\hat{S_i}\sim0$ and b is the density-dependence shape parameter. ${X}$ is a matrix of environmental covariates, $\beta$ and $\lambda$ are vectors of estimated parameters representing covariate effects on pre- and post-spawning success, respectively,and $\theta^{\beta}$ and $\theta^{\lambda}$are binary vectors of length $n_k$ of covariate inclusion (i.e., ${\theta^{\beta}} \in \{0,1 \}$ and ${\theta^{\lambda}} \in \{0,1 \}$).
 
@@ -536,7 +545,9 @@ $$\hat{R_i}=\frac{ a \hat{S_i}e^{ \left( \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_
 
 Ricker relationship.
 
-$$\mathrm{log}\hat{R_i}= a\left( \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i}} \right)-b\hat{S_i}\sum_{k=1}^{n_k}{\theta_i^{\lambda}\lambda_k X_{k,i}}+\hat{S_i}+\varepsilon_i $$
+<!-- $$\mathrm{ln}\hat{R_i}= ae^{\left( \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i}} \right)}-be^{\left( \sum_{k=1}^{n_k}{\theta_i^{\lambda}\lambda_k X_{k,i}}\right)}\hat{S_i}+\mathrm{ln}\hat{S_i}+\varepsilon_i $$ -->
+$$\mathrm{ln}\hat{R_i}= \left(a+ \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i}} \right)-\left(b+ \sum_{k=1}^{n_k}{\theta_i^{\lambda}\lambda_k X_{k,i}}\right)\hat{S_i}+\mathrm{ln}\hat{S_i}+\varepsilon_i $$
+
 
 ```{r fitR4, echo=T,eval=T,message=F,results='hide'}
 
@@ -588,7 +599,9 @@ $$\mathrm{log}\hat{R_i}= a\left( \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i
 
 Ricker relationship fit with covariates on pre-spawning success and post-spawning survival.
 
-$$\mathrm{log}\hat{R_i}= a\left( \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i}} \right)-b\hat{S_i}\sum_{k=1}^{n_k}{\theta_i^{\lambda}\lambda_k X_{k,i}}+\mathrm{ln}\hat{S_i}+\varepsilon_i $$
+<!-- $$\mathrm{log}\hat{R_i}= a\left( \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i}} \right)-b\hat{S_i}\sum_{k=1}^{n_k}{\theta_i^{\lambda}\lambda_k X_{k,i}}+\mathrm{ln}\hat{S_i}+\varepsilon_i $$ -->
+
+$$\mathrm{ln}\hat{R_i}= \left(a+ \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i}} \right)-\left(b+ \sum_{k=1}^{n_k}{\theta_i^{\lambda}\lambda_k X_{k,i}}\right)\hat{S_i}+\mathrm{ln}\hat{S_i}+\varepsilon_i $$
 
 ```{r fitR4_2, echo=T,eval=T,message=F,results='hide'}
  
