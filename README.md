@@ -205,7 +205,7 @@ $$
 When rectype is set to 4 the model fits a Ricker S/R curve. The Ricker
 model (Ricker,1954) is a dome shaped recruitment curve best used to
 describe populations with strong density dependence (e.g., cannibalism).
-The model estimates recruitment in year *i* and a fucntion of the index
+The model estimates recruitment in year *i* and a function of the index
 of spawners contributing to that year’s recruitment $\\hat{S_i}$ (e.g.,
 spawning biomass in year *i* − 1). If specified, the model also includes
 the additional effects of annual changes in environmental conditions
@@ -214,11 +214,16 @@ model can therefore be used to model annual variation in spawning
 habitat and carrying capacity (covariates on the *a* term below) or
 environmental changes in other density dependent processes like
 cannibalism (covariates on the *b* term below):
-$$\\hat{R_i}= a\\hat{S_i}e^{a-b\\hat{S_i}} e^{\\varepsilon_i} $$
+
+$$\\hat{R_i}= a\\hat{S_i}e^{-b\\hat{S_i}} e^{\\varepsilon_i} $$
+
 the general Ricker formulation can be rewritten in linear form and
 expanded to include covariates (modified from Mueter et al. 2011):
 
-$$\\mathrm{ln}\\hat{R_i}= a \\sum\_{k=1}^{n_k}{\\theta_i^{\\beta}\\beta_k X\_{k,i}} -b\\hat{S_i}\\sum\_{k=1}^{n_k}{\\theta_i^{\\lambda}\\lambda_k X\_{k,i}}+\\mathrm{ln}\\hat{S_i}+\\varepsilon_i $$
+<!-- $$\mathrm{ln}\hat{R_i}= a \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i}} -b\hat{S_i}\sum_{k=1}^{n_k}{\theta_i^{\lambda}\lambda_k X_{k,i}}+\mathrm{ln}\hat{S_i}+\varepsilon_i $$ -->
+<!-- $$\mathrm{ln}\hat{R_i}= ae^{\left( \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i}} \right)}-be^{\left( \sum_{k=1}^{n_k}{\theta_i^{\lambda}\lambda_k X_{k,i}}\right)}\hat{S_i}+\mathrm{ln}\hat{S_i}+\varepsilon_i $$ -->
+
+$$\\mathrm{ln}\\hat{R_i}= \\left(a+ \\sum\_{k=1}^{n_k}{\\theta_i^{\\beta}\\beta_k X\_{k,i}} \\right)-\\left(b+ \\sum\_{k=1}^{n_k}{\\theta_i^{\\lambda}\\lambda_k X\_{k,i}}\\right)\\hat{S_i}+\\mathrm{ln}\\hat{S_i}+\\varepsilon_i$$
 
 where *ε*<sub>*i*</sub> represents a normally distributed independent
 random variable with mean 0 and variance *σ*<sub>*R*</sub><sup>2</sup>
@@ -577,7 +582,9 @@ $$\\hat{R_i}=\\frac{ a \\hat{S_i}e^{ \\left( \\sum\_{k=1}^{n_k}{\\theta_i^{\\bet
 
 Ricker relationship.
 
-$$\\mathrm{log}\\hat{R_i}= a\\left( \\sum\_{k=1}^{n_k}{\\theta_i^{\\beta}\\beta_k X\_{k,i}} \\right)-b\\hat{S_i}\\sum\_{k=1}^{n_k}{\\theta_i^{\\lambda}\\lambda_k X\_{k,i}}+\\hat{S_i}+\\varepsilon_i $$
+<!-- $$\mathrm{ln}\hat{R_i}= ae^{\left( \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i}} \right)}-be^{\left( \sum_{k=1}^{n_k}{\theta_i^{\lambda}\lambda_k X_{k,i}}\right)}\hat{S_i}+\mathrm{ln}\hat{S_i}+\varepsilon_i $$ -->
+
+$$\\mathrm{ln}\\hat{R_i}= \\left(a+ \\sum\_{k=1}^{n_k}{\\theta_i^{\\beta}\\beta_k X\_{k,i}} \\right)-\\left(b+ \\sum\_{k=1}^{n_k}{\\theta_i^{\\lambda}\\lambda_k X\_{k,i}}\\right)\\hat{S_i}+\\mathrm{ln}\\hat{S_i}+\\varepsilon_i $$
 
 ``` r
   # makeDat will make the input values, data, and phases for the model:
@@ -622,7 +629,9 @@ $$\\mathrm{log}\\hat{R_i}= a\\left( \\sum\_{k=1}^{n_k}{\\theta_i^{\\beta}\\beta_
 Ricker relationship fit with covariates on pre-spawning success and
 post-spawning survival.
 
-$$\\mathrm{log}\\hat{R_i}= a\\left( \\sum\_{k=1}^{n_k}{\\theta_i^{\\beta}\\beta_k X\_{k,i}} \\right)-b\\hat{S_i}\\sum\_{k=1}^{n_k}{\\theta_i^{\\lambda}\\lambda_k X\_{k,i}}+\\mathrm{ln}\\hat{S_i}+\\varepsilon_i $$
+<!-- $$\mathrm{log}\hat{R_i}= a\left( \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i}} \right)-b\hat{S_i}\sum_{k=1}^{n_k}{\theta_i^{\lambda}\lambda_k X_{k,i}}+\mathrm{ln}\hat{S_i}+\varepsilon_i $$ -->
+
+$$\\mathrm{ln}\\hat{R_i}= \\left(a+ \\sum\_{k=1}^{n_k}{\\theta_i^{\\beta}\\beta_k X\_{k,i}} \\right)-\\left(b+ \\sum\_{k=1}^{n_k}{\\theta_i^{\\lambda}\\lambda_k X\_{k,i}}\\right)\\hat{S_i}+\\mathrm{ln}\\hat{S_i}+\\varepsilon_i $$
 
 ``` r
   # read in the data and create a datlist (rather than hand code it)
