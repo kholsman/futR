@@ -4,10 +4,6 @@
 %
 \documentclass[
 ]{article}
-\title{futR()}
-\author{Kirstin Holsman}
-\date{}
-
 \usepackage{amsmath,amssymb}
 \usepackage{lmodern}
 \usepackage{iftex}
@@ -37,14 +33,6 @@
   \KOMAoptions{parskip=half}}
 \makeatother
 \usepackage{xcolor}
-\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
-\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
-\hypersetup{
-  pdftitle={futR()},
-  pdfauthor={Kirstin Holsman},
-  hidelinks,
-  pdfcreator={LaTeX via pandoc}}
-\urlstyle{same} % disable monospaced font for URLs
 \usepackage[margin=1in]{geometry}
 \usepackage{color}
 \usepackage{fancyvrb}
@@ -103,23 +91,21 @@
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 \setcounter{secnumdepth}{-\maxdimen} % remove section numbering
-\usepackage{booktabs}
-\usepackage{longtable}
-\usepackage{array}
-\usepackage{multirow}
-\usepackage{wrapfig}
-\usepackage{float}
-\usepackage{colortbl}
-\usepackage{pdflscape}
-\usepackage{tabu}
-\usepackage{threeparttable}
-\usepackage{threeparttablex}
-\usepackage[normalem]{ulem}
-\usepackage{makecell}
-\usepackage{xcolor}
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={futR()},
+  pdfauthor={Kirstin Holsman},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{futR()}
+\author{Kirstin Holsman}
+\date{}
 
 \begin{document}
 \maketitle
@@ -560,8 +546,8 @@ recruitment and spawning biomass:
 \end{Highlighting}
 \end{Shaded}
 
-\emph{Note: If you get a compilation error try reinstalling RTools using
-the instructions
+\emph{Note: If you get a compilation error try re-installing RTools
+using the instructions
 \href{https://cran.r-project.org/bin/windows/Rtools/}{here}.}
 
 \begin{Shaded}
@@ -629,6 +615,7 @@ Log-linear relationship (mean with variation with covars).
   \CommentTok{\# run the basic model}
 \NormalTok{  Rec1 }\OtherTok{\textless{}{-}}\NormalTok{  mm }\OtherTok{\textless{}{-}}\FunctionTok{runRecMod}\NormalTok{(}\AttributeTok{dlistIN   =}\NormalTok{ datlist,}
                           \AttributeTok{version   =} \StringTok{\textquotesingle{}futR\textquotesingle{}}\NormalTok{,}
+                          \AttributeTok{src\_fldr   =} \StringTok{"src/TMB"}\NormalTok{,}
                           \AttributeTok{recompile =} \ConstantTok{FALSE}\NormalTok{,}
                           \AttributeTok{simulate  =} \ConstantTok{TRUE}\NormalTok{,}
                           \AttributeTok{sim\_nitr  =} \DecValTok{1000}\NormalTok{)}
@@ -643,14 +630,18 @@ Log-linear relationship (mean with variation with covars).
   
   \ControlFlowTok{if}\NormalTok{(}\DecValTok{1} \SpecialCharTok{==} \DecValTok{10}\NormalTok{)\{}
    \FunctionTok{print}\NormalTok{(rec\_fit)}
-   \FunctionTok{jpeg}\NormalTok{(}\StringTok{"Figs/recplot1.jpg"}\NormalTok{)}
-   \FunctionTok{print}\NormalTok{(}\FunctionTok{plot\_rs}\NormalTok{(rec\_fit))}
+   \FunctionTok{jpeg}\NormalTok{(}\StringTok{"Figs/recplot1.jpg"}\NormalTok{, }\AttributeTok{width =}\NormalTok{ W, }\AttributeTok{height=}\NormalTok{ H1, }\AttributeTok{res =} \DecValTok{250}\NormalTok{, }\AttributeTok{units =} \StringTok{"in"}\NormalTok{)}
+   \FunctionTok{print}\NormalTok{(}\FunctionTok{plot\_rs}\NormalTok{(r1\_fit))}
    \FunctionTok{dev.off}\NormalTok{()}
 \NormalTok{  \}}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{futR_demo_files/figure-latex/plotR1-1.pdf}
+\begin{figure}
+\centering
+\includegraphics[width=0.6\textwidth,height=\textheight]{../Figs/recplot1.jpg}
+\caption{mean recruitment}
+\end{figure}
 
 \hypertarget{rectype-2}{%
 \subsubsection{rectype = 2}\label{rectype-2}}
@@ -683,6 +674,7 @@ Log-linear relationship with spawners and covariates.
   \CommentTok{\# run the basic model}
 \NormalTok{  Rec2 }\OtherTok{\textless{}{-}}\NormalTok{  mm }\OtherTok{\textless{}{-}}\FunctionTok{runRecMod}\NormalTok{(}\AttributeTok{dlistIN   =}\NormalTok{ datlist,}
                           \AttributeTok{version   =} \StringTok{\textquotesingle{}futR\textquotesingle{}}\NormalTok{,}
+                          \AttributeTok{src\_fldr   =} \StringTok{"src/TMB"}\NormalTok{,}
                           \AttributeTok{recompile =} \ConstantTok{FALSE}\NormalTok{,}
                           \AttributeTok{simulate  =} \ConstantTok{TRUE}\NormalTok{,}
                           \AttributeTok{sim\_nitr  =} \DecValTok{1000}\NormalTok{)}
@@ -694,18 +686,16 @@ Log-linear relationship with spawners and covariates.
 \NormalTok{  r2\_fit  }\OtherTok{\textless{}{-}} \FunctionTok{getFit}\NormalTok{(mm, }\AttributeTok{nm =} \StringTok{"recType = 2"}\NormalTok{)}
 \NormalTok{  rec\_fit }\OtherTok{\textless{}{-}} \FunctionTok{rbind}\NormalTok{(rec\_fit,r2\_fit)}
  \FunctionTok{rm}\NormalTok{(mm)}
- \ControlFlowTok{if}\NormalTok{(}\DecValTok{1}\SpecialCharTok{==}\DecValTok{10}\NormalTok{)\{}
-   \FunctionTok{jpeg}\NormalTok{(}\StringTok{"Figs/recplot2.jpg"}\NormalTok{)}
+ \ControlFlowTok{if}\NormalTok{(updatePlots)\{}
+   \FunctionTok{jpeg}\NormalTok{(}\StringTok{"Figs/recplot2.jpg"}\NormalTok{, }\AttributeTok{width =}\NormalTok{ W, }\AttributeTok{height=}\NormalTok{ H1, }\AttributeTok{res =} \DecValTok{250}\NormalTok{, }\AttributeTok{units =} \StringTok{"in"}\NormalTok{)}
    \FunctionTok{print}\NormalTok{(}\FunctionTok{plot\_rs}\NormalTok{(rec\_fit))}
    \FunctionTok{dev.off}\NormalTok{()}
 \NormalTok{ \}}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{futR_demo_files/figure-latex/plotR2-1.pdf}
-
-\hypertarget{rectype-3}{%
-\subsubsection{rectype = 3}\label{rectype-3}}
+\includegraphics[width=0.6\textwidth,height=\textheight]{../Figs/recplot2.jpg}\\
+\#\#\# rectype = 3
 
 Beverton holt relationship.
 
@@ -731,6 +721,7 @@ Beverton holt relationship.
   \CommentTok{\# run the basic model}
 \NormalTok{  Rec3 }\OtherTok{\textless{}{-}}\NormalTok{  mm }\OtherTok{\textless{}{-}}\FunctionTok{runRecMod}\NormalTok{(}\AttributeTok{dlistIN   =}\NormalTok{ datlist,}
                           \AttributeTok{version   =} \StringTok{\textquotesingle{}futR\textquotesingle{}}\NormalTok{,}
+                          \AttributeTok{src\_fldr   =} \StringTok{"src/TMB"}\NormalTok{,}
                           \AttributeTok{recompile =} \ConstantTok{FALSE}\NormalTok{,}
                           \AttributeTok{simulate  =} \ConstantTok{TRUE}\NormalTok{,}
                           \AttributeTok{sim\_nitr  =} \DecValTok{1000}\NormalTok{)}
@@ -743,15 +734,15 @@ Beverton holt relationship.
 \NormalTok{  rec\_fit }\OtherTok{\textless{}{-}} \FunctionTok{rbind}\NormalTok{(rec\_fit,r3\_fit)}
   \FunctionTok{rm}\NormalTok{(mm)}
   
-  \ControlFlowTok{if}\NormalTok{(}\DecValTok{1}\SpecialCharTok{==}\DecValTok{10}\NormalTok{)\{}
-     \FunctionTok{jpeg}\NormalTok{(}\StringTok{"Figs/recplot3.jpg"}\NormalTok{)}
+  \ControlFlowTok{if}\NormalTok{(updatePlots)\{}
+     \FunctionTok{jpeg}\NormalTok{(}\StringTok{"Figs/recplot3.jpg"}\NormalTok{, }\AttributeTok{width =}\NormalTok{ W, }\AttributeTok{height=}\NormalTok{ H1, }\AttributeTok{res =} \DecValTok{250}\NormalTok{, }\AttributeTok{units =} \StringTok{"in"}\NormalTok{)}
      \FunctionTok{print}\NormalTok{(}\FunctionTok{plot\_rs}\NormalTok{(rec\_fit))}
      \FunctionTok{dev.off}\NormalTok{()}
 \NormalTok{  \}}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{futR_demo_files/figure-latex/plotR3-1.pdf}
+\includegraphics[width=0.6\textwidth,height=\textheight]{../Figs/recplot3.jpg}
 
 \hypertarget{rectype-4}{%
 \subsubsection{rectype = 4}\label{rectype-4}}
@@ -780,6 +771,7 @@ Ricker relationship.
   \CommentTok{\# run the basic model}
 \NormalTok{  Rec4 }\OtherTok{\textless{}{-}}\NormalTok{  mm }\OtherTok{\textless{}{-}}\FunctionTok{runRecMod}\NormalTok{(}\AttributeTok{dlistIN   =}\NormalTok{ datlist,}
                           \AttributeTok{version   =} \StringTok{\textquotesingle{}futR\textquotesingle{}}\NormalTok{,}
+                          \AttributeTok{src\_fldr   =} \StringTok{"src/TMB"}\NormalTok{,}
                           \AttributeTok{recompile =} \ConstantTok{FALSE}\NormalTok{,}
                           \AttributeTok{simulate  =} \ConstantTok{TRUE}\NormalTok{,}
                           \AttributeTok{sim\_nitr  =} \DecValTok{1000}\NormalTok{)}
@@ -792,13 +784,15 @@ Ricker relationship.
 \NormalTok{  r4\_fit  }\OtherTok{\textless{}{-}} \FunctionTok{getFit}\NormalTok{(mm, }\AttributeTok{nm =} \StringTok{"recType = 4"}\NormalTok{)}
 \NormalTok{  rec\_fit }\OtherTok{\textless{}{-}} \FunctionTok{rbind}\NormalTok{(rec\_fit,r4\_fit)}
  \FunctionTok{rm}\NormalTok{(mm)}
- \FunctionTok{jpeg}\NormalTok{(}\StringTok{"Figs/recplot4.jpg"}\NormalTok{)}
- \FunctionTok{print}\NormalTok{(}\FunctionTok{plot\_rs}\NormalTok{(rec\_fit))}
- \FunctionTok{dev.off}\NormalTok{()}
+ \ControlFlowTok{if}\NormalTok{(updatePlots)\{}
+   \FunctionTok{jpeg}\NormalTok{(}\StringTok{"Figs/recplot4.jpg"}\NormalTok{, }\AttributeTok{width =}\NormalTok{ W, }\AttributeTok{height=}\NormalTok{ H1, }\AttributeTok{res =} \DecValTok{250}\NormalTok{, }\AttributeTok{units =} \StringTok{"in"}\NormalTok{)}
+   \FunctionTok{print}\NormalTok{(}\FunctionTok{plot\_rs}\NormalTok{(rec\_fit))}
+   \FunctionTok{dev.off}\NormalTok{()}
+\NormalTok{ \}}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{futR_demo_files/figure-latex/plotR4-1.pdf}
+\includegraphics[width=0.6\textwidth,height=\textheight]{../Figs/recplot4.jpg}
 
 \hypertarget{rectype-4-with-covariates}{%
 \subsubsection{rectype = 4 with
@@ -817,7 +811,8 @@ post-spawning survival.
   
   \CommentTok{\# run the basic model}
 \NormalTok{  Rec4\_covar }\OtherTok{\textless{}{-}}\NormalTok{  mm }\OtherTok{\textless{}{-}}\FunctionTok{runRecMod}\NormalTok{(}\AttributeTok{dlistIN   =}\NormalTok{ datlist,}
-                          \AttributeTok{version   =} \StringTok{\textquotesingle{}futR\textquotesingle{}}\NormalTok{,}
+                          \AttributeTok{version   =} \StringTok{\textquotesingle{}futR\textquotesingle{}}\NormalTok{,                           }
+                          \AttributeTok{src\_fldr   =} \StringTok{"src/TMB"}\NormalTok{,}
                           \AttributeTok{recompile =} \ConstantTok{FALSE}\NormalTok{,}
                           \AttributeTok{simulate  =} \ConstantTok{TRUE}\NormalTok{,}
                           \AttributeTok{sim\_nitr  =} \DecValTok{1000}\NormalTok{)}
@@ -830,13 +825,15 @@ post-spawning survival.
 \NormalTok{  r4\_fit\_c  }\OtherTok{\textless{}{-}} \FunctionTok{getFit}\NormalTok{(mm, }\AttributeTok{nm =} \StringTok{"recType = 4 with covar"}\NormalTok{)}
 \NormalTok{  rec\_fit }\OtherTok{\textless{}{-}} \FunctionTok{rbind}\NormalTok{(r4\_fit,r4\_fit\_c)}
  \FunctionTok{rm}\NormalTok{(mm)}
- \FunctionTok{jpeg}\NormalTok{(}\StringTok{"Figs/recplot5.jpg"}\NormalTok{)}
- \FunctionTok{print}\NormalTok{(}\FunctionTok{plot\_rs}\NormalTok{(rec\_fit))}
- \FunctionTok{dev.off}\NormalTok{()}
+ \ControlFlowTok{if}\NormalTok{(updatePlots)\{}
+   \FunctionTok{jpeg}\NormalTok{(}\StringTok{"Figs/recplot5.jpg"}\NormalTok{, }\AttributeTok{width =}\NormalTok{ W, }\AttributeTok{height=}\NormalTok{ H1, }\AttributeTok{res =} \DecValTok{250}\NormalTok{, }\AttributeTok{units =} \StringTok{"in"}\NormalTok{)}
+   \FunctionTok{print}\NormalTok{(}\FunctionTok{plot\_rs}\NormalTok{(rec\_fit))}
+   \FunctionTok{dev.off}\NormalTok{()}
+\NormalTok{ \}}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{futR_demo_files/figure-latex/plotR4_cov-1.pdf}
+\includegraphics[width=0.6\textwidth,height=\textheight]{../Figs/recplot5.jpg}
 
 \hypertarget{explore-obs.-error-options}{%
 \subsection{Explore obs. error
@@ -907,7 +904,8 @@ estimated for either spawners (S) or recruitment (R) estimates.
   \CommentTok{\# run the basic model}
 
 \NormalTok{  m\_S1 }\OtherTok{\textless{}{-}}\NormalTok{  mm }\OtherTok{\textless{}{-}}\FunctionTok{runRecMod}\NormalTok{(}\AttributeTok{dlistIN   =}\NormalTok{ datlist,}
-                       \AttributeTok{version   =} \StringTok{\textquotesingle{}futR\textquotesingle{}}\NormalTok{,}
+                       \AttributeTok{version   =} \StringTok{\textquotesingle{}futR\textquotesingle{}}\NormalTok{,                           }
+                       \AttributeTok{src\_fldr   =} \StringTok{"src/TMB"}\NormalTok{,}
                        \AttributeTok{recompile =}\NormalTok{ F,}
                        \AttributeTok{simulate  =} \ConstantTok{TRUE}\NormalTok{,}
                        \AttributeTok{sim\_nitr  =} \DecValTok{1000}\NormalTok{)}
@@ -922,13 +920,15 @@ estimated for either spawners (S) or recruitment (R) estimates.
     \FunctionTok{count}\NormalTok{(parameter,}\FunctionTok{round}\NormalTok{(estimate,}\DecValTok{1}\NormalTok{))}\SpecialCharTok{\%\textgreater{}\%}
     \FunctionTok{slice}\NormalTok{(}\FunctionTok{which.max}\NormalTok{(n))}
   \FunctionTok{names}\NormalTok{(peak)}\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"model"}\NormalTok{,}\StringTok{"parameter"}\NormalTok{,}\StringTok{"freq"}\NormalTok{,}\StringTok{"n"}\NormalTok{)}
- \FunctionTok{jpeg}\NormalTok{(}\StringTok{"Figs/plotpar1.jpg"}\NormalTok{)}
- \FunctionTok{print}\NormalTok{(}\FunctionTok{plot\_par\_pdf}\NormalTok{(df\_S1))}
- \FunctionTok{dev.off}\NormalTok{()}
+ \ControlFlowTok{if}\NormalTok{(updatePlots)\{}
+    \FunctionTok{jpeg}\NormalTok{(}\StringTok{"Figs/plotpar1.jpg"}\NormalTok{, }\AttributeTok{width =}\NormalTok{ W, }\AttributeTok{height=}\NormalTok{ H2, }\AttributeTok{res =} \DecValTok{250}\NormalTok{, }\AttributeTok{units =} \StringTok{"in"}\NormalTok{)}
+    \FunctionTok{print}\NormalTok{(}\FunctionTok{plot\_par\_pdf}\NormalTok{(df\_S1))}
+    \FunctionTok{dev.off}\NormalTok{()}
+\NormalTok{ \}}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{futR_demo_files/figure-latex/plot1-1.pdf}
+\includegraphics[width=0.9\textwidth,height=\textheight]{../Figs/plotpar1.jpg}
 
 \hypertarget{sigmethod-2-1}{%
 \subsubsection{sigMethod = 2}\label{sigmethod-2-1}}
@@ -969,6 +969,7 @@ distributed observation error as:
 
 \NormalTok{  m\_S2  }\OtherTok{\textless{}{-}}\NormalTok{  mm }\OtherTok{\textless{}{-}}  \FunctionTok{runRecMod}\NormalTok{(}\AttributeTok{dlistIN  =}\NormalTok{ datlist,}
                           \AttributeTok{version  =} \StringTok{\textquotesingle{}futR\textquotesingle{}}\NormalTok{,}
+                          \AttributeTok{src\_fldr   =} \StringTok{"src/TMB"}\NormalTok{,}
                           \AttributeTok{recompile=}\NormalTok{ F,}
                           \AttributeTok{simulate =} \ConstantTok{TRUE}\NormalTok{,}
                           \AttributeTok{maxitr   =} \DecValTok{100000}\NormalTok{,}
@@ -985,13 +986,15 @@ distributed observation error as:
     \FunctionTok{count}\NormalTok{(parameter,}\FunctionTok{round}\NormalTok{(estimate,}\DecValTok{1}\NormalTok{))}\SpecialCharTok{\%\textgreater{}\%}
     \FunctionTok{slice}\NormalTok{(}\FunctionTok{which.max}\NormalTok{(n))}
   \FunctionTok{names}\NormalTok{(peak)}\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"model"}\NormalTok{,}\StringTok{"parameter"}\NormalTok{,}\StringTok{"freq"}\NormalTok{,}\StringTok{"n"}\NormalTok{)}
-\FunctionTok{jpeg}\NormalTok{(}\StringTok{"Figs/plotpar2.jpg"}\NormalTok{)}
- \FunctionTok{print}\NormalTok{(}\FunctionTok{plot\_par\_pdf}\NormalTok{(df))}
- \FunctionTok{dev.off}\NormalTok{()}
+  \ControlFlowTok{if}\NormalTok{(updatePlots)\{}
+     \FunctionTok{jpeg}\NormalTok{(}\StringTok{"Figs/plotpar2.jpg"}\NormalTok{, }\AttributeTok{width =}\NormalTok{ W, }\AttributeTok{height=}\NormalTok{ H2, }\AttributeTok{res =} \DecValTok{250}\NormalTok{, }\AttributeTok{units =} \StringTok{"in"}\NormalTok{)}
+     \FunctionTok{print}\NormalTok{(}\FunctionTok{plot\_par\_pdf}\NormalTok{(df))}
+     \FunctionTok{dev.off}\NormalTok{()}
+\NormalTok{  \}}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{futR_demo_files/figure-latex/plot2-1.pdf}
+\includegraphics[width=0.9\textwidth,height=\textheight]{../Figs/plotpar2.jpg}
 
 \hypertarget{sigmethod-3-1}{%
 \subsubsection{sigMethod = 3}\label{sigmethod-3-1}}
@@ -1026,7 +1029,8 @@ where
   \CommentTok{\# re{-}run the model with tau}
 
 \NormalTok{  m\_S3 }\OtherTok{\textless{}{-}}\NormalTok{  mm }\OtherTok{\textless{}{-}} \FunctionTok{runRecMod}\NormalTok{(}\AttributeTok{dlistIN   =}\NormalTok{ datlist,}
-                        \AttributeTok{version   =} \StringTok{\textquotesingle{}futR\textquotesingle{}}\NormalTok{,}
+                        \AttributeTok{version   =} \StringTok{\textquotesingle{}futR\textquotesingle{}}\NormalTok{,                           }
+                        \AttributeTok{src\_fldr   =} \StringTok{"src/TMB"}\NormalTok{,}
                         \AttributeTok{recompile =}\NormalTok{ F,}
                         \AttributeTok{simulate  =} \ConstantTok{TRUE}\NormalTok{,}
                         \AttributeTok{sim\_nitr  =} \DecValTok{1000}\NormalTok{)}
@@ -1042,13 +1046,15 @@ where
     \FunctionTok{count}\NormalTok{(parameter,}\FunctionTok{round}\NormalTok{(estimate,}\DecValTok{1}\NormalTok{))}\SpecialCharTok{\%\textgreater{}\%}
     \FunctionTok{slice}\NormalTok{(}\FunctionTok{which.max}\NormalTok{(n))}
   \FunctionTok{names}\NormalTok{(peak)}\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"model"}\NormalTok{,}\StringTok{"parameter"}\NormalTok{,}\StringTok{"freq"}\NormalTok{,}\StringTok{"n"}\NormalTok{)}
-  \FunctionTok{jpeg}\NormalTok{(}\StringTok{"Figs/plotpar3.jpg"}\NormalTok{)}
-  \FunctionTok{print}\NormalTok{(}\FunctionTok{plot\_par\_pdf}\NormalTok{(df))}
-  \FunctionTok{dev.off}\NormalTok{()}
+  \ControlFlowTok{if}\NormalTok{(updatePlots)\{}
+    \FunctionTok{jpeg}\NormalTok{(}\StringTok{"Figs/plotpar3.jpg"}\NormalTok{, }\AttributeTok{width =}\NormalTok{ W, }\AttributeTok{height=}\NormalTok{ H2, }\AttributeTok{res =} \DecValTok{250}\NormalTok{, }\AttributeTok{units =} \StringTok{"in"}\NormalTok{)}
+    \FunctionTok{print}\NormalTok{(}\FunctionTok{plot\_par\_pdf}\NormalTok{(df))}
+    \FunctionTok{dev.off}\NormalTok{()}
+\NormalTok{  \}}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{futR_demo_files/figure-latex/plot3-1.pdf}
+\includegraphics[width=0.9\textwidth,height=\textheight]{../Figs/plotpar3.jpg}
 
 \hypertarget{sigmethod-4-1}{%
 \subsubsection{sigMethod = 4}\label{sigmethod-4-1}}
@@ -1080,7 +1086,12 @@ that:
                     \AttributeTok{covars\_sd  =}  \ConstantTok{NULL}\NormalTok{)}
 
   \CommentTok{\# re{-}run the model with tau}
-\NormalTok{  m\_S4 }\OtherTok{\textless{}{-}}\NormalTok{  mm }\OtherTok{\textless{}{-}} \FunctionTok{runRecMod}\NormalTok{(}\AttributeTok{dlistIN=}\NormalTok{datlist,}\AttributeTok{version=}\StringTok{\textquotesingle{}futR\textquotesingle{}}\NormalTok{,}\AttributeTok{recompile=}\NormalTok{F,}\AttributeTok{simulate=}\ConstantTok{TRUE}\NormalTok{,}\AttributeTok{sim\_nitr =} \DecValTok{1000}\NormalTok{)}
+\NormalTok{  m\_S4 }\OtherTok{\textless{}{-}}\NormalTok{  mm }\OtherTok{\textless{}{-}} \FunctionTok{runRecMod}\NormalTok{(}\AttributeTok{dlistIN=}\NormalTok{datlist,}
+                           \AttributeTok{version=}\StringTok{\textquotesingle{}futR\textquotesingle{}}\NormalTok{,}
+                           \AttributeTok{src\_fldr   =} \StringTok{"src/TMB"}\NormalTok{,}
+                           \AttributeTok{recompile=}\NormalTok{F,}
+                           \AttributeTok{simulate=}\ConstantTok{TRUE}\NormalTok{,}
+                           \AttributeTok{sim\_nitr =} \DecValTok{1000}\NormalTok{)}
 
 \NormalTok{  df\_S4 }\OtherTok{\textless{}{-}}  \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{model =} \StringTok{"sigMethod 4"}\NormalTok{,}
                      \AttributeTok{estimate=}\FunctionTok{as.vector}\NormalTok{(mm}\SpecialCharTok{$}\NormalTok{sim),}
@@ -1093,13 +1104,15 @@ that:
     \FunctionTok{count}\NormalTok{(parameter,}\FunctionTok{round}\NormalTok{(estimate,}\DecValTok{1}\NormalTok{))}\SpecialCharTok{\%\textgreater{}\%}
     \FunctionTok{slice}\NormalTok{(}\FunctionTok{which.max}\NormalTok{(n))}
   \FunctionTok{names}\NormalTok{(peak)}\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"model"}\NormalTok{,}\StringTok{"parameter"}\NormalTok{,}\StringTok{"freq"}\NormalTok{,}\StringTok{"n"}\NormalTok{)}
-  \FunctionTok{jpeg}\NormalTok{(}\StringTok{"Figs/plotpar4.jpg"}\NormalTok{)}
-  \FunctionTok{print}\NormalTok{(}\FunctionTok{plot\_par\_pdf}\NormalTok{(df))}
-  \FunctionTok{dev.off}\NormalTok{()}
+  \ControlFlowTok{if}\NormalTok{(updatePlots)\{}
+    \FunctionTok{jpeg}\NormalTok{(}\StringTok{"Figs/plotpar4.jpg"}\NormalTok{, }\AttributeTok{width =}\NormalTok{ W, }\AttributeTok{height=}\NormalTok{ H2, }\AttributeTok{res =} \DecValTok{250}\NormalTok{, }\AttributeTok{units =} \StringTok{"in"}\NormalTok{)}
+    \FunctionTok{print}\NormalTok{(}\FunctionTok{plot\_par\_pdf}\NormalTok{(df))}
+    \FunctionTok{dev.off}\NormalTok{()}
+\NormalTok{  \}}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{futR_demo_files/figure-latex/plot4-1.pdf}
+\includegraphics[width=0.9\textwidth,height=\textheight]{../Figs/plotpar4.jpg}
 
 \hypertarget{sigmethod-5-1}{%
 \subsubsection{sigMethod = 5}\label{sigmethod-5-1}}
@@ -1137,7 +1150,12 @@ offsets for each.
 
   \CommentTok{\# re{-}run the model with tau}
 
-\NormalTok{  m\_S5 }\OtherTok{\textless{}{-}}\NormalTok{  mm }\OtherTok{\textless{}{-}} \FunctionTok{runRecMod}\NormalTok{(}\AttributeTok{dlistIN=}\NormalTok{datlist,}\AttributeTok{version=}\StringTok{\textquotesingle{}futR\textquotesingle{}}\NormalTok{,}\AttributeTok{recompile=}\NormalTok{F,}\AttributeTok{simulate=}\ConstantTok{TRUE}\NormalTok{,}\AttributeTok{sim\_nitr =} \DecValTok{1000}\NormalTok{)}
+\NormalTok{  m\_S5 }\OtherTok{\textless{}{-}}\NormalTok{  mm }\OtherTok{\textless{}{-}} \FunctionTok{runRecMod}\NormalTok{(}\AttributeTok{dlistIN=}\NormalTok{datlist,}
+                           \AttributeTok{version=}\StringTok{\textquotesingle{}futR\textquotesingle{}}\NormalTok{,}
+                           \AttributeTok{src\_fldr   =} \StringTok{"src/TMB"}\NormalTok{,}
+                           \AttributeTok{recompile=}\NormalTok{F,}
+                           \AttributeTok{simulate=}\ConstantTok{TRUE}\NormalTok{,}
+                           \AttributeTok{sim\_nitr =} \DecValTok{1000}\NormalTok{)}
 
 \NormalTok{  df\_S5 }\OtherTok{\textless{}{-}}  \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{model =} \StringTok{"sigMethod 5"}\NormalTok{,}
                      \AttributeTok{estimate=}\FunctionTok{as.vector}\NormalTok{(mm}\SpecialCharTok{$}\NormalTok{sim),}
@@ -1145,12 +1163,14 @@ offsets for each.
   \FunctionTok{rm}\NormalTok{(mm)}
 
 \NormalTok{  df }\OtherTok{\textless{}{-}} \FunctionTok{rbind}\NormalTok{(df, df\_S5)}
-  \FunctionTok{jpeg}\NormalTok{(}\StringTok{"Figs/plotpar5.jpg"}\NormalTok{)}
- \FunctionTok{print}\NormalTok{(}\FunctionTok{plot\_par\_pdf}\NormalTok{(df))}
- \FunctionTok{dev.off}\NormalTok{()}
+  \ControlFlowTok{if}\NormalTok{(updatePlots)\{}
+    \FunctionTok{jpeg}\NormalTok{(}\StringTok{"Figs/plotpar5.jpg"}\NormalTok{, }\AttributeTok{width =}\NormalTok{ W, }\AttributeTok{height=}\NormalTok{ H2, }\AttributeTok{res =} \DecValTok{250}\NormalTok{, }\AttributeTok{units =} \StringTok{"in"}\NormalTok{)}
+    \FunctionTok{print}\NormalTok{(}\FunctionTok{plot\_par\_pdf}\NormalTok{(df))}
+    \FunctionTok{dev.off}\NormalTok{()}
+\NormalTok{  \}}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{futR_demo_files/figure-latex/plot5-1.pdf}
+\includegraphics[width=0.9\textwidth,height=\textheight]{../Figs/plotpar5.jpg}
 
 \end{document}

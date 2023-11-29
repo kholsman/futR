@@ -13,7 +13,7 @@ Repo maintained by: Kirstin Holsman
 Alaska Fisheries Science Center  
 NOAA Fisheries, Seattle WA  
 **<kirstin.holsman@noaa.gov>**  
-<!-- *Last updated: Feb 27, 2023*   -->
+<!-- *Last updated: Nov 29, 2023*   -->
 
 ------------------------------------------------------------------------
 
@@ -36,7 +36,7 @@ covariates are optional and can be included to influence pre-spawning
 and post-spawning success. In all cases, parameters are estimated by
 minimizing the negative log-likelihood function:
 
-$$-\\mathrm{LL} = 0.5\\left( n\\mathrm{ln(2\\pi\\sigma^2_R)+\\sum\_{i=1}^{n_y}{\\left( \\frac{\\mathrm{ln}(\\frac{R_i}{\\hat{R_i}})}{\\sigma_R} \\right)^2}} \\right)$$
+$$-\mathrm{LL} = 0.5\left( n\mathrm{ln(2\pi\sigma^2_R)+\sum\_{i=1}^{n_y}{\left( \frac{\mathrm{ln}(\frac{R_i}{\hat{R_i}})}{\sigma_R} \right)^2}} \right)$$
 
 For more information see Holsman et al. 2020 Climate and trophic
 controls on groundfish recruitment in Alaska.
@@ -82,7 +82,7 @@ spawning biomass is not available, or when recruitment is more strongly
 driven by environmental conditions than by spawning biomass (e.g.,
 hatchery production). The general formulation is as follows:
 
-$$ \\mathrm{ln}(\\hat{R_i})= a+\\sum\_{k=1}^{n_k}{\\theta_i^{\\beta}\\beta_k X\_{k,i}}+\\varepsilon_i $$
+$$ \mathrm{ln}(\hat{R_i})= a+\sum\_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X\_{k,i}}+\varepsilon_i $$
 
 where *ε*<sub>*i*</sub> represents a normally distributed independent
 random variable with mean 0 and variance *σ*<sub>*R*</sub><sup>2</sup>
@@ -93,27 +93,27 @@ recruitment, and *θ*<sup>*β*</sup> is a binary vector of length
 *n*<sub>*k*</sub> of covariate inclusion. (i.e.,
 *θ*<sup>*β*</sup> ∈ {0, 1}).
 
-$$\\mathbf{X} = \\left\[\\begin{array}
+$$\mathbf{X} = \left\[\begin{array}
 {rrr}
-x\_{1,1} & \\dots  & b\_{1,n_y} \\\\
-\\vdots & \\ddots & \\vdots \\\\
-x\_{n_k,1} & \\dots  & x\_{n_k,n_y} 
-\\end{array}\\right\]
-,\\; \\mathbf{\\beta} = \\left\[\\begin{array}
+x\_{1,1} & \dots  & b\_{1,n_y} \\\\
+\vdots & \ddots & \vdots \\\\
+x\_{n_k,1} & \dots  & x\_{n_k,n_y} 
+\end{array}\right\]
+,\\; \mathbf{\beta} = \left\[\begin{array}
 {rrr}
-\\beta_1 \\\\
-\\vdots  \\\\
-\\beta\_{n_k} \\\\
-\\end{array}\\right\]
+\beta_1 \\\\
+\vdots  \\\\
+\beta\_{n_k} \\\\
+\end{array}\right\]
 $$
 
 ### rectype = 2. Log-linear with spawners
 
 When rectype is set to 2, the model fits a log-normal linear model as a
-function of the index of spawners $\\hat{S_i}$ in the year *i* and
-annual changes in environmental covariates, *X*):
+function of the index of spawners $\hat{S_i}$ in the year *i* and annual
+changes in environmental covariates, *X*):
 
-$$\\mathrm{ln}(\\hat{R_i})= a + \\sum\_{k=1}^{n_k}{\\theta_i^{\\beta}\\beta_k X\_{k,i}}+ (b+\\sum\_{k=1}^{n_k}{\\theta_i^{\\lambda}\\lambda_k X\_{k,i}})\* \\hat{S_i}+\\varepsilon_i$$
+$$\mathrm{ln}(\hat{R_i})= a + \sum\_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X\_{k,i}}+ (b+\sum\_{k=1}^{n_k}{\theta_i^{\lambda}\lambda_k X\_{k,i}})\* \hat{S_i}+\varepsilon_i$$
 
 where *ε*<sub>*i*</sub> represents a normally distributed independent
 random variable with mean 0 and variance *σ*<sub>*R*</sub><sup>2</sup>
@@ -125,26 +125,26 @@ post-spawning success, respectively, and and *θ*<sup>*β*</sup> and
 *θ*<sup>*λ*</sup> are binary vectors of length *n*<sub>*k*</sub> of
 covariate inclusion (i.e., *θ*<sup>*β*</sup> ∈ {0, 1} and
 *θ*<sup>*λ*</sup> ∈ {0, 1}). Note that in most cases, setting *a* = 0 is
-recommended $\\hat{R_i}\\sim0$ as $\\hat{S_i}\\to0$)
+recommended $\hat{R_i}\sim0$ as $\hat{S_i}\to0$)
 
-$$\\mathbf{X} = \\left\[\\begin{array}
+$$\mathbf{X} = \left\[\begin{array}
 {rrr}
-x\_{1,1} & \\dots  & b\_{1,n_y} \\\\
-\\vdots & \\ddots & \\vdots \\\\
-x\_{n_k,1} & \\dots  & x\_{n_k,n_y} 
-\\end{array}\\right\],\\; 
-\\mathbf{\\beta} = \\left\[\\begin{array}
+x\_{1,1} & \dots  & b\_{1,n_y} \\\\
+\vdots & \ddots & \vdots \\\\
+x\_{n_k,1} & \dots  & x\_{n_k,n_y} 
+\end{array}\right\],\\; 
+\mathbf{\beta} = \left\[\begin{array}
 {rrr}
-\\beta_1 \\\\
-\\vdots  \\\\
-\\beta\_{n_k} \\\\
-\\end{array}\\right\],\\; 
-\\mathbf{\\lambda} = \\left\[\\begin{array}
+\beta_1 \\\\
+\vdots  \\\\
+\beta\_{n_k} \\\\
+\end{array}\right\],\\; 
+\mathbf{\lambda} = \left\[\begin{array}
 {rrr}
-\\lambda_1 \\\\
-\\vdots  \\\\
-\\lambda\_{n_k}\\\\
-\\end{array}\\right\]
+\lambda_1 \\\\
+\vdots  \\\\
+\lambda\_{n_k}\\\\
+\end{array}\right\]
 $$
 
 ### rectype = 3. Beverton Holt
@@ -155,7 +155,7 @@ predatory activity immediately to changes in prey abundance” (Wootton
 1990, p. 264).
 
 When rectype is set to 3, the model fits a Beverton-Holt (Beverton and
-Holt, 1957) model as a function of the index of spawners $\\hat{S_i}$ in
+Holt, 1957) model as a function of the index of spawners $\hat{S_i}$ in
 the year *i* and annual changes in environmental covariates, *X*). This
 model is most appropriate when there is a limit to the capacity of the
 system to support recruitment (e.g., limits to spawning habitat or
@@ -166,7 +166,7 @@ model annual variation in spawning habitat and carrying capacity
 density dependent processes like predation or disease (covariates on the
 *b* term below):
 
-$$\\hat{R_i}=\\frac{ a \\hat{S_i}e^{ \\left( \\sum\_{k=1}^{n_k}{\\theta_i^{\\beta}\\beta_k X\_{k,i}} \\right)}}{ 1+b\\hat{S_i}e^{\\left( \\sum\_{k=1}^{n_k}{\\theta_i^{\\lambda}\\lambda_k X\_{k,i}} \\right) }}+e^{\\varepsilon_i}$$
+$$\hat{R_i}=\frac{ a \hat{S_i}e^{ \left( \sum\_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X\_{k,i}} \right)}}{ 1+b\hat{S_i}e^{\left( \sum\_{k=1}^{n_k}{\theta_i^{\lambda}\lambda_k X\_{k,i}} \right) }}+e^{\varepsilon_i}$$
 
 where *ε*<sub>*i*</sub> represents a normally distributed independent
 random variable with mean 0 and variance *σ*<sub>*R*</sub><sup>2</sup>
@@ -180,24 +180,24 @@ success, respectively, and *θ*<sup>*β*</sup> and *θ*<sup>*λ*</sup> are
 binary vectors of length *n*<sub>*k*</sub> of covariate inclusion (i.e.,
 *θ*<sup>*β*</sup> ∈ {0, 1} and *θ*<sup>*λ*</sup> ∈ {0, 1}).
 
-$$\\mathbf{X} = \\left\[\\begin{array}
+$$\mathbf{X} = \left\[\begin{array}
 {rrr}
-x\_{1,1} & \\dots  & b\_{1,n_y} \\\\
-\\vdots & \\ddots & \\vdots \\\\
-x\_{n_k,1} & \\dots  & x\_{n_k,n_y}
-\\end{array}\\right\],\\;
-\\mathbf{\\beta} = \\left\[\\begin{array}
+x\_{1,1} & \dots  & b\_{1,n_y} \\\\
+\vdots & \ddots & \vdots \\\\
+x\_{n_k,1} & \dots  & x\_{n_k,n_y}
+\end{array}\right\],\\;
+\mathbf{\beta} = \left\[\begin{array}
 {rrr}
-\\beta_1 \\\\
-\\vdots  \\\\
-\\beta\_{n_k} \\\\
-\\end{array}\\right\],\\;
-\\mathbf{\\lambda} = \\left\[\\begin{array}
+\beta_1 \\\\
+\vdots  \\\\
+\beta\_{n_k} \\\\
+\end{array}\right\],\\;
+\mathbf{\lambda} = \left\[\begin{array}
 {rrr}
-\\lambda_1 \\\\
-\\vdots  \\\\
-\\lambda\_{n_k}\\\\
-\\end{array}\\right\]
+\lambda_1 \\\\
+\vdots  \\\\
+\lambda\_{n_k}\\\\
+\end{array}\right\]
 $$
 
 ### rectype = 4. Ricker
@@ -206,7 +206,7 @@ When rectype is set to 4 the model fits a Ricker S/R curve. The Ricker
 model (Ricker,1954) is a dome shaped recruitment curve best used to
 describe populations with strong density dependence (e.g., cannibalism).
 The model estimates recruitment in year *i* and a function of the index
-of spawners contributing to that year’s recruitment $\\hat{S_i}$ (e.g.,
+of spawners contributing to that year’s recruitment $\hat{S_i}$ (e.g.,
 spawning biomass in year *i* − 1). If specified, the model also includes
 the additional effects of annual changes in environmental conditions
 *X*); inclusion of environmental covariates on each of the terms in the
@@ -215,7 +215,7 @@ habitat and carrying capacity (covariates on the *a* term below) or
 environmental changes in other density dependent processes like
 cannibalism (covariates on the *b* term below):
 
-$$\\hat{R_i}= a\\hat{S_i}e^{-b\\hat{S_i}} e^{\\varepsilon_i} $$
+$$\hat{R_i}= a\hat{S_i}e^{-b\hat{S_i}} e^{\varepsilon_i} $$
 
 the general Ricker formulation can be rewritten in linear form and
 expanded to include covariates (modified from Mueter et al. 2011):
@@ -223,12 +223,12 @@ expanded to include covariates (modified from Mueter et al. 2011):
 <!-- $$\mathrm{ln}\hat{R_i}= a \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i}} -b\hat{S_i}\sum_{k=1}^{n_k}{\theta_i^{\lambda}\lambda_k X_{k,i}}+\mathrm{ln}\hat{S_i}+\varepsilon_i $$ -->
 <!-- $$\mathrm{ln}\hat{R_i}= ae^{\left( \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i}} \right)}-be^{\left( \sum_{k=1}^{n_k}{\theta_i^{\lambda}\lambda_k X_{k,i}}\right)}\hat{S_i}+\mathrm{ln}\hat{S_i}+\varepsilon_i $$ -->
 
-$$\\mathrm{ln}\\hat{R_i}= \\left(a+ \\sum\_{k=1}^{n_k}{\\theta_i^{\\beta}\\beta_k X\_{k,i}} \\right)-\\left(b+ \\sum\_{k=1}^{n_k}{\\theta_i^{\\lambda}\\lambda_k X\_{k,i}}\\right)\\hat{S_i}+\\mathrm{ln}\\hat{S_i}+\\varepsilon_i$$
+$$\mathrm{ln}\hat{R_i}= \left(a+ \sum\_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X\_{k,i}} \right)-\left(b+ \sum\_{k=1}^{n_k}{\theta_i^{\lambda}\lambda_k X\_{k,i}}\right)\hat{S_i}+\mathrm{ln}\hat{S_i}+\varepsilon_i$$
 
 where *ε*<sub>*i*</sub> represents a normally distributed independent
 random variable with mean 0 and variance *σ*<sub>*R*</sub><sup>2</sup>
 (i.e., *ε*<sub>*i*</sub> ∼ N(0,*σ*<sub>*R*</sub><sup>2</sup>), a is the
-estimated slope of the model near $\\hat{S_i}\\sim0$ and b is the
+estimated slope of the model near $\hat{S_i}\sim0$ and b is the
 density-dependence shape parameter. *X* is a matrix of environmental
 covariates, *β* and *λ* are vectors of estimated parameters representing
 covariate effects on pre- and post-spawning success, respectively,and
@@ -236,24 +236,24 @@ covariate effects on pre- and post-spawning success, respectively,and
 *n*<sub>*k*</sub> of covariate inclusion (i.e.,
 *θ*<sup>*β*</sup> ∈ {0, 1} and *θ*<sup>*λ*</sup> ∈ {0, 1}).
 
-$$\\mathbf{X} = \\left\[\\begin{array}
+$$\mathbf{X} = \left\[\begin{array}
 {rrr}
-x\_{1,1} & \\dots  & b\_{1,n_y} \\\\
-\\vdots & \\ddots & \\vdots \\\\
-x\_{n_k,1} & \\dots  & x\_{n_k,n_y}
-\\end{array}\\right\],\\;
-\\mathbf{\\beta} = \\left\[\\begin{array}
+x\_{1,1} & \dots  & b\_{1,n_y} \\\\
+\vdots & \ddots & \vdots \\\\
+x\_{n_k,1} & \dots  & x\_{n_k,n_y}
+\end{array}\right\],\\;
+\mathbf{\beta} = \left\[\begin{array}
 {rrr}
-\\beta_1 \\\\
-\\vdots  \\\\
-\\beta\_{n_k} \\\\
-\\end{array}\\right\],\\;
-\\mathbf{\\lambda} = \\left\[\\begin{array}
+\beta_1 \\\\
+\vdots  \\\\
+\beta\_{n_k} \\\\
+\end{array}\right\],\\;
+\mathbf{\lambda} = \left\[\begin{array}
 {rrr}
-\\lambda_1 \\\\
-\\vdots  \\\\
-\\lambda\_{n_k}\\\\
-\\end{array}\\right\]
+\lambda_1 \\\\
+\vdots  \\\\
+\lambda\_{n_k}\\\\
+\end{array}\right\]
 $$
 
 ------------------------------------------------------------------------
@@ -311,7 +311,7 @@ distributed observation error as:
 As in sigMethod = 2, except when sigMethod = 3 *σ* is estimated using
 the unbiased sigma estimate (sensu Ludwig and Walters 1982):
 
-$$\\sigma_i =  \\frac1{(n_y-k)}\*({ \\frac{{\\epsilon\_{Ri}}^2}{1+\\tau} + \\frac{{\\epsilon\_{S,i}}^2}{\\tau} })$$
+$$\sigma_i =  \frac1{(n_y-k)}\*({ \frac{{\epsilon\_{Ri}}^2}{1+\tau} + \frac{{\epsilon\_{S,i}}^2}{\tau} })$$
 where
 
 *ϵ*<sub>*R**i*</sub> = *l**o**g*(*R*<sub>*i*</sub>) − *l**o**g*(*R̂*<sub>*i*</sub>)
@@ -397,7 +397,7 @@ recruitment and spawning biomass:
   # this will generate warnings - they can be ignored if "0" is returned
 ```
 
-*Note: If you get a compilation error try reinstalling RTools using the
+*Note: If you get a compilation error try re-installing RTools using the
 instructions [here](https://cran.r-project.org/bin/windows/Rtools/).*
 
 ``` r
@@ -436,7 +436,7 @@ instructions [here](https://cran.r-project.org/bin/windows/Rtools/).*
 ### rectype = 1
 
 Log-linear relationship (mean with variation with covars).
-$$ \\mathrm{log}(\\hat{R_i})= a+\\sum\_{k=1}^{n_k}{\\theta_i^{\\beta}\\beta_k X\_{k,i}}+\\varepsilon_i $$
+$$ \mathrm{log}(\hat{R_i})= a+\sum\_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X\_{k,i}}+\varepsilon_i $$
 
 ``` r
   # makeDat will make the input values, data, and phases for the model:
@@ -459,6 +459,7 @@ $$ \\mathrm{log}(\\hat{R_i})= a+\\sum\_{k=1}^{n_k}{\\theta_i^{\\beta}\\beta_k X\
   # run the basic model
   Rec1 <-  mm <-runRecMod(dlistIN   = datlist,
                           version   = 'futR',
+                          src_fldr   = "src/TMB",
                           recompile = FALSE,
                           simulate  = TRUE,
                           sim_nitr  = 1000)
@@ -473,19 +474,23 @@ $$ \\mathrm{log}(\\hat{R_i})= a+\\sum\_{k=1}^{n_k}{\\theta_i^{\\beta}\\beta_k X\
   
   if(1 == 10){
    print(rec_fit)
-   jpeg("Figs/recplot1.jpg")
-   print(plot_rs(rec_fit))
+   jpeg("Figs/recplot1.jpg", width = W, height= H1, res = 250, units = "in")
+   print(plot_rs(r1_fit))
    dev.off()
   }
 ```
 
-![](futR_demo_files/figure-markdown_github/plotR1-1.png)
+<figure>
+<img src="../Figs/recplot1.jpg" style="width:60.0%"
+alt="mean recruitment" />
+<figcaption aria-hidden="true">mean recruitment</figcaption>
+</figure>
 
 ### rectype = 2
 
 Log-linear relationship with spawners and covariates.
 
-$$\\mathrm{log}(\\hat{R_i})= a + \\sum\_{k=1}^{n_k}{\\theta_i^{\\beta}\\beta_k X\_{k,i}}+ (b+\\sum\_{k=1}^{n_k}{\\theta_i^{\\lambda}\\lambda_k X\_{k,i}})\* \\hat{S_i}+\\varepsilon_i$$
+$$\mathrm{log}(\hat{R_i})= a + \sum\_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X\_{k,i}}+ (b+\sum\_{k=1}^{n_k}{\theta_i^{\lambda}\lambda_k X\_{k,i}})\* \hat{S_i}+\varepsilon_i$$
 
 ``` r
   # makeDat will make the input values, data, and phases for the model:
@@ -510,6 +515,7 @@ $$\\mathrm{log}(\\hat{R_i})= a + \\sum\_{k=1}^{n_k}{\\theta_i^{\\beta}\\beta_k X
   # run the basic model
   Rec2 <-  mm <-runRecMod(dlistIN   = datlist,
                           version   = 'futR',
+                          src_fldr   = "src/TMB",
                           recompile = FALSE,
                           simulate  = TRUE,
                           sim_nitr  = 1000)
@@ -521,22 +527,21 @@ $$\\mathrm{log}(\\hat{R_i})= a + \\sum\_{k=1}^{n_k}{\\theta_i^{\\beta}\\beta_k X
   r2_fit  <- getFit(mm, nm = "recType = 2")
   rec_fit <- rbind(rec_fit,r2_fit)
  rm(mm)
- if(1==10){
-   jpeg("Figs/recplot2.jpg")
+ if(updatePlots){
+   jpeg("Figs/recplot2.jpg", width = W, height= H1, res = 250, units = "in")
    print(plot_rs(rec_fit))
    dev.off()
  }
 ```
 
-![](futR_demo_files/figure-markdown_github/plotR2-1.png)
-
-### rectype = 3
+<img src="../Figs/recplot2.jpg" style="width:60.0%" />  
+\### rectype = 3
 
 Beverton holt relationship. <!-- $\gamma = 0$ -->
 
 <!-- $$R_i  =  aS_ie^{\mathbf{\beta X}}{(1 - (b\gamma S_ie^{\mathbf{\beta X}})}^{1/\gamma})e^{\mathbf{\lambda X}}*e^{\sigma}$$ -->
 
-$$\\hat{R_i}=\\frac{ a \\hat{S_i}e^{ \\left( \\sum\_{k=1}^{n_k}{\\theta_i^{\\beta}\\beta_k X\_{k,i}} \\right)}}{ 1+b\\hat{S_i}e^{\\left( \\sum\_{k=1}^{n_k}{\\theta_i^{\\lambda}\\lambda_k X\_{k,i}} \\right) }}+e^{\\varepsilon_i}$$
+$$\hat{R_i}=\frac{ a \hat{S_i}e^{ \left( \sum\_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X\_{k,i}} \right)}}{ 1+b\hat{S_i}e^{\left( \sum\_{k=1}^{n_k}{\theta_i^{\lambda}\lambda_k X\_{k,i}} \right) }}+e^{\varepsilon_i}$$
 
 ``` r
   # makeDat will make the input values, data, and phases for the model:
@@ -557,6 +562,7 @@ $$\\hat{R_i}=\\frac{ a \\hat{S_i}e^{ \\left( \\sum\_{k=1}^{n_k}{\\theta_i^{\\bet
   # run the basic model
   Rec3 <-  mm <-runRecMod(dlistIN   = datlist,
                           version   = 'futR',
+                          src_fldr   = "src/TMB",
                           recompile = FALSE,
                           simulate  = TRUE,
                           sim_nitr  = 1000)
@@ -569,14 +575,14 @@ $$\\hat{R_i}=\\frac{ a \\hat{S_i}e^{ \\left( \\sum\_{k=1}^{n_k}{\\theta_i^{\\bet
   rec_fit <- rbind(rec_fit,r3_fit)
   rm(mm)
   
-  if(1==10){
-     jpeg("Figs/recplot3.jpg")
+  if(updatePlots){
+     jpeg("Figs/recplot3.jpg", width = W, height= H1, res = 250, units = "in")
      print(plot_rs(rec_fit))
      dev.off()
   }
 ```
 
-![](futR_demo_files/figure-markdown_github/plotR3-1.png)
+<img src="../Figs/recplot3.jpg" style="width:60.0%" />
 
 ### rectype = 4
 
@@ -584,7 +590,7 @@ Ricker relationship.
 
 <!-- $$\mathrm{ln}\hat{R_i}= ae^{\left( \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i}} \right)}-be^{\left( \sum_{k=1}^{n_k}{\theta_i^{\lambda}\lambda_k X_{k,i}}\right)}\hat{S_i}+\mathrm{ln}\hat{S_i}+\varepsilon_i $$ -->
 
-$$\\mathrm{ln}\\hat{R_i}= \\left(a+ \\sum\_{k=1}^{n_k}{\\theta_i^{\\beta}\\beta_k X\_{k,i}} \\right)-\\left(b+ \\sum\_{k=1}^{n_k}{\\theta_i^{\\lambda}\\lambda_k X\_{k,i}}\\right)\\hat{S_i}+\\mathrm{ln}\\hat{S_i}+\\varepsilon_i $$
+$$\mathrm{ln}\hat{R_i}= \left(a+ \sum\_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X\_{k,i}} \right)-\left(b+ \sum\_{k=1}^{n_k}{\theta_i^{\lambda}\lambda_k X\_{k,i}}\right)\hat{S_i}+\mathrm{ln}\hat{S_i}+\varepsilon_i $$
 
 ``` r
   # makeDat will make the input values, data, and phases for the model:
@@ -605,6 +611,7 @@ $$\\mathrm{ln}\\hat{R_i}= \\left(a+ \\sum\_{k=1}^{n_k}{\\theta_i^{\\beta}\\beta_
   # run the basic model
   Rec4 <-  mm <-runRecMod(dlistIN   = datlist,
                           version   = 'futR',
+                          src_fldr   = "src/TMB",
                           recompile = FALSE,
                           simulate  = TRUE,
                           sim_nitr  = 1000)
@@ -617,12 +624,14 @@ $$\\mathrm{ln}\\hat{R_i}= \\left(a+ \\sum\_{k=1}^{n_k}{\\theta_i^{\\beta}\\beta_
   r4_fit  <- getFit(mm, nm = "recType = 4")
   rec_fit <- rbind(rec_fit,r4_fit)
  rm(mm)
- jpeg("Figs/recplot4.jpg")
- print(plot_rs(rec_fit))
- dev.off()
+ if(updatePlots){
+   jpeg("Figs/recplot4.jpg", width = W, height= H1, res = 250, units = "in")
+   print(plot_rs(rec_fit))
+   dev.off()
+ }
 ```
 
-![](futR_demo_files/figure-markdown_github/plotR4-1.png)
+<img src="../Figs/recplot4.jpg" style="width:60.0%" />
 
 ### rectype = 4 with covariates
 
@@ -631,7 +640,7 @@ post-spawning survival.
 
 <!-- $$\mathrm{log}\hat{R_i}= a\left( \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i}} \right)-b\hat{S_i}\sum_{k=1}^{n_k}{\theta_i^{\lambda}\lambda_k X_{k,i}}+\mathrm{ln}\hat{S_i}+\varepsilon_i $$ -->
 
-$$\\mathrm{ln}\\hat{R_i}= \\left(a+ \\sum\_{k=1}^{n_k}{\\theta_i^{\\beta}\\beta_k X\_{k,i}} \\right)-\\left(b+ \\sum\_{k=1}^{n_k}{\\theta_i^{\\lambda}\\lambda_k X\_{k,i}}\\right)\\hat{S_i}+\\mathrm{ln}\\hat{S_i}+\\varepsilon_i $$
+$$\mathrm{ln}\hat{R_i}= \left(a+ \sum\_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X\_{k,i}} \right)-\left(b+ \sum\_{k=1}^{n_k}{\theta_i^{\lambda}\lambda_k X\_{k,i}}\right)\hat{S_i}+\mathrm{ln}\hat{S_i}+\varepsilon_i $$
 
 ``` r
   # read in the data and create a datlist (rather than hand code it)
@@ -640,7 +649,8 @@ $$\\mathrm{ln}\\hat{R_i}= \\left(a+ \\sum\_{k=1}^{n_k}{\\theta_i^{\\beta}\\beta_
   
   # run the basic model
   Rec4_covar <-  mm <-runRecMod(dlistIN   = datlist,
-                          version   = 'futR',
+                          version   = 'futR',                           
+                          src_fldr   = "src/TMB",
                           recompile = FALSE,
                           simulate  = TRUE,
                           sim_nitr  = 1000)
@@ -653,12 +663,14 @@ $$\\mathrm{ln}\\hat{R_i}= \\left(a+ \\sum\_{k=1}^{n_k}{\\theta_i^{\\beta}\\beta_
   r4_fit_c  <- getFit(mm, nm = "recType = 4 with covar")
   rec_fit <- rbind(r4_fit,r4_fit_c)
  rm(mm)
- jpeg("Figs/recplot5.jpg")
- print(plot_rs(rec_fit))
- dev.off()
+ if(updatePlots){
+   jpeg("Figs/recplot5.jpg", width = W, height= H1, res = 250, units = "in")
+   print(plot_rs(rec_fit))
+   dev.off()
+ }
 ```
 
-![](futR_demo_files/figure-markdown_github/plotR4_cov-1.png)
+<img src="../Figs/recplot5.jpg" style="width:60.0%" />
 
 <!-- # ```{r plotR4_covpar, fig.dim=c(10, 4),echo=F} -->
 <!-- #   # now plot the density of each parm: -->
@@ -672,7 +684,7 @@ Let’s start by fitting based models (no climate covariates) with
 different options for observation error.
 
 1.  No observation error (tau = 0)
-2.  estimate sigma, random effects on SSB if tau >0, tau input
+2.  estimate sigma, random effects on SSB if tau \>0, tau input
 3.  unbiased sigma estimate, tau input
 4.  as in 1 but with defined measurement error for rec (indep of random
     effects on Spawners/SSB)
@@ -720,7 +732,8 @@ estimated for either spawners (S) or recruitment (R) estimates.
   # run the basic model
 
   m_S1 <-  mm <-runRecMod(dlistIN   = datlist,
-                       version   = 'futR',
+                       version   = 'futR',                           
+                       src_fldr   = "src/TMB",
                        recompile = F,
                        simulate  = TRUE,
                        sim_nitr  = 1000)
@@ -735,12 +748,14 @@ estimated for either spawners (S) or recruitment (R) estimates.
     count(parameter,round(estimate,1))%>%
     slice(which.max(n))
   names(peak)<- c("model","parameter","freq","n")
- jpeg("Figs/plotpar1.jpg")
- print(plot_par_pdf(df_S1))
- dev.off()
+ if(updatePlots){
+    jpeg("Figs/plotpar1.jpg", width = W, height= H2, res = 250, units = "in")
+    print(plot_par_pdf(df_S1))
+    dev.off()
+ }
 ```
 
-![](futR_demo_files/figure-markdown_github/plot1-1.png)
+<img src="../Figs/plotpar1.jpg" style="width:90.0%" />
 
 ### sigMethod = 2
 
@@ -781,6 +796,7 @@ distributed observation error as:
 
   m_S2  <-  mm <-  runRecMod(dlistIN  = datlist,
                           version  = 'futR',
+                          src_fldr   = "src/TMB",
                           recompile= F,
                           simulate = TRUE,
                           maxitr   = 100000,
@@ -797,19 +813,21 @@ distributed observation error as:
     count(parameter,round(estimate,1))%>%
     slice(which.max(n))
   names(peak)<- c("model","parameter","freq","n")
-jpeg("Figs/plotpar2.jpg")
- print(plot_par_pdf(df))
- dev.off()
+  if(updatePlots){
+     jpeg("Figs/plotpar2.jpg", width = W, height= H2, res = 250, units = "in")
+     print(plot_par_pdf(df))
+     dev.off()
+  }
 ```
 
-![](futR_demo_files/figure-markdown_github/plot2-1.png)
+<img src="../Figs/plotpar2.jpg" style="width:90.0%" />
 
 ### sigMethod = 3
 
 As in sigMethod = 2, except when sigMethod = 3 *σ* is estimated using
 the unbiased sigma estimate (sensu Ludwig and Walters 1982):
 
-$$\\sigma_i =  \\frac1{(n_y-k)}\*({ \\frac{{\\epsilon\_{Ri}}^2}{1+\\tau} + \\frac{{\\epsilon\_{S,i}}^2}{\\tau} })$$
+$$\sigma_i =  \frac1{(n_y-k)}\*({ \frac{{\epsilon\_{Ri}}^2}{1+\tau} + \frac{{\epsilon\_{S,i}}^2}{\tau} })$$
 where
 
 *ϵ*<sub>*R**i*</sub> = *l**o**g*(*R*<sub>*i*</sub>) − *l**o**g*(*R̂*<sub>*i*</sub>)
@@ -836,7 +854,8 @@ and
   # re-run the model with tau
 
   m_S3 <-  mm <- runRecMod(dlistIN   = datlist,
-                        version   = 'futR',
+                        version   = 'futR',                           
+                        src_fldr   = "src/TMB",
                         recompile = F,
                         simulate  = TRUE,
                         sim_nitr  = 1000)
@@ -852,12 +871,14 @@ and
     count(parameter,round(estimate,1))%>%
     slice(which.max(n))
   names(peak)<- c("model","parameter","freq","n")
-  jpeg("Figs/plotpar3.jpg")
-  print(plot_par_pdf(df))
-  dev.off()
+  if(updatePlots){
+    jpeg("Figs/plotpar3.jpg", width = W, height= H2, res = 250, units = "in")
+    print(plot_par_pdf(df))
+    dev.off()
+  }
 ```
 
-![](futR_demo_files/figure-markdown_github/plot3-1.png)
+<img src="../Figs/plotpar3.jpg" style="width:90.0%" />
 
 ### sigMethod = 4
 
@@ -888,7 +909,12 @@ such that:
                     covars_sd  =  NULL)
 
   # re-run the model with tau
-  m_S4 <-  mm <- runRecMod(dlistIN=datlist,version='futR',recompile=F,simulate=TRUE,sim_nitr = 1000)
+  m_S4 <-  mm <- runRecMod(dlistIN=datlist,
+                           version='futR',
+                           src_fldr   = "src/TMB",
+                           recompile=F,
+                           simulate=TRUE,
+                           sim_nitr = 1000)
 
   df_S4 <-  data.frame(model = "sigMethod 4",
                      estimate=as.vector(mm$sim),
@@ -901,12 +927,14 @@ such that:
     count(parameter,round(estimate,1))%>%
     slice(which.max(n))
   names(peak)<- c("model","parameter","freq","n")
-  jpeg("Figs/plotpar4.jpg")
-  print(plot_par_pdf(df))
-  dev.off()
+  if(updatePlots){
+    jpeg("Figs/plotpar4.jpg", width = W, height= H2, res = 250, units = "in")
+    print(plot_par_pdf(df))
+    dev.off()
+  }
 ```
 
-![](futR_demo_files/figure-markdown_github/plot4-1.png)
+<img src="../Figs/plotpar4.jpg" style="width:90.0%" />
 
 ### sigMethod = 5
 
@@ -942,7 +970,12 @@ for each.
 
   # re-run the model with tau
 
-  m_S5 <-  mm <- runRecMod(dlistIN=datlist,version='futR',recompile=F,simulate=TRUE,sim_nitr = 1000)
+  m_S5 <-  mm <- runRecMod(dlistIN=datlist,
+                           version='futR',
+                           src_fldr   = "src/TMB",
+                           recompile=F,
+                           simulate=TRUE,
+                           sim_nitr = 1000)
 
   df_S5 <-  data.frame(model = "sigMethod 5",
                      estimate=as.vector(mm$sim),
@@ -950,9 +983,11 @@ for each.
   rm(mm)
 
   df <- rbind(df, df_S5)
-  jpeg("Figs/plotpar5.jpg")
- print(plot_par_pdf(df))
- dev.off()
+  if(updatePlots){
+    jpeg("Figs/plotpar5.jpg", width = W, height= H2, res = 250, units = "in")
+    print(plot_par_pdf(df))
+    dev.off()
+  }
 ```
 
-![](futR_demo_files/figure-markdown_github/plot5-1.png)
+<img src="../Figs/plotpar5.jpg" style="width:90.0%" />

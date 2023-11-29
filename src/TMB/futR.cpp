@@ -34,7 +34,7 @@ Type objective_function<Type>::operator(  ) (  )
   // 1 -- Linear with biomass ( y-1 )
   // 2 -- Beverton holt 
   // 3 -- Ricker
-  // 4 -- exponential
+  // 4 -- DEFUNCT exponential
   
   //0.1 -- switches
   DATA_INTEGER( estMode);          // estimation mode?

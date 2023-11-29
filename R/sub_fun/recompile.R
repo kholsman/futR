@@ -15,7 +15,13 @@ recompile<-function(model="futR"){
   if(file.exists( paste0(model,'.o')) )
   file.remove( paste0(model,'.o')) 
 
-  TMB::compile( paste0(model,'.cpp')) 
-  file.copy(from =paste0(model,'.dll'),to =paste0("../",model,'.dll'))
-  file.remove(paste0(model,'.dll'))
+ aa <-  TMB::compile( paste0(model,'.cpp')) 
+  if(file.exists(paste0(model,'.dll')) ){
+    file.copy(from =paste0(model,'.dll'),to =paste0("../",model,'.dll'))
+    #file.remove(paste0(model,'.dll'))
+  }
+ file.copy(from =paste0(model,'.o'),to =paste0("../",model,'.o'))
+ file.copy(from =paste0(model,'.so'),to =paste0("../",model,'.so'))
+ if(aa != 0) stop(paste(model, "did not compile"))
+ print(aa)
 }

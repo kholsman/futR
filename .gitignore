@@ -1,6 +1,15 @@
 data/ignore
 NotShared
 .Rproj.user
-*NotShared
+**/NotShared
 notShared
 Trash
+* .DS_Store*
+._*
+.DS_*
+.DS_Store 
+**~$**
+Figs_old
+**/figure-latex
+*nul
+**.cpp*

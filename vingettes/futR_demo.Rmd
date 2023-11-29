@@ -54,6 +54,10 @@ output:
 
  thisYr <- format(Sys.time(), "%Y")
  today  <- format(Sys.time(), "%b %d, %Y")
+ updatePlots <- FALSE
+ W <- 8
+ H1 <- 8
+ H2 <- 3
  
 ```
 
@@ -306,7 +310,7 @@ devtools::install_github("kholsman/futR")
 
 The base function for fitting recruitment requires a data.frame of recruitment and spawning biomass:
 
-```{r setup, echo=T,eval=T,message=F,results='hide'}
+```{r setup, echo=T,eval=F,message=F,results='hide'}
   # rm(list=ls()); setwd("/Users/kholsman/Documents/GitHub/futR")
   #___________________________________________
   # 1. Set things up
@@ -332,9 +336,9 @@ The base function for fitting recruitment requires a data.frame of recruitment a
 
 ```
 
-*Note: If you get a compilation error try reinstalling RTools using the instructions [here](https://cran.r-project.org/bin/windows/Rtools/).*
+*Note: If you get a compilation error try re-installing RTools using the instructions [here](https://cran.r-project.org/bin/windows/Rtools/).*
       
-```{r setup3, echo=T,eval=T,message=F,results='hide'}
+```{r setup3, echo=T,eval=F,message=F,results='hide'}
   
  # read in the data and create a datlist
   datlist <- makefutR_data("data/in/futR_Inputs.xlsx" )
@@ -375,7 +379,7 @@ The base function for fitting recruitment requires a data.frame of recruitment a
 Log-linear relationship (mean with variation with covars).
 $$ \mathrm{log}(\hat{R_i})= a+\sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i}}+\varepsilon_i $$
 
-```{r fitR1, echo=T,eval=T,message=F,results='hide'}
+```{r fitR1, echo=T,eval=F,message=F,results='hide'}
 
   # makeDat will make the input values, data, and phases for the model:
   
@@ -397,6 +401,7 @@ $$ \mathrm{log}(\hat{R_i})= a+\sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i}}+
   # run the basic model
   Rec1 <-  mm <-runRecMod(dlistIN   = datlist,
                           version   = 'futR',
+                          src_fldr   = "src/TMB",
                           recompile = FALSE,
                           simulate  = TRUE,
                           sim_nitr  = 1000)
@@ -411,8 +416,8 @@ $$ \mathrm{log}(\hat{R_i})= a+\sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i}}+
   
   if(1 == 10){
    print(rec_fit)
-   jpeg("Figs/recplot1.jpg")
-   print(plot_rs(rec_fit))
+   jpeg("Figs/recplot1.jpg", width = W, height= H1, res = 250, units = "in")
+   print(plot_rs(r1_fit))
    dev.off()
   }
    
@@ -420,11 +425,11 @@ $$ \mathrm{log}(\hat{R_i})= a+\sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i}}+
 ```
 
 ```{r plotR1, fig.dim=c(8, 8),echo=F}
-   #plot_par_pdf(dfR1_t1)
-   plot_rs(rec_fit)
+   #plot_rs(rec_fit)
 
 ```
 
+![mean recruitment](../Figs/recplot1.jpg){width=60%}  
 
 ### rectype = 2
 
@@ -432,7 +437,7 @@ Log-linear relationship with spawners and covariates.
 
 $$\mathrm{log}(\hat{R_i})= a + \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i}}+ (b+\sum_{k=1}^{n_k}{\theta_i^{\lambda}\lambda_k X_{k,i}})* \hat{S_i}+\varepsilon_i$$
 
-```{r fitR2, echo=T,eval=T,message=F,results='hide'}
+```{r fitR2, echo=T,eval=F,message=F,results='hide'}
 
   # makeDat will make the input values, data, and phases for the model:
   estparams1 <- estparams
@@ -456,6 +461,7 @@ $$\mathrm{log}(\hat{R_i})= a + \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i}}
   # run the basic model
   Rec2 <-  mm <-runRecMod(dlistIN   = datlist,
                           version   = 'futR',
+                          src_fldr   = "src/TMB",
                           recompile = FALSE,
                           simulate  = TRUE,
                           sim_nitr  = 1000)
@@ -467,8 +473,8 @@ $$\mathrm{log}(\hat{R_i})= a + \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i}}
   r2_fit  <- getFit(mm, nm = "recType = 2")
   rec_fit <- rbind(rec_fit,r2_fit)
  rm(mm)
- if(1==10){
-   jpeg("Figs/recplot2.jpg")
+ if(updatePlots){
+   jpeg("Figs/recplot2.jpg", width = W, height= H1, res = 250, units = "in")
    print(plot_rs(rec_fit))
    dev.off()
  }
@@ -476,11 +482,11 @@ $$\mathrm{log}(\hat{R_i})= a + \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i}}
 ```
 
 ```{r plotR2, fig.dim=c(8, 8),echo=F}
-   #plot_par_pdf(df)
-   plot_rs(rec_fit)
+   #plot_rs(rec_fit)
 
 ```
 
+![ ](../Figs/recplot2.jpg){width=60%}  
 ### rectype = 3
 
 Beverton holt relationship.
@@ -491,7 +497,7 @@ Beverton holt relationship.
 $$\hat{R_i}=\frac{ a \hat{S_i}e^{ \left( \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i}} \right)}}{ 1+b\hat{S_i}e^{\left( \sum_{k=1}^{n_k}{\theta_i^{\lambda}\lambda_k X_{k,i}} \right) }}+e^{\varepsilon_i}$$
 
 
-```{r fitR3, echo=T,eval=T,message=F,results='hide'}
+```{r fitR3, echo=T,eval=F,message=F,results='hide'}
 
   # makeDat will make the input values, data, and phases for the model:
   datlist  <-  makeDat(
@@ -511,6 +517,7 @@ $$\hat{R_i}=\frac{ a \hat{S_i}e^{ \left( \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_
   # run the basic model
   Rec3 <-  mm <-runRecMod(dlistIN   = datlist,
                           version   = 'futR',
+                          src_fldr   = "src/TMB",
                           recompile = FALSE,
                           simulate  = TRUE,
                           sim_nitr  = 1000)
@@ -523,8 +530,8 @@ $$\hat{R_i}=\frac{ a \hat{S_i}e^{ \left( \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_
   rec_fit <- rbind(rec_fit,r3_fit)
   rm(mm)
   
-  if(1==10){
-     jpeg("Figs/recplot3.jpg")
+  if(updatePlots){
+     jpeg("Figs/recplot3.jpg", width = W, height= H1, res = 250, units = "in")
      print(plot_rs(rec_fit))
      dev.off()
   }
@@ -532,11 +539,10 @@ $$\hat{R_i}=\frac{ a \hat{S_i}e^{ \left( \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_
 ```
 
 ```{r plotR3, fig.dim=c(8, 8),echo=F}
-   #plot_par_pdf(df)
-   plot_rs(rec_fit)
-
+   #plot_rs(rec_fit)
 ```
 
+![ ](../Figs/recplot3.jpg){width=60%}    
 
 ### rectype = 4
 
@@ -546,7 +552,7 @@ Ricker relationship.
 $$\mathrm{ln}\hat{R_i}= \left(a+ \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i}} \right)-\left(b+ \sum_{k=1}^{n_k}{\theta_i^{\lambda}\lambda_k X_{k,i}}\right)\hat{S_i}+\mathrm{ln}\hat{S_i}+\varepsilon_i $$
 
 
-```{r fitR4, echo=T,eval=T,message=F,results='hide'}
+```{r fitR4, echo=T,eval=F,message=F,results='hide'}
 
   # makeDat will make the input values, data, and phases for the model:
   datlist  <-  makeDat(
@@ -566,6 +572,7 @@ $$\mathrm{ln}\hat{R_i}= \left(a+ \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i
   # run the basic model
   Rec4 <-  mm <-runRecMod(dlistIN   = datlist,
                           version   = 'futR',
+                          src_fldr   = "src/TMB",
                           recompile = FALSE,
                           simulate  = TRUE,
                           sim_nitr  = 1000)
@@ -578,19 +585,20 @@ $$\mathrm{ln}\hat{R_i}= \left(a+ \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i
   r4_fit  <- getFit(mm, nm = "recType = 4")
   rec_fit <- rbind(rec_fit,r4_fit)
  rm(mm)
- jpeg("Figs/recplot4.jpg")
- print(plot_rs(rec_fit))
- dev.off()
+ if(updatePlots){
+   jpeg("Figs/recplot4.jpg", width = W, height= H1, res = 250, units = "in")
+   print(plot_rs(rec_fit))
+   dev.off()
+ }
 
 ```
 
 ```{r plotR4, fig.dim=c(8, 8),echo=F}
-   #plot_par_pdf(df)
-   plot_rs(rec_fit)
+   #plot_rs(rec_fit)
 
 ```
 
-
+![ ](../Figs/recplot4.jpg){width=60%}  
 
 ### rectype = 4 with covariates
 
@@ -600,7 +608,7 @@ Ricker relationship fit with covariates on pre-spawning success and post-spawnin
 
 $$\mathrm{ln}\hat{R_i}= \left(a+ \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i}} \right)-\left(b+ \sum_{k=1}^{n_k}{\theta_i^{\lambda}\lambda_k X_{k,i}}\right)\hat{S_i}+\mathrm{ln}\hat{S_i}+\varepsilon_i $$
 
-```{r fitR4_2, echo=T,eval=T,message=F,results='hide'}
+```{r fitR4_2, echo=T,eval=F,message=F,results='hide'}
  
   
   # read in the data and create a datlist (rather than hand code it)
@@ -609,7 +617,8 @@ $$\mathrm{ln}\hat{R_i}= \left(a+ \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i
   
   # run the basic model
   Rec4_covar <-  mm <-runRecMod(dlistIN   = datlist,
-                          version   = 'futR',
+                          version   = 'futR',                           
+                          src_fldr   = "src/TMB",
                           recompile = FALSE,
                           simulate  = TRUE,
                           sim_nitr  = 1000)
@@ -622,18 +631,20 @@ $$\mathrm{ln}\hat{R_i}= \left(a+ \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i
   r4_fit_c  <- getFit(mm, nm = "recType = 4 with covar")
   rec_fit <- rbind(r4_fit,r4_fit_c)
  rm(mm)
- jpeg("Figs/recplot5.jpg")
- print(plot_rs(rec_fit))
- dev.off()
+ if(updatePlots){
+   jpeg("Figs/recplot5.jpg", width = W, height= H1, res = 250, units = "in")
+   print(plot_rs(rec_fit))
+   dev.off()
+ }
 
 ```
 
 ```{r plotR4_cov, fig.dim=c(8, 8),echo=F}
-   #plot_par_pdf(df)
-   plot_rs(rec_fit)
+   #plot_rs(rec_fit)
 
 ```
 
+![ ](../Figs/recplot5.jpg){width=60%}  
 
 <!-- # ```{r plotR4_covpar, fig.dim=c(10, 4),echo=F} -->
 <!-- #   # now plot the density of each parm: -->
@@ -653,7 +664,7 @@ Let's start by fitting based models (no climate covariates) with different optio
 
 **Run this code first**
 
-```{r base, echo=T,eval=T,message=F,results='hide'}
+```{r base, echo=T,eval=F,message=F,results='hide'}
 
    estparams  = c(
     log_a        = TRUE,
@@ -674,7 +685,7 @@ Now explore different sigMethod settings starting with sigMethod = 0. Note compa
 
 The base model fits the lognormally distributed process error for recruitment ($\sigma$) using maximum likelihood (i.e., ordinary least squares). When sigMethod =1 , no observation error ($\tau = 0$) is estimated for either spawners (S) or recruitment (R) estimates.
 
-```{r fit1, echo=T,eval=T,message=F,results='hide'}
+```{r fit1, echo=T,eval=F,message=F,results='hide'}
 
   # makeDat will make the input values, data, and phases for the model:
   datlist  <-  makeDat(
@@ -693,7 +704,8 @@ The base model fits the lognormally distributed process error for recruitment ($
   # run the basic model
 
   m_S1 <-  mm <-runRecMod(dlistIN   = datlist,
-                       version   = 'futR',
+                       version   = 'futR',                           
+                       src_fldr   = "src/TMB",
                        recompile = F,
                        simulate  = TRUE,
                        sim_nitr  = 1000)
@@ -708,16 +720,18 @@ The base model fits the lognormally distributed process error for recruitment ($
     count(parameter,round(estimate,1))%>%
     slice(which.max(n))
   names(peak)<- c("model","parameter","freq","n")
- jpeg("Figs/plotpar1.jpg")
- print(plot_par_pdf(df_S1))
- dev.off()
+ if(updatePlots){
+    jpeg("Figs/plotpar1.jpg", width = W, height= H2, res = 250, units = "in")
+    print(plot_par_pdf(df_S1))
+    dev.off()
+ }
 ```
 
 ```{r plot1, fig.dim=c(10, 4),echo=F}
-  # now plot the density of each parm:
-  plot_par_pdf(df_S1)
+  # plot_par_pdf(df_S1)
 ```
 
+![](../Figs/plotpar1.jpg){width=90%}  
 
 ### sigMethod = 2
 
@@ -728,7 +742,7 @@ $log\hat{R}_i\sim N(0,\sigma_R)$ where $\sigma_R=(1+\tau)*\sigma$
 Similarly, spawner indices ($\hat{S}_{i-1}$) include log-normally distributed observation error as:
 $log\hat{S}_{i-1} \sim N(0,\sigma_S)$ where $\sigma_S=\tau*\sigma$
 
-```{r fit2, echo=T,eval=T,message=F,results='hide'}
+```{r fit2, echo=T,eval=F,message=F,results='hide'}
 
   # makeDat will make the input values, data, and phases for the model:
   datlist  <-  makeDat(
@@ -748,6 +762,7 @@ $log\hat{S}_{i-1} \sim N(0,\sigma_S)$ where $\sigma_S=\tau*\sigma$
 
   m_S2  <-  mm <-  runRecMod(dlistIN  = datlist,
                           version  = 'futR',
+                          src_fldr   = "src/TMB",
                           recompile= F,
                           simulate = TRUE,
                           maxitr   = 100000,
@@ -764,17 +779,20 @@ $log\hat{S}_{i-1} \sim N(0,\sigma_S)$ where $\sigma_S=\tau*\sigma$
     count(parameter,round(estimate,1))%>%
     slice(which.max(n))
   names(peak)<- c("model","parameter","freq","n")
-jpeg("Figs/plotpar2.jpg")
- print(plot_par_pdf(df))
- dev.off()
+  if(updatePlots){
+     jpeg("Figs/plotpar2.jpg", width = W, height= H2, res = 250, units = "in")
+     print(plot_par_pdf(df))
+     dev.off()
+  }
 
 
 ```
 
 ```{r plot2, fig.dim=c(10, 4),echo=F}
-  # now plot the density of each parm:
-  plot_par_pdf(df)
+  #  plot_par_pdf(df)
 ```
+
+![](../Figs/plotpar2.jpg){width=90%}  
 
 ### sigMethod = 3
 
@@ -787,7 +805,7 @@ where
   and
    $$\epsilon_{Si} = log(S_i) - log(\hat S_i) $$
 
-```{r fit3, echo=T,eval=T,message=F,results='hide'}
+```{r fit3, echo=T,eval=F,message=F,results='hide'}
   # makeDat will make the input values, data, and phases for the model:
    datlist  <-  makeDat(
                     tauIN      =  .001,
@@ -807,7 +825,8 @@ where
   # re-run the model with tau
 
   m_S3 <-  mm <- runRecMod(dlistIN   = datlist,
-                        version   = 'futR',
+                        version   = 'futR',                           
+                        src_fldr   = "src/TMB",
                         recompile = F,
                         simulate  = TRUE,
                         sim_nitr  = 1000)
@@ -823,18 +842,19 @@ where
     count(parameter,round(estimate,1))%>%
     slice(which.max(n))
   names(peak)<- c("model","parameter","freq","n")
-  jpeg("Figs/plotpar3.jpg")
-  print(plot_par_pdf(df))
-  dev.off()
-
+  if(updatePlots){
+    jpeg("Figs/plotpar3.jpg", width = W, height= H2, res = 250, units = "in")
+    print(plot_par_pdf(df))
+    dev.off()
+  }
 ```
 
 
 ```{r plot3, fig.dim=c(10, 4),echo=F}
-  # now plot the density of each parm:
-  plot_par_pdf(df)
+  # plot_par_pdf(df)
 ```
 
+![](../Figs/plotpar3.jpg){width=90%}  
 
 ### sigMethod = 4
 
@@ -846,7 +866,7 @@ As in sigMethod = 2 with observation error (random effects) on S if $\tau >0$,  
 
 
 
-```{r fit4, echo=T,eval=T,message=F,results='hide'}
+```{r fit4, echo=T,eval=F,message=F,results='hide'}
   # makeDat will make the input values, data, and phases for the model:
    datlist  <-  makeDat(
                     tauIN      =  .03,
@@ -863,7 +883,12 @@ As in sigMethod = 2 with observation error (random effects) on S if $\tau >0$,  
                     covars_sd  =  NULL)
 
   # re-run the model with tau
-  m_S4 <-  mm <- runRecMod(dlistIN=datlist,version='futR',recompile=F,simulate=TRUE,sim_nitr = 1000)
+  m_S4 <-  mm <- runRecMod(dlistIN=datlist,
+                           version='futR',
+                           src_fldr   = "src/TMB",
+                           recompile=F,
+                           simulate=TRUE,
+                           sim_nitr = 1000)
 
   df_S4 <-  data.frame(model = "sigMethod 4",
                      estimate=as.vector(mm$sim),
@@ -876,17 +901,19 @@ As in sigMethod = 2 with observation error (random effects) on S if $\tau >0$,  
     count(parameter,round(estimate,1))%>%
     slice(which.max(n))
   names(peak)<- c("model","parameter","freq","n")
-  jpeg("Figs/plotpar4.jpg")
-  print(plot_par_pdf(df))
-  dev.off()
+  if(updatePlots){
+    jpeg("Figs/plotpar4.jpg", width = W, height= H2, res = 250, units = "in")
+    print(plot_par_pdf(df))
+    dev.off()
+  }
 
 ```
 
 ```{r plot4, fig.dim=c(10, 4),echo=F}
-  # now plot the density of each parm:
-  plot_par_pdf(df)
+  #  plot_par_pdf(df)
 ```
 
+![](../Figs/plotpar4.jpg){width=90%}  
 
 ### sigMethod = 5
 
@@ -899,7 +926,7 @@ As in sigMethod = 2 with observation error (random effects) on S and R if $\tau 
 Note that $\tau = 0$ defaults to the input variance for S and R as offsets for each.
 
 
-```{r fit5, echo=T,eval=T,message=F,results='hide'}
+```{r fit5, echo=T,eval=F,message=F,results='hide'}
   # makeDat will make the input values, data, and phases for the model:
    datlist  <-  makeDat(
                     tauIN      =  .03,
@@ -918,7 +945,12 @@ Note that $\tau = 0$ defaults to the input variance for S and R as offsets for e
 
   # re-run the model with tau
 
-  m_S5 <-  mm <- runRecMod(dlistIN=datlist,version='futR',recompile=F,simulate=TRUE,sim_nitr = 1000)
+  m_S5 <-  mm <- runRecMod(dlistIN=datlist,
+                           version='futR',
+                           src_fldr   = "src/TMB",
+                           recompile=F,
+                           simulate=TRUE,
+                           sim_nitr = 1000)
 
   df_S5 <-  data.frame(model = "sigMethod 5",
                      estimate=as.vector(mm$sim),
@@ -926,19 +958,20 @@ Note that $\tau = 0$ defaults to the input variance for S and R as offsets for e
   rm(mm)
 
   df <- rbind(df, df_S5)
-  jpeg("Figs/plotpar5.jpg")
- print(plot_par_pdf(df))
- dev.off()
+  if(updatePlots){
+    jpeg("Figs/plotpar5.jpg", width = W, height= H2, res = 250, units = "in")
+    print(plot_par_pdf(df))
+    dev.off()
+  }
   
 
 ```
 
 ```{r plot5, fig.dim=c(10, 4),echo=F}
-  # now plot the density of each parm:
-  plot_par_pdf(df)
+  #plot_par_pdf(df)
 ```
 
-
+![](../Figs/plotpar5.jpg){width=90%}  
 
 ```{r makeReadME, echo=FALSE,eval=F, include =F}
 

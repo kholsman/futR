@@ -14,14 +14,15 @@
 #'  plot_rs(r_fit)
 #' @export
 getFit <- function(mm, nm = "recType = 2"){
-  out <- mm$pred%>%
-  select(def,pred)%>%
-  group_by(def) %>%
-  filter(def%in%c("S_hat","S_obs","R_hat","R_obs"))%>%
-  mutate(id = 1:n(), model = nm) %>%  
+  out <- mm$pred %>%
+  dplyr::select(def,pred)%>%
+    dplyr::group_by(def) %>%
+    dplyr::filter(def%in%c("S_hat","S_obs","R_hat","R_obs"))%>%
+    dplyr::mutate(id = 1:n(), model = nm) %>%  
   tidyr::spread(def, pred)%>%
-  mutate(R_obsIN =  mm$input$R_obs, 
+    dplyr::mutate(R_obsIN =  mm$input$R_obs, 
          S_obsIN =  mm$input$S_obs, 
-         year =  mm$input$years) 
-  return(out)
+         year =  mm$input$years)%>%
+    dplyr::ungroup()
+  return(data.frame(out))
 }
