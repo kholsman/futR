@@ -342,7 +342,7 @@ The base function for fitting recruitment requires a data.frame of recruitment a
   
  # read in the data and create a datlist
   datlist <- makefutR_data("data/in/futR_Inputs.xlsx" )
-  
+  # save(datlist, file= "data/datlist.Rdata")
   # recruitment data:
   datlist$rs_dat$R_obs
   datlist$rs_dat$S_obs

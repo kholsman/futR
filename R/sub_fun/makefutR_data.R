@@ -45,10 +45,10 @@
 makefutR_data <- function(fn= "data/in/futR_Inputs.xlsx"){
   
   tmp            <- data.frame(readxl::read_xlsx(fn, sheet = "rec_data" ))
-  ec             <- data.frame(readxl::read_xlsx(fn, sheet = "covar_val" ,skip=3)) 
+  ec             <- data.frame(readxl::read_xlsx(fn, sheet = "covar_val" )) 
   ec_sd          <- data.frame(readxl::read_xlsx(fn, sheet = "covar_val_sd")) 
-  beta_0IN       <- data.frame(readxl::read_xlsx(fn, sheet = "covar_val", n_max =2)[1,-1])
-  lambda_0IN     <- data.frame(readxl::read_xlsx(fn, sheet = "covar_val", n_max =2 )[2,-1])
+  beta_0IN       <- data.frame(readxl::read_xlsx(fn, sheet = "pre_post_spawning_effects", n_max =2)[1,-1])
+  lambda_0IN     <- data.frame(readxl::read_xlsx(fn, sheet = "pre_post_spawning_effects", n_max =2 )[2,-1])
   estparams      <- data.frame(readxl::read_xlsx(fn, sheet = "estparams" ))
   switches       <- tibble::deframe(readxl::read_xlsx(fn, sheet = "switches"))
   rec_dat        <- tmp[,1:5]

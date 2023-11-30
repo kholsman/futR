@@ -11,10 +11,10 @@
 
   #_______________________________________
   # 1.3 load data
-  load(file.path(in_dir,"env_covars.Rdata"))
-  load(file.path(in_dir,"rec_dat.Rdata"))
-  load(file.path(in_dir,"rec_dat_tmb.Rdata"))
-  load(file.path(in_dir,"ration_tmb.Rdata"))
+  # load(file.path(in_dir,"env_covars.Rdata"))
+  # load(file.path(in_dir,"rec_dat.Rdata"))
+  # load(file.path(in_dir,"rec_dat_tmb.Rdata"))
+  # load(file.path(in_dir,"ration_tmb.Rdata"))
   
   #___________________________________________
   # 2. run Rceattle() estimation mode
