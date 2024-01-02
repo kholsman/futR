@@ -73,11 +73,11 @@ NOAA Fisheries, Seattle WA
 <!-- # Overview {.tabset .tabset-dropdown} -->
 # Overview
 
-futR() is a generic Rpackage for fitting recruitment models to indices of spawning biomass (or numbers) and recruitment with or without climate covariates. The recruitment model is based on Template Model Builder (`TMB`) and standard stock-recruitment models modified to include the effects of environmental covariates (Deriso 1980; Schnute 1985). This includes Ricker (logistic), Beverton Holt, log-linear, and log-linear with biomass lagged by year 'y-1'. The model can be fit with and with out random effects on spawning stock biomass (SSB) and recruitment (R) (i.e., measurement error on SSB and rec) using the methods of  Porch and Lauretta (2016) and with the optional unbiased estimate of sigma (sensu Ludwid and Walters 1981, Porch and Lauretta 2016). Environmental covariates are optional and can be included to influence pre-spawning and post-spawning success. In all cases, parameters are estimated by minimizing the negative log-likelihood function:
+futR() is a generic Rpackage for fitting recruitment models to indices of spawning biomass (or numbers) and recruitment with or without climate covariates. The recruitment model is based on Template Model Builder (`TMB`) and standard stock-recruitment models modified to include the effects of environmental covariates (Deriso 1980; Schnute 1985). This includes Ricker (logistic), Beverton-Holt, log-linear, and log-linear with biomass lagged by year 'y-1'. The model can be fit with and with out random effects on spawning stock biomass (SSB) and recruitment (R) (i.e., measurement error on SSB and rec) using the methods of  Porch and Lauretta (2016) and with the optional unbiased estimate of sigma (sensu Ludwid and Walters 1981, Porch and Lauretta 2016). Environmental covariates are optional and can be included to influence pre-spawning and post-spawning success. In all cases, parameters are estimated by minimizing the negative log-likelihood function:
 
 $$-\mathrm{LL} = 0.5\left( n\mathrm{ln(2\pi\sigma^2_R)+\sum_{i=1}^{n_y}{\left( \frac{\mathrm{ln}(\frac{R_i}{\hat{R_i}})}{\sigma_R} \right)^2}} \right)$$ 
 
-For more information see Holsman et al. 2020 Climate and trophic controls on groundfish recruitment in Alaska.
+where $R_i$ is the "observed" or input estimates of recruitment, $\hat{R_i}$ is the estimated recruitment from a specific recruitment model (see below), and $\sigma_R$ is the process error standard deviation.  For more information see Holsman et al. 2020 Climate and trophic controls on groundfish recruitment in Alaska.
    
 ---
 
@@ -89,7 +89,7 @@ There are four base model formulations available for estimating the relationship
 
 1. Log-linear
 2. Log-linear with spawners
-3. Beverton Holt
+3. Beverton-Holt
 4. Ricker
 
 In addition, the main effect of environmental covariates is optional through estimating $\beta$ (for pre-larval or spawning habitat effects) and $\lambda$ (for post-spawning success and survival to recruitment age (e.g., age 0+ survival)):
@@ -129,7 +129,7 @@ When rectype is set to 2, the model fits a log-normal linear model as a function
 
 $$\mathrm{ln}(\hat{R_i})= a + \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i}}+ (b+\sum_{k=1}^{n_k}{\theta_i^{\lambda}\lambda_k X_{k,i}})* \hat{S_i}+\varepsilon_i$$
 
-where $\varepsilon_i$ represents a normally distributed independent random variable with mean 0 and variance $\sigma^2_R$ (i.e., $\varepsilon_i\sim \mathrm N(0,\sigma^2_R)$, $\mathrm{a}$ is the estimated intercept, $\mathrm{b}$ is the estimated productivity or slope,$\mathbf{X}$ is a matrix of environmental covariates, where $\beta$ and $\lambda$ are vectors of estimated parameters representing covariate effects on pre- and post-spawning success, respectively, and and $\theta^{\beta}$ and $\theta^{\lambda}$ are binary vectors of length $n_k$ of covariate inclusion (i.e., ${\theta^{\beta}} \in \{0,1 \}$ and ${\theta^{\lambda}} \in \{0,1 \}$). Note that in most cases, setting $a =0$ is recommended $\hat{R_i}\sim0$ as $\hat{S_i}\to0$)
+where $\varepsilon_i$ represents a normally distributed independent random variable with mean 0 and variance $\sigma^2_R$ (i.e., $\varepsilon_i\sim \mathrm N(0,\sigma^2_R)$, $\mathrm{a}$ is the estimated intercept, $\mathrm{b}$ is the estimated productivity or slope,$\mathbf{X}$ is a matrix of environmental covariates, where $\beta$ and $\lambda$ are vectors of estimated parameters representing covariate effects on pre- and post-spawning success, respectively, and $\theta^{\beta}$ and $\theta^{\lambda}$ are binary vectors of length $n_k$ of covariate inclusion (i.e., ${\theta^{\beta}} \in \{0,1 \}$ and ${\theta^{\lambda}} \in \{0,1 \}$). Note that in most cases, setting $a =0$ is recommended $\hat{R_i}\sim0$ as $\hat{S_i}\to0$)
 
 $$\mathbf{X} = \left[\begin{array}
 {rrr}
@@ -151,7 +151,7 @@ x_{n_k,1} & \dots  & x_{n_k,n_y}
 \end{array}\right]
 $$
 
-### rectype = 3. Beverton Holt
+### rectype = 3. Beverton-Holt
 
 The Beverton-Holt model is appropriate “if there is a maximum abundance imposed by
 food availability or space, or if the predator can adjust its predatory activity immediately to changes in prey
@@ -226,7 +226,13 @@ $$
 
 ## Obs. error options (sigMethod)  {.tabset}
 
-Finally, for more advanced model fitting, various options for observation error on recruitment or spawning estimates is available through alternative "sigMethod" selections:
+As a default, each model fits lognormally distributed process error for recruitment ($\sigma_R$) using maximum likelihood. However, there may be additional observation error associated with the input estimates of recruitment or spawning that result from model mispecification or sampling:
+
+$$log R_i\sim N \left(log\bar{R}_i,\tau \right)$$
+
+where $R_i$ is the "observed" or input recruitment, $\bar{R}_i$ is the "true" recruitment, and $\tau$ is the observation error.
+
+Various options for observation error on recruitment or spawning estimates are available through the following "sigMethod" selections:
 
 1. No observation error ($\tau=0$)
 2. estimate sigma, random effects on SSB if $\tau>0$, $\tau$ input
@@ -236,17 +242,12 @@ Finally, for more advanced model fitting, various options for observation error 
 
 ### sigMethod = 1
 
-The base model fits the lognormally distributed process error for recruitment ($\sigma$) using maximum likelihood (i.e., ordinary least squares). When sigMethod - 0, no observation error ($\tau = 0$) is estimated for either spawners (S) or recruitment (R) estimates:
-
-$log\hat{R}_i\sim N(0,\sigma_R)$ where $\sigma_R=\sigma$
-
-Similarly, spawner indices ($\hat{S}_{i-1}$) include log-normally distributed observation error as:
-$log\hat{S}_{i-1} \sim N(0,\sigma_S)$ where $\sigma_S=0$
+When sigMethod = 1 and no $\tau$ is input, no observation error ($\tau = 0$) is estimated for either spawners (S) or recruitment (R) estimates.
 
 
 ### sigMethod = 2
 
-The base model fits the lognormally distributed process error for recruitment ($\sigma$) using maximum likelihood (i.e., ordinary least squares). Additionally, when sigMethod = 1 and $\tau$ is input ($0<\tau<1$), observation errors are estimated for recruitment and spawners. Observation errors are statistically independent, random normal variables with similar variance but because of lack of other information $\sigma_R$ is modeled as a function of process error via the $\tau$ scalar (see eq 4 in Porch, C. E., and M. V. Lauretta. 2016). Observation error for recruitment is modeled with log-normally distributed observation error as a function of $\sigma$ as:
+When sigMethod = 2 and $\tau$ is input ($0<\tau<1$), observation errors are estimated for recruitment and spawners. Observation errors are statistically independent, random normal variables with similar variance but because of lack of other information $\sigma_R$ is modeled as a function of process error via the $\tau$ scalar (see eq 4 in Porch, C. E., and M. V. Lauretta. 2016). Observation error for recruitment is modeled with log-normally distributed observation error as a function of $\sigma$ as:
 $log\hat{R}_i\sim N(0,\sigma_R)$ where $\sigma_R=(1+\tau)*\sigma$
 
 Similarly, spawner indices ($\hat{S}_{i-1}$) include log-normally distributed observation error as:
@@ -473,6 +474,9 @@ $$\mathrm{log}(\hat{R_i})= a + \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i}}
   r2_fit  <- getFit(mm, nm = "recType = 2")
   rec_fit <- rbind(rec_fit,r2_fit)
  rm(mm)
+ 
+ #FIXME: updatePlots = TRUE; W = 7; H1 = 6
+ 
  if(updatePlots){
    jpeg("Figs/recplot2.jpg", width = W, height= H1, res = 250, units = "in")
    print(plot_rs(rec_fit))
@@ -489,7 +493,7 @@ $$\mathrm{log}(\hat{R_i})= a + \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i}}
 ![ ](../Figs/recplot2.jpg){width=60%}  
 ### rectype = 3
 
-Beverton holt relationship.
+Beverton-Holt relationship.
 <!-- $\gamma = 0$ -->
 
 <!-- $$R_i  =  aS_ie^{\mathbf{\beta X}}{(1 - (b\gamma S_ie^{\mathbf{\beta X}})}^{1/\gamma})e^{\mathbf{\lambda X}}*e^{\sigma}$$ -->
@@ -720,6 +724,8 @@ The base model fits the lognormally distributed process error for recruitment ($
     count(parameter,round(estimate,1))%>%
     slice(which.max(n))
   names(peak)<- c("model","parameter","freq","n")
+  
+  #FIXME: H2 = 7
  if(updatePlots){
     jpeg("Figs/plotpar1.jpg", width = W, height= H2, res = 250, units = "in")
     print(plot_par_pdf(df_S1))
