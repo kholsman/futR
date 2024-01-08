@@ -110,11 +110,12 @@ makeDat <- function(
     rs_dat$R_obs           <-  Rec[ix]  #Rec[y]~  S_obs[y-1]
     #rs_dat$Ration_scaled   <-  rationIN[ix]
     if(!is.null(covars)){
-      rs_dat$rs_cov        <-  covars[,ix]
-      rs_dat$beta_0        <-  beta_0
-      rs_dat$lambda_0      <-  lambda_0
+      rs_dat$rs_cov        <-   covars[,ix]
+      ec_use               <-   matrix(covars[,ix],dim(covars)[1],length(ix))
+      rs_dat$beta_0        <-   matrix(beta_0*(ec_use*0+1),dim(covars)[1],length(ix))
+      rs_dat$lambda_0      <-   matrix(lambda_0*(ec_use*0+1),dim(covars)[1],length(ix))
     }
-    
+
     rs_dat$sdrs_cov        <-  rs_dat$rs_cov*0
     if(!is.null(covars_sd)) 
       rs_dat$sdrs_cov      <-  covars_sd[,ix]
@@ -134,8 +135,8 @@ makeDat <- function(
       rs_dat$ncov      <-   dim(covars)[1]
       if(rs_dat$ncov==1){
         rs_dat$rs_cov    <- t(as.matrix(rs_dat$rs_cov))
-        rs_dat$beta_0    <- t(as.matrix(rs_dat$beta_0))
-        rs_dat$lambda_0  <- t(as.matrix(rs_dat$lambda_0))
+        #rs_dat$beta_0    <- t(as.matrix(rs_dat$beta_0))
+        #rs_dat$lambda_0  <- t(as.matrix(rs_dat$lambda_0))
         rs_dat$sdrs_cov  <- t(as.matrix(rs_dat$sdrs_cov))
       }
     }
@@ -226,8 +227,8 @@ makeDat <- function(
      parameters      <-   list(
       log_a        = tmp_a, 
       log_b        = tmp_b ,
-      beta         = rep(0,rs_dat$ncov),
-      lambda       = rep(0,rs_dat$ncov),
+      beta         = beta_0,
+      lambda       = lambda_0,
       epsi_s       = 0,
       logsigma     = log(.9),
       skipFit      = 0)
@@ -243,6 +244,10 @@ makeDat <- function(
      # print(parameters)
      # print(estparams)
     maplist <- makeMap(param=parameters,estpar=estparams)
+
+    parameters$beta   <- rs_dat$beta_0[,1]*0
+    parameters$lambda <-rs_dat$lambda_0[,1]*0
+
  
     return(list(parameters = parameters, 
                 rs_dat     = rs_dat, 

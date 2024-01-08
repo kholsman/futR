@@ -9,7 +9,6 @@
 #' * data$npar number of parameteris in a given model
 #' * data$n number of data observations (nobs)
 #' * data$mnames1 names for each model
-#' * data$R2 pearson correlation coefficent value for the model (hat:obs);  default = NULL
 #' * data$type2 number 1= AIC;2 = AICc ; default = NULL
 #' * data$covnm default = NULL
 #' @param rsType   default = NULL
@@ -25,7 +24,6 @@ AICselection <- function (LL,
                           npar, 
                           n, 
                           mnames1 = legend.nm, 
-                          R2      = R2[, s], 
                           type2   = 2, 
                           covnm   = NULL,
                           rsType  = NULL,
@@ -56,11 +54,11 @@ AICselection <- function (LL,
   }
   
   nn         <- length(LL)
-  tmp1       <- data.frame(LL = LL, npar = npar, lab = 1:nn, R2 = R2)
-  tmp1$names <- mnames1
+  tmp1       <- data.frame(LL = LL, npar = npar, lab = 1:nn)
+  tmp1$name  <- mnames1
   tmp1$aicc  <- tmp1$aicc_marg <- rep(0, nn)
   for (i in 1:nn) {
-    tmp1$aicc[i] <- aicfun(npar[i], -LL[i], n[i], type = type2)
+    tmp1$aicc[i]        <- aicfun(npar[i], -LL[i], n[i], type = type2)
     if(!is.null(LnDet))
       tmp1$aicc_marg[i] <- aicfun_marg(npar=npar[i], LL=-LL[i],n= n[i], type = type2,LnDet=LnDet[i])
    # tmp1$aicc_marg[i] <- GET_HESS_AIC(HESS[[i]], npar = npar[i],NLL = -1 * LL[i])[[1]]
@@ -78,7 +76,7 @@ AICselection <- function (LL,
     tmp1$CE   = CE
   
   tmp1           <- tmp1[order(tmp1$aicc), ]
-  tmp1$AICw_std  <- tmp1$AICweight/sum(tmp1$AICweight)
+  tmp1$AICw_std  <- tmp1$AICweight/sum(tmp1$AICweight, na.rm = T)
   tmp1$cumlAIC   <- cumsum(tmp1$AICw_std)
   
   cutoff <- which(tmp1$cumlAIC > 0.95)[1]

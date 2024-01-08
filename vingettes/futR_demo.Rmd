@@ -581,7 +581,7 @@ $$\mathrm{ln}\hat{R_i}= \left(a+ \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i
   dfR4    <-  data.frame(model = "Rec 4",
                      estimate  = as.vector(mm$sim),
                      parameter = names( mm$mle)[row(mm$sim)])
-  df      <- rbind(df,dfR3)
+  df      <- rbind(dfR4)
   r4_fit  <- getFit(mm, nm = "recType = 4")
   rec_fit <- rbind(rec_fit,r4_fit)
  rm(mm)

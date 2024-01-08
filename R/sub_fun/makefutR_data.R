@@ -77,8 +77,10 @@ makefutR_data <- function(fn= "data/in/futR_Inputs.xlsx"){
     sdRec      =  rec_dat$sdRobs,
     covars    = ec,                # (n_cov, n_yrs) matrix
     covars_sd = ec_sd,
-    beta_0    = matrix(as.numeric(beta_0IN),dim(ec)[1],dim(ec)[2],byrow=F),
-    lambda_0  = matrix(as.numeric(lambda_0IN),dim(ec)[1],dim(ec)[2],byrow=F),
+   # beta_0    = matrix(as.numeric(beta_0IN),dim(ec)[1],dim(ec)[2],byrow=F),
+  #  lambda_0  = matrix(as.numeric(lambda_0IN),dim(ec)[1],dim(ec)[2],byrow=F),
+    beta_0     = beta_0IN,
+    lambda_0   = lambda_0IN,
     #startVal  = tibble::deframe(estparams[,c(1,4)]),
     startVal  = NULL,
     phases    = tibble::deframe(estparams[,c(1,2)]))

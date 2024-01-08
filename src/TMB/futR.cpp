@@ -8,11 +8,11 @@
   //                                                                           //
   // AUTHORS:   K Holsman, Aydin, Adams, Punt et al.                           //
   // CITATIONS:                                                                //
-  // 1. Holsman, et al. 2020 Climate and trophic controls on groundfish        //
+  // 1. Holsman, et al. 2024 Climate and trophic controls on groundfish        //
   // recruitment in Alaska.                                                    //
   // ------------------------------------------------------------------------- //
 
-  //  INDEX (following the fab G. Adams design)
+  //  INDEX
   //  0. Load data
   //  1. Local parameters
   //  2. Estimated parameters
