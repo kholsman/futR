@@ -30,10 +30,10 @@ Type objective_function<Type>::operator(  ) (  )
   // ------------------------------------------------------------------------- //
 
   // Based Rec~S_hat functions. rectype options are 
-  // 0 -- Linear 
-  // 1 -- Linear with biomass ( y-1 )
-  // 2 -- Beverton holt 
-  // 3 -- Ricker
+  // 1 -- Linear 
+  // 2 -- Linear with biomass ( y-1 )
+  // 3 -- Beverton holt 
+  // 4 -- Ricker
   // 4 -- DEFUNCT exponential
   
   //0.1 -- switches
@@ -216,8 +216,8 @@ Type objective_function<Type>::operator(  ) (  )
     Type sig    = Type(0.0);
     Type sig_R  = Type(0.0);
     Type sig_S  = Type(0.0);
-    Type mn_sdR = Type(0.0);
-    Type mn_sdS = Type(0.0);
+    Type mn_log_sdR = Type(0.0);
+    Type mn_log_sdS = Type(0.0);
     
     switch ( sigMethod ) {
     case 1: //  no observation error tau = 0
@@ -248,18 +248,18 @@ Type objective_function<Type>::operator(  ) (  )
         // tau = 0 defaults to no random effects on Spawners
          sig  = exp(logsigma);
          for( int i= 0; i< nyrs; i++ )
-           mn_sdR += sdR(i)/nyrs;
-         sig_R = sig + mn_sdR;
+           mn_log_sdR += log(sdR(i))/nyrs;
+         sig_R = sig + exp(mn_log_sdR);
          sig_S = tau*(sig);
       break;
       case 5:// as in 1 but with defined measurement error for rec and SSB; tau = 0 defaults to no random effects on S, and sig for R
         sig  = exp(logsigma);
         for( int i = 0; i< nyrs; i++ ){
-          mn_sdR += sdR(i)/nyrs;
-          mn_sdS += sdS(i)/nyrs;
+          mn_log_sdR += log(sdR(i))/nyrs;
+          mn_log_sdS += log(sdS(i))/nyrs;
         }
-        sig_R =  ((Type(1.0)+tau)*sig) + mn_sdR;
-        sig_S =  (tau*(sig)) + mn_sdS;
+        sig_R =  ((Type(1.0)+tau)*sig) + exp(mn_log_sdR);
+        sig_S =  (tau*(sig)) + exp(mn_log_sdS);
       break;
       default:
         error( "Invalid 'sigMethod'" );

@@ -12,21 +12,24 @@
 
 get_interaction_mat<-function(covIN, maxIN,ADDTEMP2=TRUE,cor_cutoff=0.5){
   mod_mat <- list()
+  cor_mat <- abs(cor(covIN,covIN))
   for(i in 1:maxIN){
     tt <- combn(covIN,i,simplify=F)
     for(k in 1:length(tt)){
       if(i>1){
         ex <- cor(tt[[k]])
-        diag(ex)<-0
-      }else{
-        ex = 0
+        diag(ex) <- 0
+        ex[abs(ex)>cor_cutoff] <- 0
+        # }else{
+        #   ex = 0
+        # }
+        names(tt)[k] <-  paste0(names(tt[[k]]),collapse="_PLUS_")
+        # if the covars are not related:
+        if(  length(which(as.numeric(ex[1,])!=0)) ==(i-1) ){
+          mod_mat <- c(mod_mat,tt[k])
+        }
+        rm(ex)
       }
-      names(tt)[k] <-  paste0(names(tt[[k]]),collapse="_PLUS_")
-      # if the covars are not related:
-      if(!any( abs(ex) > cor_cutoff ) ){
-        mod_mat <- c(mod_mat,tt[k])
-      }
-      rm(ex)
       if(ADDTEMP2){
         aa <- grep("temp",colnames(tt[[k]]))
         if(length(aa)>0){
