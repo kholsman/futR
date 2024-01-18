@@ -15,15 +15,15 @@
 #' @param LnDet default = NULL
 #' @param CE Climate enhanced model? default = NULL
 #'    list of input data from makeDat() function: "parameters" "rs_dat"     "maplist"    "estparams"  "phases"  
-#' @param returnAll   return all phases? TRUE/FALSE
-#' @param quiet       print out phases
 #' @return   tmp1 a dataframe of summary statistics for AICc of submodels         
 #' @examples
 #' @export
 AICselection <- function (LL, 
                           npar, 
                           n, 
+                          R2 = NULL,
                           mnames1 = legend.nm, 
+                          include_marginal = FALSE,
                           type2   = 2, 
                           covnm   = NULL,
                           rsType  = NULL,
@@ -54,7 +54,7 @@ AICselection <- function (LL,
   }
   
   nn         <- length(LL)
-  tmp1       <- data.frame(LL = LL, npar = npar, lab = 1:nn)
+  tmp1       <- data.frame(LL = LL, npar = npar, lab = 1:nn, R2 = R2)
   tmp1$name  <- mnames1
   tmp1$aicc  <- tmp1$aicc_marg <- rep(0, nn)
   for (i in 1:nn) {
@@ -63,7 +63,7 @@ AICselection <- function (LL,
       tmp1$aicc_marg[i] <- aicfun_marg(npar=npar[i], LL=-LL[i],n= n[i], type = type2,LnDet=LnDet[i])
    # tmp1$aicc_marg[i] <- GET_HESS_AIC(HESS[[i]], npar = npar[i],NLL = -1 * LL[i])[[1]]
   }
-  tmp1$deltaAIC  <- (tmp1$aicc - min(tmp1$aicc))
+  tmp1$deltaAIC  <- (tmp1$aicc - min(tmp1$aicc, na.rm = T))
   tmp1$AICweight <- exp(-0.5 * tmp1$deltaAIC)
   tmp1$rank      <- rank(tmp1$aicc)
   if(!is.null(covnm))
@@ -75,6 +75,7 @@ AICselection <- function (LL,
   if(!is.null(CE))
     tmp1$CE   = CE
   
+  # re order from smallest AICc to largest
   tmp1           <- tmp1[order(tmp1$aicc), ]
   tmp1$AICw_std  <- tmp1$AICweight/sum(tmp1$AICweight, na.rm = T)
   tmp1$cumlAIC   <- cumsum(tmp1$AICw_std)
@@ -98,30 +99,32 @@ AICselection <- function (LL,
   
  
   tmp1$topSet         <- paste(t2, t4, t1, sep = "")
+  if(include_marginal){
+    tmp1$aicc_marg[tmp1$aicc_marg==-Inf] <- NA
+    tmp1$deltaAIC_marg  <- (tmp1$aicc_marg - min(tmp1$aicc_marg,na.rm=T))
+    tmp1$AICweight_marg <- exp(-0.5 * tmp1$deltaAIC_marg)
+    tmp1$rank_marg      <- rank(tmp1$aicc_marg)
+    tmp1$AICw_std_marg  <- tmp1$AICweight_marg/sum(tmp1$AICweight_marg,na.rm=T)
+    tmp1$AICw_std_marg[is.na(tmp1$AICw_std_marg)]<-0
+    tmp1$cumlAIC_marg   <- cumsum(tmp1$AICw_std_marg)
+    cutoff_marg         <- which(tmp1$cumlAIC_marg > 0.95)[1]
+    
+    if (is.na(cutoff_marg)) 
+      cutoff_marg <- nn
+    cutoff2_marg <- which(tmp1$deltaAIC_marg > 2)[1]
+    if (is.na(cutoff2_marg)) 
+      cutoff2_marg <- nn
+    cutoff4_marg <- which(tmp1$deltaAIC_marg > 4)[1]
+    if (is.na(cutoff4_marg)) 
+      cutoff4_marg <- nn
+    t1_marg <- rep("", nn)
+    t1_marg[1:cutoff_marg] <- "o"
+    t2_marg <- rep("", nn)
+    t2_marg[1:cutoff2_marg] <- "*"
+    t4_marg <- rep("", nn)
+    t4_marg[1:cutoff4_marg] <- "*"
+    tmp1$topSet_marg <- paste(t2_marg, t4_marg, t1_marg, sep = "")
+    }
   
-  tmp1$aicc_marg[tmp1$aicc_marg==-Inf] <- NA
-  tmp1$deltaAIC_marg  <- (tmp1$aicc_marg - min(tmp1$aicc_marg,na.rm=T))
-  tmp1$AICweight_marg <- exp(-0.5 * tmp1$deltaAIC_marg)
-  tmp1$rank_marg      <- rank(tmp1$aicc_marg)
-  tmp1$AICw_std_marg  <- tmp1$AICweight_marg/sum(tmp1$AICweight_marg,na.rm=T)
-  tmp1$AICw_std_marg[is.na(tmp1$AICw_std_marg)]<-0
-  tmp1$cumlAIC_marg   <- cumsum(tmp1$AICw_std_marg)
-  cutoff_marg         <- which(tmp1$cumlAIC_marg > 0.95)[1]
-  
-  if (is.na(cutoff_marg)) 
-    cutoff_marg <- nn
-  cutoff2_marg <- which(tmp1$deltaAIC_marg > 2)[1]
-  if (is.na(cutoff2_marg)) 
-    cutoff2_marg <- nn
-  cutoff4_marg <- which(tmp1$deltaAIC_marg > 4)[1]
-  if (is.na(cutoff4_marg)) 
-    cutoff4_marg <- nn
-  t1_marg <- rep("", nn)
-  t1_marg[1:cutoff_marg] <- "o"
-  t2_marg <- rep("", nn)
-  t2_marg[1:cutoff2_marg] <- "*"
-  t4_marg <- rep("", nn)
-  t4_marg[1:cutoff4_marg] <- "*"
-  tmp1$topSet_marg <- paste(t2_marg, t4_marg, t1_marg, sep = "")
   return(tmp1)
 }

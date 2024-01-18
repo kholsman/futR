@@ -28,11 +28,14 @@ makeMap<-function(param=parameters,estpar=estparams){
       if(estpar[[inm]]){
         # advance the ixx index
         if(inm%in%c("beta","lambda")){
+          
+          # nn      <- which(!is.na(param[[inm]]))
+          # nn_na   <- which(is.na(param[[inm]]))
           nn      <- which(param[[inm]]!=0)
           nn_na   <- which(param[[inm]]==0)
           out     <- rep(NA,length(param[[inm]]))
-          out[nn] <- 1:length(which(param[[inm]]!=0))+rev(ixx)[1]
-          ixx             <-  1:length(which(param[[inm]]!=0))+rev(ixx)[1]
+          out[nn] <- 1:length(nn)+rev(ixx)[1]
+          ixx     <- 1:length(nn)+rev(ixx)[1]
           maplist[[inm]]  <-  factor(out)
       
         }else{

@@ -311,7 +311,7 @@ devtools::install_github("kholsman/futR")
 The base function for fitting recruitment requires a data.frame of recruitment and spawning biomass:
 
 ```{r setup, echo=T,eval=F,message=F,results='hide'}
-  # rm(list=ls()); setwd("/Users/kholsman/Documents/GitHub/futR")
+  # rm(list=ls()); setwd("/Volumes/LaCie/GitHub_cloud/futR")
   #___________________________________________
   # 1. Set things up
   #___________________________________________
@@ -554,12 +554,14 @@ $$\mathrm{ln}\hat{R_i}= \left(a+ \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i
 
 ```{r fitR4, echo=T,eval=F,message=F,results='hide'}
 
+  estparams_0 <- estparams
+  estparams_0$beta <- estparams_0$lambda <- FALSE
   # makeDat will make the input values, data, and phases for the model:
   datlist  <-  makeDat(
                     rectype    =  4,
                     tauIN      =  0,
                     sigMethod  =  1, # (default, no random effects)
-                    estparams  =  estparams,
+                    estparams  =  estparams_0,
                     estMode    =  1,
                     rec_years  =  rec$rec_year,
                     Rec        =  rec$Robs,
@@ -609,12 +611,13 @@ Ricker relationship fit with covariates on pre-spawning success and post-spawnin
 $$\mathrm{ln}\hat{R_i}= \left(a+ \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i}} \right)-\left(b+ \sum_{k=1}^{n_k}{\theta_i^{\lambda}\lambda_k X_{k,i}}\right)\hat{S_i}+\mathrm{ln}\hat{S_i}+\varepsilon_i $$
 
 ```{r fitR4_2, echo=T,eval=F,message=F,results='hide'}
- 
   
   # read in the data and create a datlist (rather than hand code it)
   datlist <- makefutR_data("data/in/futR_Inputs.xlsx" )
-  
-  
+  datlist_post <- datlist
+  datlist_pre  <- datlist
+  datlist_post$estparams["beta"] <- FALSE
+  datlist_pre$estparams["lambda"] <- FALSE
   # run the basic model
   Rec4_covar <-  mm <-runRecMod(dlistIN   = datlist,
                           version   = 'futR',                           
@@ -627,10 +630,48 @@ $$\mathrm{ln}\hat{R_i}= \left(a+ \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i
   dfR4_c    <-  data.frame(model = "Rec 4 with covar",
                      estimate  = as.vector(mm$sim),
                      parameter = names( mm$mle)[row(mm$sim)])
-  df      <- rbind(dfR4,dfR4_c)
-  r4_fit_c  <- getFit(mm, nm = "recType = 4 with covar")
-  rec_fit <- rbind(r4_fit,r4_fit_c)
- rm(mm)
+  df        <- rbind(dfR4,dfR4_c)
+  r4_fit_c  <- getFit(mm, nm = "recType = 4 with pre- and post- covar")
+  rec_fit   <- rbind(r4_fit,r4_fit_c)
+  rm(mm)
+  
+  
+  # run the basic model
+   mm <-runRecMod(dlistIN   = datlist_pre,
+                          version   = 'futR',                           
+                          src_fldr   = "src/TMB",
+                          recompile = FALSE,
+                          simulate  = TRUE,
+                          sim_nitr  = 1000)
+
+  # summarize results
+  dfR4_c_pre    <-  data.frame(model = "Rec 4 with covar on pre",
+                     estimate  = as.vector(mm$sim),
+                     parameter = names( mm$mle)[row(mm$sim)])
+  df      <- rbind(df,dfR4_c_pre)
+  r4_fit_c_pre  <- getFit(mm, nm = "recType = 4 with pre-covar")
+  rec_fit <- rbind(rec_fit,r4_fit_c_pre)
+  
+  rm(mm)
+  # run the basic model
+   mm <-runRecMod(dlistIN   = datlist_post,
+                          version   = 'futR',                           
+                          src_fldr   = "src/TMB",
+                          recompile = FALSE,
+                          simulate  = TRUE,
+                          sim_nitr  = 1000)
+
+  # summarize results
+  dfR4_c_post    <-  data.frame(model = "Rec 4 with covar on post",
+                     estimate  = as.vector(mm$sim),
+                     parameter = names( mm$mle)[row(mm$sim)])
+  df      <- rbind(df,dfR4_c_post)
+  r4_fit_c_post  <- getFit(mm, nm = "recType = 4 with post-covar")
+  rec_fit <- rbind(rec_fit,r4_fit_c_post)
+  
+  rm(mm)
+  
+  
  if(updatePlots){
    jpeg("Figs/recplot5.jpg", width = W, height= H1, res = 250, units = "in")
    print(plot_rs(rec_fit))

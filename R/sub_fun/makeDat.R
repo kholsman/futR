@@ -112,8 +112,8 @@ makeDat <- function(
     if(!is.null(covars)){
       rs_dat$rs_cov        <-   covars[,ix]
       ec_use               <-   matrix(covars[,ix],dim(covars)[1],length(ix))
-      rs_dat$beta_0        <-   matrix(beta_0*(ec_use*0+1),dim(covars)[1],length(ix))
-      rs_dat$lambda_0      <-   matrix(lambda_0*(ec_use*0+1),dim(covars)[1],length(ix))
+      rs_dat$beta_0        <-   matrix(as.numeric(beta_0)*(ec_use*0+1),dim(covars)[1],length(ix))
+      rs_dat$lambda_0      <-   matrix(as.numeric(lambda_0)*(ec_use*0+1),dim(covars)[1],length(ix))
     }
 
     rs_dat$sdrs_cov        <-  rs_dat$rs_cov*0
@@ -243,10 +243,12 @@ makeDat <- function(
    }
      # print(parameters)
      # print(estparams)
+    
+    
+    
     maplist <- makeMap(param=parameters,estpar=estparams)
-
     parameters$beta   <- rs_dat$beta_0[,1]*0
-    parameters$lambda <-rs_dat$lambda_0[,1]*0
+    parameters$lambda <- rs_dat$lambda_0[,1]*0
 
  
     return(list(parameters = parameters, 
