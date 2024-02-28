@@ -65,82 +65,99 @@ runRecMod<-function(
   maxitr     = 10000,
   maxeval    = 10000){
   
+  
   wd0 <- getwd()
   if(!is.null(src_fldr))
     setwd(src_fldr)
-  
-  if(recompile){  
-    if(file.exists(paste0(version,".o")))
-       file.remove(paste0(version,".o"))
-    if(file.exists(paste0(version,".so")))
-      file.remove(paste0(version,".so"))
-    compile(paste0(version, ".cpp")) 
-  }
-  
-  dyn.load( dynlib(version) ) 
-
-  model  <- MakeADFun(
-              data                 =  dlistIN$rs_dat,
-              parameters           =  dlistIN$parameters,
-              DLL                  =  version,
-              checkParameterOrder  =  TRUE,
-              hessian              =  TRUE,
-              map                  =  dlistIN$maplist,
-              silent               =  silentIN)
-  
-  tmpmod  <- list()
-  tmpmod$model    <-  model
-  tmpmod$fit      <-  nlminb(model$env$last.par.best,
-                             model$fn,
-                             model$gr, 
-                             control=list(iter.max=maxitr,eval.max=maxeval))
-  if(tmpmod$fit$objective==Inf) 
-    stop("Problem with objective function (Inf)")
-  if(is.na(tmpmod$fit$objective)) 
-    stop("Problem with objective function (NaN)")
-  tmpmod$objFun   <-  model$fn()
-  tmpmod$report   <-  model$report()
-  tmpmod$sdreport <-  sdreport(model,getJointPrecision=TRUE)
-  tmpmod$rep      <-  sdreport(model,getJointPrecision=TRUE)
-  tmpmod$input    <-  dlistIN$rs_dat
-  tmpmod$out      <-  summary(tmpmod$rep)
-  tmpmod$mle      <-  model$env$last.par.best
-  tmpmod$Hessian  <-  with(model,optimHess(tmpmod$mle,model$fn,model$gr))
-  tmpmod$LnDet    <-  sum(determinant(tmpmod$Hessian, logarithm=TRUE)$modulus[[1]])
-  lp              <-  model$env$last.par
-  
-  if (!se.fit) {
-    pred          <- unlist(model$report(lp))
-    tmpmod$pred   <- data.frame(def= names(pred),pred=pred,pred.se=NA)
-  } else {
-    tmpmod$sdr    <- sdreport(model,tmpmod$mle,hessian.fixed=tmpmod$Hessian,getReportCovariance=F)
-    #tmpmod$sdrsum <- TMB:::summary.sdreport(tmpmod$sdr, "report")
-    tmpmod$sdrsum <- summary(sdreport(model,getJointPrecision=TRUE))
-    pred          <- tmpmod$sdrsum[,"Estimate"]
-    se            <- tmpmod$sdrsum[,"Std. Error"]
-    tmpmod$pred   <- data.frame(def= names(pred),pred=pred,pred.se=se)
-  }
-  
-  if(simulate){
-    #tmpmod$simdat <- array(sim_nitr)
-    sim <- replicate(sim_nitr, {
-      simdata <- model$simulate(par = model$par, complete=TRUE)
+  tryCatch(
+    {
+      if(recompile){  
+        if(file.exists(paste0(version,".o")))
+          file.remove(paste0(version,".o"))
+        if(file.exists(paste0(version,".so")))
+          file.remove(paste0(version,".so"))
+        compile(paste0(version, ".cpp")) 
+      }
       
-      obj2    <- MakeADFun(data       = simdata,
-                         parameters = dlistIN$parameters,
-                         DLL        = version,
-                         checkParameterOrder=TRUE,
-                         hessian    = TRUE,
-                         map        = dlistIN$maplist,
-                         profile    = NULL, # TODO: Optionally "beta"
-                         silent     = TRUE)
-      nlminb(obj2$par, obj2$fn, obj2$gr)$par
-    })
-    tmpmod$sim_df <- data.frame(estimate=as.vector(sim), parameter=names(model$par)[row(sim)])
-    tmpmod$sim    <- sim
-
-  }
-  setwd(wd0 )
-  
-  return(tmpmod)
+      dyn.load( dynlib(version) ) 
+      
+      model  <- MakeADFun(
+        data                 =  dlistIN$rs_dat,
+        parameters           =  dlistIN$parameters,
+        DLL                  =  version,
+        checkParameterOrder  =  TRUE,
+        hessian              =  TRUE,
+        map                  =  dlistIN$maplist,
+        silent               =  silentIN)
+      
+      tmpmod  <- list()
+      tmpmod$model    <-  model
+      tmpmod$fit      <-  nlminb(model$env$last.par.best,
+                                 model$fn,
+                                 model$gr, 
+                                 control=list(iter.max=maxitr,eval.max=maxeval))
+      if(tmpmod$fit$objective==Inf) 
+        stop("Problem with objective function (Inf)")
+      if(is.na(tmpmod$fit$objective)) 
+        stop("Problem with objective function (NaN)")
+      tmpmod$objFun   <-  model$fn()
+      tmpmod$report   <-  model$report()
+      tmpmod$sdreport <-  sdreport(model,getJointPrecision=TRUE)
+      tmpmod$rep      <-  sdreport(model,getJointPrecision=TRUE)
+      tmpmod$input    <-  dlistIN$rs_dat
+      tmpmod$out      <-  summary(tmpmod$rep)
+      tmpmod$mle      <-  model$env$last.par.best
+      tmpmod$Hessian  <-  with(model,optimHess(tmpmod$mle,model$fn,model$gr))
+      tmpmod$LnDet    <-  sum(determinant(tmpmod$Hessian, logarithm=TRUE)$modulus[[1]])
+      lp              <-  model$env$last.par
+      
+      if (!se.fit) {
+        pred          <- unlist(model$report(lp))
+        tmpmod$pred   <- data.frame(def= names(pred),pred=pred,pred.se=NA)
+      } else {
+        tmpmod$sdr    <- sdreport(model,tmpmod$mle,hessian.fixed=tmpmod$Hessian,getReportCovariance=F)
+        #tmpmod$sdrsum <- TMB:::summary.sdreport(tmpmod$sdr, "report")
+        tmpmod$sdrsum <- summary(sdreport(model,getJointPrecision=TRUE))
+        pred          <- tmpmod$sdrsum[,"Estimate"]
+        se            <- tmpmod$sdrsum[,"Std. Error"]
+        tmpmod$pred   <- data.frame(def= names(pred),pred=pred,pred.se=se)
+      }
+      
+      if(simulate){
+        #tmpmod$simdat <- array(sim_nitr)
+        sim <- replicate(sim_nitr, {
+          simdata <- model$simulate(par = model$par, complete=TRUE)
+          
+          obj2    <- MakeADFun(data       = simdata,
+                               parameters = dlistIN$parameters,
+                               DLL        = version,
+                               checkParameterOrder=TRUE,
+                               hessian    = TRUE,
+                               map        = dlistIN$maplist,
+                               profile    = NULL, # TODO: Optionally "beta"
+                               silent     = TRUE)
+          nlminb(obj2$par, obj2$fn, obj2$gr)$par
+        })
+        tmpmod$sim_df <- data.frame(estimate=as.vector(sim), parameter=names(model$par)[row(sim)])
+        tmpmod$sim    <- sim
+        
+      }
+      return(tmpmod)
+    },
+    error = function(cond) {
+      message("FutR model failed, error message:")
+      message(conditionMessage(cond))
+      # Choose a return value in case of error
+      NA
+    },
+    warning = function(cond) {
+      message("FutR model warning message:")
+      message(conditionMessage(cond))
+      # Choose a return value in case of warning
+      return(tmpmod)
+    },
+    finally = {
+     setwd(wd0)
+    }
+  )
 }

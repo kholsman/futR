@@ -18,7 +18,7 @@ make_flag   <- TRUE
 cat("-- compiling the model ...\n\n")
 wd0 <- getwd()
 setwd("src/TMB")
-recompile('futR')
+#recompile('futR')
 setwd(wd0)
 # options(clustermq.scheduler = "multicore") # optional parallel computing. Also needs parallelism = "clustermq"
 # make(
