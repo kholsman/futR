@@ -49,3 +49,6 @@ The sum of `x` and `y`.
 \description{
 get the SSB / R shape
 }
+\examples{
+get_SSB_shape()
+}

@@ -1,9 +1,11 @@
-#' convert markdown doc to readme file for github
-#'
 #' rmd2md() 
 #' 
-#' @email For more information contact author Kirstin Holsman (kirstin.holsman@noaa.gov)
-#' @weblink 
+#' convert markdown doc to readme file for github
+#'
+#' 
+#' 
+#' For more information contact author Kirstin Holsman (kirstin.holsman@noaa.gov)
+#'  
 #' @param rmd_fl name of the markdown file (without the .Rmd)
 #' @param md_fl  name of the output; default is 'README'
 #' 

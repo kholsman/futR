@@ -1,7 +1,9 @@
+#' recompile()
+#' 
 #' recompiles the model
 #' 
-#' @email For more information contact author Kirstin Holsman (kirstin.holsman@noaa.gov)
-#' @weblink 
+#' For more information contact author Kirstin Holsman (kirstin.holsman@noaa.gov)
+#'  
 #' @param model (without the '.cpp'); default is "futR"
 #'
 #' @return list

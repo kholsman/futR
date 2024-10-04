@@ -27,7 +27,6 @@
 #' @export
 #' 
 
-require("extrafont")
 # theme_kir_EBM <- function(...) {
 #   theme_kir(base_family="Helvetica",
 #             plot_title_family="Helvetica-Bold",
@@ -70,6 +69,9 @@ theme_hrbrmstr <- function(base_family="Hind",
                            grid = TRUE,
                            axis = FALSE,
                            ticks = FALSE) {
+  #load packages
+  require("extrafont")
+  
   
   ret <- theme_minimal(base_family=base_family, base_size=base_size)
   

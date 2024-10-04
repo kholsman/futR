@@ -3,7 +3,7 @@
 #'
 #' This function prepares the ceattle estimated data for futR
 #' For more information contact author Kirstin Holsman (kirstin.holsman@noaa.gov)
-#' @weblink 
+#'  
 #' @param datlistIN   list of input data from makeDat() function: "parameters" "rs_dat"     "maplist"    "estparams"  "phases"  
 #' @param returnAll   return all phases? TRUE/FALSE
 #' @param quiet       print out phases

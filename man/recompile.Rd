@@ -2,7 +2,7 @@
 % Please edit documentation in R/sub_fun_recompile.R
 \name{recompile}
 \alias{recompile}
-\title{recompiles the model}
+\title{recompile()}
 \usage{
 recompile(model = "futR")
 }
@@ -14,6 +14,9 @@ list
 }
 \description{
 recompiles the model
+}
+\details{
+For more information contact author Kirstin Holsman (kirstin.holsman@noaa.gov)
 }
 \examples{
 recompile(model="futR")

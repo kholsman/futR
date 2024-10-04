@@ -1,9 +1,10 @@
 #' run the futR() recruitment model
 #'
 #' runRecMod() will run the futR() recruitment model
+#' For more information contact author Kirstin Holsman (kirstin.holsman@noaa.gov)
+#'  
 #' @import futR
-#' @email For more information contact author Kirstin Holsman (kirstin.holsman@noaa.gov)
-#' @weblink 
+#'  
 #' @param dlistIN     list of input data and parameters used for the makeADfun() dependency
 #' * dlistIN$parameters  list of parameters for the TMB futR model:
 #'    [] dlistIN$parameters$log_a    scalar starting value for log_a (intercept)

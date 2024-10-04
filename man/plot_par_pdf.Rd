@@ -18,6 +18,9 @@ list
 \description{
 plot the pdf of each parameter estimated in the model
 }
+\details{
+For more information contact author Kirstin Holsman (kirstin.holsman@noaa.gov)
+}
 \examples{
 # read in the data
 datlist <- datlist2 <-  readMake_futR_data("data/in/futR_Inputs.xlsx" )

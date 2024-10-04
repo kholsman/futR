@@ -2,7 +2,7 @@
 % Please edit documentation in R/sub_fun_vec2list.R
 \name{vec2list}
 \alias{vec2list}
-\title{convert vector to list using names}
+\title{vec2list()}
 \usage{
 vec2list(x)
 }

@@ -20,6 +20,7 @@
 #' @export
 #'
 #' @examples
+#' get_SSB_shape()
 
 get_SSB_shape <- function(
     AIC_summryIN,

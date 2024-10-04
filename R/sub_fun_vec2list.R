@@ -1,7 +1,8 @@
+#' vec2list()
+#' 
 #' convert vector to list using names
 #' 
-#' @email For more information contact author Kirstin Holsman (kirstin.holsman@noaa.gov)
-#' @weblink 
+#' 
 #' @param x Numeric vector.
 #'
 #' @return list

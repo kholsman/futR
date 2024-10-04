@@ -318,7 +318,7 @@ The base function for fitting recruitment requires a data.frame of recruitment a
   # rm(list=ls()) ; dir()
 
   # load data, packages, setup, etc.
-  source("R/01_make.R")
+  source(file.path("R","01_make.R"))
 
   #___________________________________________
   # 2. Compile futR	(first time through - can skip this step after )
@@ -341,8 +341,8 @@ The base function for fitting recruitment requires a data.frame of recruitment a
 ```{r setup3, echo=T,eval=F,message=F,results='hide'}
   
  # read in the data and create a datlist
-  datlist <- makefutR_data("data/in/futR_Inputs.xlsx" )
-  # save(datlist, file= "data/datlist.Rdata")
+  datlist <- makefutR_data(file.path("data-raw","in","futR_Inputs.xlsx" ))
+
   # recruitment data:
   datlist$rs_dat$R_obs
   datlist$rs_dat$S_obs
@@ -355,20 +355,19 @@ The base function for fitting recruitment requires a data.frame of recruitment a
   # which parameters to estimate with futR?
   datlist$estparams
   
-  # starting values? 
+  # starting values
   datlist$parameters
   
-  # parameter map:
+  # parameter map
   datlist$maplist
   
-  # which phases to estimate in (not yet coded up)
+  # which phases to estimate in  
   datlist$phases
 
  
   # set some global values for the demo below:
   estparams <-  datlist$estparams[1:6]
-  rec       <-  data.frame(readxl::read_xlsx("data/in/futR_Inputs.xlsx" , sheet = "rec_data" ))
-
+  
   
 ```
 
@@ -613,7 +612,9 @@ $$\mathrm{ln}\hat{R_i}= \left(a+ \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i
 ```{r fitR4_2, echo=T,eval=F,message=F,results='hide'}
   
   # read in the data and create a datlist (rather than hand code it)
-  datlist <- makefutR_data("data/in/futR_Inputs.xlsx" )
+  #datlist <- makefutR_data("data/in/futR_Inputs.xlsx" )
+  datlist <- makefutR_data(file.path("data-raw","in","futR_Inputs.xlsx" ))
+
   datlist_post <- datlist
   datlist_pre  <- datlist
   datlist_post$estparams["beta"] <- FALSE

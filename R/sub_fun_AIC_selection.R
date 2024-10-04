@@ -9,7 +9,7 @@
 #' * data$mnames1 names for each model
 #' * data$type2 number 1= AIC;2 = AICc ; default = NULL
 #' * data$covnm default = NULL
-#' @param rsType   default = NULL
+#' @param rsType default = NULL
 #' @param LnDet default = NULL
 #' @param CE Climate enhanced model? default = NULL
 #'    list of input data from makeDat() function: "parameters" "rs_dat"     "maplist"    "estparams"  "phases"  
@@ -17,8 +17,8 @@
 #' 
 #' @export
 #'
-#'@examples
-#' 
+#' @examples
+#' AICselection()
 #' 
 AICselection <- function (LL, 
                           npar, 

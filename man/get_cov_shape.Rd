@@ -31,14 +31,9 @@ used if simulateIN == T, default = 200}
 The sum of `x` and `y`.
 }
 \description{
-This is the description.
+Get the shape of the covariate effects
 }
-\details{
-These are further details.
+\examples{
+get_cov_shape()
+
 }
-\section{A Custom Section}{
-
-
-Text accompanying the custom section.
-}
-

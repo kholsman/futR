@@ -79,3 +79,6 @@ list with :
 This function prepares the ceattle estimated data for futR
 For more information contact author Kirstin Holsman (kirstin.holsman@noaa.gov)
 }
+\examples{
+ makeDat()
+}

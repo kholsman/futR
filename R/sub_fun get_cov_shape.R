@@ -1,12 +1,6 @@
 #' get_cov_shape.R
 #'
-#' This is the description.
-#'
-#' These are further details.
-#'
-#' @section A Custom Section:
-#'
-#' Text accompanying the custom section.
+#' Get the shape of the covariate effects
 #'
 #' @param AIC_summryIN summary table input
 #' @param s species number; default = 1
@@ -19,7 +13,7 @@
 #' @export
 #'
 #' @examples
-#'
+#'get_cov_shape()
 #'
   get_cov_shape <- function(
                       AIC_summryIN,

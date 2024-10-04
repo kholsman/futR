@@ -2,14 +2,14 @@
 #' 
 #' profile the covariates to get partial effects
 #' 
-#' @param cov_nm     = "Spring_temp_surface5m",
-#' @paramT2         = T,
-#' @paramSD_range   =  3,
-#' @paramsim_nitrIN = 100,
-#' @paramsimulateIN = TRUE,
-#' @parammodIN    = AIC_summry[[s]]$topRicker_R2,
-#' @paramrecIN    = AIC_summry[[s]]$topRicker_R2_rec_fit,
-#' @paramphasesIN = phases description
+#' @param cov_nm = "Spring_temp_surface5m",
+#' @param T2 = T,
+#' @param SD_range   =  3,
+#' @param sim_nitrIN = 100,
+#' @param simulateIN = TRUE,
+#' @param modIN    = AIC_summry[[s]]$topRicker_R2,
+#' @param recIN    = AIC_summry[[s]]$topRicker_R2_rec_fit,
+#' @param phasesIN = phases description
 #' 
 #' 
 #' @returns list(sim_df=sim_df,R_hat_sim=R_hat_sim, poly=aa,main = bb,p=p)

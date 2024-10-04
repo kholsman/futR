@@ -14,7 +14,7 @@
 #' @export
 #'
 #' @examples
-#' 
+#' get_model()
 #' 
 get_model <- function(
     mod        ,

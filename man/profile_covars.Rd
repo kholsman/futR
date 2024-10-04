@@ -17,6 +17,20 @@ profile_covars(
 }
 \arguments{
 \item{cov_nm}{= "Spring_temp_surface5m",}
+
+\item{T2}{= T,}
+
+\item{SD_range}{=  3,}
+
+\item{sim_nitrIN}{= 100,}
+
+\item{simulateIN}{= TRUE,}
+
+\item{modIN}{= AIC_summry[[s]]$topRicker_R2,}
+
+\item{recIN}{= AIC_summry[[s]]$topRicker_R2_rec_fit,}
+
+\item{phasesIN}{= phases description}
 }
 \value{
 list(sim_df=sim_df,R_hat_sim=R_hat_sim, poly=aa,main = bb,p=p)

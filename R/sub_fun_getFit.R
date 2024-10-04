@@ -10,8 +10,6 @@
 
 #' @export 
 #' 
-#' @email For more information contact author Kirstin Holsman (kirstin.holsman@noaa.gov)
-#' 
 #' @examples
 #'  datlist <- readMake_futR_data("data/in/futR_Inputs.xlsx" )
 #'  mm      <- runmod(dlistIN   = datlist, version   = 'futR',recompile = FALSE,simulate  = TRUE,sim_nitr  = 1000)  

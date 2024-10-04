@@ -5,11 +5,11 @@
 #' This function prepares the estimated data for futR
 #' This function is a subset of makeDat()
 #' For more information contact author Kirstin Holsman (kirstin.holsman@noaa.gov)
-#' @weblink 
+#'
 #' @param parameters  list of starting values and parameters for the TMB futR() model
 #' @param estpar      vector of T/F of which parameters will be estimated
 #' @export            maplist a list with map values
-#' @email             For more information contact author Kirstin Holsman (kirstin.holsman@noaa.gov)
+#' 
 #' @examples
 #' 
 #' datlist   <- readMake_futR_data("data/in/futR_Inputs.xlsx" )

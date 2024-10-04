@@ -20,3 +20,7 @@ returns a list with data.frames of all possible combinations}
 \description{
 Function to get the interaction matrix for env covariates
 }
+\examples{
+get_interaction_mat()
+
+}

@@ -11,6 +11,7 @@
 #' @export
 #'
 #' @examples
+#' get_interaction_mat()
 #' 
 get_interaction_mat<-function(covIN, maxIN,ADDTEMP2=TRUE,cor_cutoff=0.5){
   mod_mat <- list()

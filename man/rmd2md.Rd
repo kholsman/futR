@@ -2,7 +2,7 @@
 % Please edit documentation in R/sub_fun_rmd2md.R
 \name{rmd2md}
 \alias{rmd2md}
-\title{convert markdown doc to readme file for github}
+\title{rmd2md()}
 \usage{
 rmd2md(rmd_fl, md_fl = "README")
 }
@@ -12,7 +12,10 @@ rmd2md(rmd_fl, md_fl = "README")
 \item{md_fl}{name of the output; default is 'README'}
 }
 \description{
-rmd2md()
+convert markdown doc to readme file for github
+}
+\details{
+For more information contact author Kirstin Holsman (kirstin.holsman@noaa.gov)
 }
 \examples{
 # convert the mymarkdown.Rmd to README.md

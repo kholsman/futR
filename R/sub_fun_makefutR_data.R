@@ -1,9 +1,8 @@
 #' makefutR_data.R
 #' 
 #' reads an xlxs input file and creates the datlist for input into runmod()
-#' 
-#' @email For more information contact author Kirstin Holsman (kirstin.holsman@noaa.gov)
-#' @weblink 
+#' For more information contact author Kirstin Holsman (kirstin.holsman@noaa.gov)
+#'  
 #' @param fn path to data input sheet; default is 'data/in/futR_Inputs.xlsx'
 #'
 #' @return datlist  list of input data and parameters used for the runmod() dependency

@@ -41,3 +41,7 @@ a dataframe of summary statistics for AICc of submodels
 \description{
 AICselection runs AIC information criterion analysis on resulting set of recruitment models
 }
+\examples{
+AICselection()
+
+}

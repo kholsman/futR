@@ -32,3 +32,7 @@ List with two objects : lobject and dlist
 \description{
 get the model from the meta evaluation
 }
+\examples{
+get_model()
+
+}
