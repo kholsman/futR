@@ -5,9 +5,6 @@
 # updated 2020
 # ----------------------------------------
 
-  
-  # load ggplot theme:
-  source("R/sub_scripts/THEMES_GGPLOT.r")
 
   #_______________________________________
   # 1.3 load data

@@ -2,6 +2,7 @@
 % Please edit documentation in R/futR.R
 \docType{package}
 \name{futR}
+\alias{futR-package}
 \alias{futR}
 \title{futR}
 \description{
