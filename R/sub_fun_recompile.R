@@ -9,6 +9,7 @@
 #' @examples
 #' recompile(model="futR")
 #' @export
+#' 
 recompile<-function(model="futR"){
   if(file.exists( paste0(model,'.so')) )
     file.remove( paste0(model,'.so')) 

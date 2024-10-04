@@ -1,8 +1,21 @@
-#'
-#'
-#' profile_covars.R
+#'profile_covars.R
 #' 
 #' profile the covariates to get partial effects
+#' 
+#' @param cov_nm     = "Spring_temp_surface5m",
+#' @paramT2         = T,
+#' @paramSD_range   =  3,
+#' @paramsim_nitrIN = 100,
+#' @paramsimulateIN = TRUE,
+#' @parammodIN    = AIC_summry[[s]]$topRicker_R2,
+#' @paramrecIN    = AIC_summry[[s]]$topRicker_R2_rec_fit,
+#' @paramphasesIN = phases description
+#' 
+#' 
+#' @returns list(sim_df=sim_df,R_hat_sim=R_hat_sim, poly=aa,main = bb,p=p)
+#' 
+#' @export
+#' 
 #' 
 #' 
 

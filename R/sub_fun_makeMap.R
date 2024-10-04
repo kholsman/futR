@@ -1,3 +1,5 @@
+#' makeMap.R
+#' 
 #' makeMap will create a map list for reading into the runmod() function
 #'
 #' This function prepares the estimated data for futR
@@ -19,6 +21,7 @@
 #' parameters
 #' maplist <- makeMap(param=parameters,estpar=estparams)
 #' @export
+#' 
 makeMap<-function(param=parameters,estpar=estparams){
   mapseq  <- 1:length(unlist(param))
   ixx     <- 0

@@ -1,8 +1,17 @@
+#'predict_futR.R
 #'
 #'
-#' predict_futR.R
-#' 
 #' Predict recruitment from new data and or new par
+#' 
+#' @param modelIN = mm,  # model output from runRecMod()
+#' @param newdata,       # new predictive data to simulate (can be new S_obs or cov)                    
+#' @param src_fldr  = "src/TMB",
+#' @param futR_fldr =  NULL
+#' 
+#' @returns  pred_model$report()
+#' 
+#' @export
+#' 
 predict_futR <- function(
                   modelIN = mm,  # model output from runRecMod()
                   newdata,       # new predictive data to simulate (can be new S_obs or cov)                    

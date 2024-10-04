@@ -1,9 +1,21 @@
-#'
-#'
-#' profile_SSB.R
+#'profile_SSB.R
 #' 
 #' profile the SSB to get partial effects
 #' 
+#' @param cov_nm_list = c("Spring_temp_surface5m","Summer_temp_surface5m","Winter_temp_bottom5m"),
+#' @param nameIN      = "hindcast 2020",
+#' @param newdataIN   = hind%>%filter(year==2020)%>%data.frame(),
+#' @param T2          = T,
+#' @param SD_range   = 7,
+#' @param steps      = 100,
+#' @param sim_nitrIN = 100,
+#' @param simulateIN = TRUE,
+#' @param hind_yearsIN = 1980:2023,
+#' @param modIN    = AIC_summry[[s]]$topRicker_R2,
+#' @param recIN    = AIC_summry[[s]]$topRicker_R2_rec_fit,
+#' @param phasesIN = phases description
+#' 
+#' @export
 #' 
 
 profile_ssb <- function(
