@@ -70,6 +70,7 @@ NOAA Fisheries, Seattle WA
    
 ---
 
+github repo: https://github.com/kholsman/futR
 
 ![](../Figs/futR_icon.png){width=25%}
 
@@ -1024,9 +1025,16 @@ Note that $\tau = 0$ defaults to the input variance for S and R as offsets for e
 
 # source("R/make.R")
  # copy and paste this into R window (won't work within markdown)
-
- rmd2md(rmd_fl = "vingettes/futR_demo",md_fl = "README")
-
+  tmpwd<- getwd()
+  setwd(file.path(tmpwd,"vingettes"))
+  rmd2md(rmd_fl = "futR_demo",md_fl = "README")
+  setwd(tmpwd)
+  file.copy(from = file.path(tmpwd,"vingettes","README.md"),
+            to = file.path(tmpwd,"README.md"),overwrite = T)
+    file.copy(from = file.path(tmpwd,"vingettes","futR_demo.html"),
+            to = file.path(tmpwd,"index.html"),overwrite = T)
+      file.copy(from = file.path(tmpwd,"vingettes","futR_demo.html"),
+            to = file.path(tmpwd,"(root)","index.html"),overwrite = T)
 
 ```
 
