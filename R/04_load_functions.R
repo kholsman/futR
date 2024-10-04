@@ -8,9 +8,10 @@
 #' kirstin.holsman@noaa.gov
 #' updated 2024
 #' ----------------------------------------
-
-  for(d in dir("R/sub_fun")) 
-    source(paste0("R/sub_fun/",d))
+#' 
+dirlist<-dir("R")
+  for(d in dirlist[grep("sub_fun_",dirlist)]) 
+    source(file.path("R",d))
 
 
 

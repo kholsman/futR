@@ -20,4 +20,5 @@
 #' @author Kirstin K. Holsman \email{kirstin.holsman@noaa.gov}
 #'
 #' @name futR
+#' 
 NULL
