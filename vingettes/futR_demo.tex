@@ -5,16 +5,19 @@
 \documentclass[
 ]{article}
 \usepackage{amsmath,amssymb}
-\usepackage{lmodern}
 \usepackage{iftex}
 \ifPDFTeX
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
   \usepackage{textcomp} % provide euro and other symbols
 \else % if luatex or xetex
-  \usepackage{unicode-math}
+  \usepackage{unicode-math} % this also loads fontspec
   \defaultfontfeatures{Scale=MatchLowercase}
   \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
 \fi
 % Use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
@@ -45,13 +48,13 @@
 \newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
 \newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
 \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
 \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
 \newcommand{\BuiltInTok}[1]{#1}
 \newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
 \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
 \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
 \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
 \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
 \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
@@ -59,7 +62,7 @@
 \newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
 \newcommand{\ExtensionTok}[1]{#1}
 \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
-\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
 \newcommand{\ImportTok}[1]{#1}
 \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
 \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
@@ -68,7 +71,7 @@
 \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
 \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
 \newcommand{\RegionMarkerTok}[1]{#1}
-\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
 \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
 \newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
 \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
@@ -94,9 +97,9 @@
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
-\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\usepackage{bookmark}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
-\urlstyle{same} % disable monospaced font for URLs
+\urlstyle{same}
 \hypersetup{
   pdftitle={futR()},
   pdfauthor={Kirstin Holsman},
@@ -121,8 +124,9 @@ NOAA Fisheries, Seattle WA\\
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\hypertarget{overview}{%
-\section{Overview}\label{overview}}
+\includegraphics[width=0.25\textwidth,height=\textheight]{../Figs/futR_icon.png}
+
+\section{Overview}\label{overview}
 
 futR() is a generic Rpackage for fitting recruitment models to indices
 of spawning biomass (or numbers) and recruitment with or without climate
@@ -147,12 +151,10 @@ controls on groundfish recruitment in Alaska.
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\hypertarget{futr-options}{%
-\section{futR() options}\label{futr-options}}
+\section{futR() options}\label{futr-options}
 
-\hypertarget{recruitment-models-rectype}{%
 \subsection{Recruitment models
-(rectype)}\label{recruitment-models-rectype}}
+(rectype)}\label{recruitment-models-rectype}
 
 There are four base model formulations available for estimating the
 relationship between recruitment and spawners (and/ or environmental
@@ -194,8 +196,7 @@ recruitment age (e.g., age 0+ survival)):
   in pre-larval effects post-spawning success
 \end{itemize}
 
-\hypertarget{rectype-1.-log-linear}{%
-\subsubsection{rectype = 1. Log-linear}\label{rectype-1.-log-linear}}
+\subsubsection{rectype = 1. Log-linear}\label{rectype-1.-log-linear}
 
 When rectype is set to 1, the model fits a log-normal linear model
 without an index of spawners (i.e., the mean recruitment as a function
@@ -230,9 +231,8 @@ x_{n_k,1} & \dots  & x_{n_k,n_y}
 \end{array}\right]
 \]
 
-\hypertarget{rectype-2.-log-linear-with-spawners}{%
 \subsubsection{rectype = 2. Log-linear with
-spawners}\label{rectype-2.-log-linear-with-spawners}}
+spawners}\label{rectype-2.-log-linear-with-spawners}
 
 When rectype is set to 2, the model fits a log-normal linear model as a
 function of the index of spawners \(\hat{S_i}\) in the year \(i\) and
@@ -273,9 +273,8 @@ x_{n_k,1} & \dots  & x_{n_k,n_y}
 \end{array}\right]
 \]
 
-\hypertarget{rectype-3.-beverton-holt}{%
 \subsubsection{rectype = 3. Beverton
-Holt}\label{rectype-3.-beverton-holt}}
+Holt}\label{rectype-3.-beverton-holt}
 
 The Beverton-Holt model is appropriate ``if there is a maximum abundance
 imposed by food availability or space, or if the predator can adjust its
@@ -329,8 +328,7 @@ x_{n_k,1} & \dots  & x_{n_k,n_y}
 \end{array}\right]
 \]
 
-\hypertarget{rectype-4.-ricker}{%
-\subsubsection{rectype = 4. Ricker}\label{rectype-4.-ricker}}
+\subsubsection{rectype = 4. Ricker}\label{rectype-4.-ricker}
 
 When rectype is set to 4 the model fits a Ricker S/R curve. The Ricker
 model (Ricker,1954) is a dome shaped recruitment curve best used to
@@ -386,9 +384,8 @@ x_{n_k,1} & \dots  & x_{n_k,n_y}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\hypertarget{obs.-error-options-sigmethod}{%
 \subsection{Obs. error options
-(sigMethod)}\label{obs.-error-options-sigmethod}}
+(sigMethod)}\label{obs.-error-options-sigmethod}
 
 Finally, for more advanced model fitting, various options for
 observation error on recruitment or spawning estimates is available
@@ -410,8 +407,7 @@ through alternative ``sigMethod'' selections:
   as in 1 but with defined measurement error for rec and Spawners/SSB)
 \end{enumerate}
 
-\hypertarget{sigmethod-1}{%
-\subsubsection{sigMethod = 1}\label{sigmethod-1}}
+\subsubsection{sigMethod = 1}\label{sigmethod-1}
 
 The base model fits the lognormally distributed process error for
 recruitment (\(\sigma\)) using maximum likelihood (i.e., ordinary least
@@ -424,8 +420,7 @@ Similarly, spawner indices (\(\hat{S}_{i-1}\)) include log-normally
 distributed observation error as:
 \(log\hat{S}_{i-1} \sim N(0,\sigma_S)\) where \(\sigma_S=0\)
 
-\hypertarget{sigmethod-2}{%
-\subsubsection{sigMethod = 2}\label{sigmethod-2}}
+\subsubsection{sigMethod = 2}\label{sigmethod-2}
 
 The base model fits the lognormally distributed process error for
 recruitment (\(\sigma\)) using maximum likelihood (i.e., ordinary least
@@ -443,8 +438,7 @@ Similarly, spawner indices (\(\hat{S}_{i-1}\)) include log-normally
 distributed observation error as:
 \(log\hat{S}_{i-1} \sim N(0,\sigma_S)\) where \(\sigma_S=\tau*\sigma\)
 
-\hypertarget{sigmethod-3}{%
-\subsubsection{sigMethod = 3}\label{sigmethod-3}}
+\subsubsection{sigMethod = 3}\label{sigmethod-3}
 
 As in sigMethod = 2, except when sigMethod = 3 \(\sigma\) is estimated
 using the unbiased sigma estimate (sensu Ludwig and Walters 1982):
@@ -455,8 +449,7 @@ where
 \[\epsilon_{Ri} = log(R_i) - log(\hat R_i) \] and
 \[\epsilon_{Si} = log(S_i) - log(\hat S_i) \]
 
-\hypertarget{sigmethod-4}{%
-\subsubsection{sigMethod = 4}\label{sigmethod-4}}
+\subsubsection{sigMethod = 4}\label{sigmethod-4}
 
 As in sigMethod = 2 with observation error (random effects) on S if
 \(\tau >0\), but with defined measurement error (\(\gamma_{R,i}\)) for
@@ -467,8 +460,7 @@ that:
 \(\sigma_{R,i}=\sigma_i+\gamma_{R,i})\). and
 \(log\hat{S}_{i-1} \sim N(0,\sigma_S\) where \(\sigma_S=\tau*\sigma\).
 
-\hypertarget{sigmethod-5}{%
-\subsubsection{sigMethod = 5}\label{sigmethod-5}}
+\subsubsection{sigMethod = 5}\label{sigmethod-5}
 
 As in sigMethod = 2 with observation error (random effects) on S and R
 if \(\tau >0\), but with defined measurement errors (\(\gamma_{R,i}\)
@@ -487,14 +479,11 @@ offsets for each.
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\hypertarget{running-futr}{%
-\section{Running futR()}\label{running-futr}}
+\section{Running futR()}\label{running-futr}
 
-\hypertarget{getting-started}{%
-\subsection{Getting started}\label{getting-started}}
+\subsection{Getting started}\label{getting-started}
 
-\hypertarget{step-1-installing-futr}{%
-\subsubsection{Step 1: Installing futR()}\label{step-1-installing-futr}}
+\subsubsection{Step 1: Installing futR()}\label{step-1-installing-futr}
 
 The package can be installed from github using the devtools package:
 
@@ -512,23 +501,22 @@ The projection package can then be installed to R directly:
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{step-2-set-up-the-workspace}{%
 \subsubsection{Step 2: Set up the
-workspace}\label{step-2-set-up-the-workspace}}
+workspace}\label{step-2-set-up-the-workspace}
 
 The base function for fitting recruitment requires a data.frame of
 recruitment and spawning biomass:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-  \CommentTok{\# rm(list=ls()); setwd("/Users/kholsman/Documents/GitHub/futR")}
+  \CommentTok{\# rm(list=ls()); setwd("/Volumes/LaCie/GitHub\_cloud/futR")}
   \CommentTok{\#\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_}
   \CommentTok{\# 1. Set things up}
   \CommentTok{\#\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_}
   \CommentTok{\# rm(list=ls()) ; dir()}
 
   \CommentTok{\# load data, packages, setup, etc.}
-  \FunctionTok{source}\NormalTok{(}\StringTok{"R/01\_make.R"}\NormalTok{)}
+  \FunctionTok{source}\NormalTok{(}\FunctionTok{file.path}\NormalTok{(}\StringTok{"R"}\NormalTok{,}\StringTok{"01\_make.R"}\NormalTok{))}
 
   \CommentTok{\#\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_}
   \CommentTok{\# 2. Compile futR (first time through {-} can skip this step after )}
@@ -553,8 +541,8 @@ using the instructions
 \begin{Shaded}
 \begin{Highlighting}[]
  \CommentTok{\# read in the data and create a datlist}
-\NormalTok{  datlist }\OtherTok{\textless{}{-}} \FunctionTok{makefutR\_data}\NormalTok{(}\StringTok{"data/in/futR\_Inputs.xlsx"}\NormalTok{ )}
-  
+\NormalTok{  datlist }\OtherTok{\textless{}{-}} \FunctionTok{makefutR\_data}\NormalTok{(}\FunctionTok{file.path}\NormalTok{(}\StringTok{"data{-}raw"}\NormalTok{,}\StringTok{"in"}\NormalTok{,}\StringTok{"futR\_Inputs.xlsx"}\NormalTok{ ))}
+
   \CommentTok{\# recruitment data:}
 \NormalTok{  datlist}\SpecialCharTok{$}\NormalTok{rs\_dat}\SpecialCharTok{$}\NormalTok{R\_obs}
 \NormalTok{  datlist}\SpecialCharTok{$}\NormalTok{rs\_dat}\SpecialCharTok{$}\NormalTok{S\_obs}
@@ -567,28 +555,25 @@ using the instructions
   \CommentTok{\# which parameters to estimate with futR?}
 \NormalTok{  datlist}\SpecialCharTok{$}\NormalTok{estparams}
   
-  \CommentTok{\# starting values? }
+  \CommentTok{\# starting values}
 \NormalTok{  datlist}\SpecialCharTok{$}\NormalTok{parameters}
   
-  \CommentTok{\# parameter map:}
+  \CommentTok{\# parameter map}
 \NormalTok{  datlist}\SpecialCharTok{$}\NormalTok{maplist}
   
-  \CommentTok{\# which phases to estimate in (not yet coded up)}
+  \CommentTok{\# which phases to estimate in  }
 \NormalTok{  datlist}\SpecialCharTok{$}\NormalTok{phases}
 
  
   \CommentTok{\# set some global values for the demo below:}
 \NormalTok{  estparams }\OtherTok{\textless{}{-}}\NormalTok{  datlist}\SpecialCharTok{$}\NormalTok{estparams[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{6}\NormalTok{]}
-\NormalTok{  rec       }\OtherTok{\textless{}{-}}  \FunctionTok{data.frame}\NormalTok{(readxl}\SpecialCharTok{::}\FunctionTok{read\_xlsx}\NormalTok{(}\StringTok{"data/in/futR\_Inputs.xlsx"}\NormalTok{ , }\AttributeTok{sheet =} \StringTok{"rec\_data"}\NormalTok{ ))}
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{explore-recruitment-models}{%
 \subsection{Explore recruitment
-models}\label{explore-recruitment-models}}
+models}\label{explore-recruitment-models}
 
-\hypertarget{rectype-1}{%
-\subsubsection{rectype = 1}\label{rectype-1}}
+\subsubsection{rectype = 1}\label{rectype-1}
 
 Log-linear relationship (mean with variation with covars).
 \[ \mathrm{log}(\hat{R_i})= a+\sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i}}+\varepsilon_i \]
@@ -643,8 +628,7 @@ Log-linear relationship (mean with variation with covars).
 \caption{mean recruitment}
 \end{figure}
 
-\hypertarget{rectype-2}{%
-\subsubsection{rectype = 2}\label{rectype-2}}
+\subsubsection{rectype = 2}\label{rectype-2}
 
 Log-linear relationship with spawners and covariates.
 
@@ -744,8 +728,7 @@ Beverton holt relationship.
 
 \includegraphics[width=0.6\textwidth,height=\textheight]{../Figs/recplot3.jpg}
 
-\hypertarget{rectype-4}{%
-\subsubsection{rectype = 4}\label{rectype-4}}
+\subsubsection{rectype = 4}\label{rectype-4}
 
 Ricker relationship.
 
@@ -753,12 +736,14 @@ Ricker relationship.
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\NormalTok{  estparams\_0 }\OtherTok{\textless{}{-}}\NormalTok{ estparams}
+\NormalTok{  estparams\_0}\SpecialCharTok{$}\NormalTok{beta }\OtherTok{\textless{}{-}}\NormalTok{ estparams\_0}\SpecialCharTok{$}\NormalTok{lambda }\OtherTok{\textless{}{-}} \ConstantTok{FALSE}
   \CommentTok{\# makeDat will make the input values, data, and phases for the model:}
 \NormalTok{  datlist  }\OtherTok{\textless{}{-}}  \FunctionTok{makeDat}\NormalTok{(}
                     \AttributeTok{rectype    =}  \DecValTok{4}\NormalTok{,}
                     \AttributeTok{tauIN      =}  \DecValTok{0}\NormalTok{,}
                     \AttributeTok{sigMethod  =}  \DecValTok{1}\NormalTok{, }\CommentTok{\# (default, no random effects)}
-                    \AttributeTok{estparams  =}\NormalTok{  estparams,}
+                    \AttributeTok{estparams  =}\NormalTok{  estparams\_0,}
                     \AttributeTok{estMode    =}  \DecValTok{1}\NormalTok{,}
                     \AttributeTok{rec\_years  =}\NormalTok{  rec}\SpecialCharTok{$}\NormalTok{rec\_year,}
                     \AttributeTok{Rec        =}\NormalTok{  rec}\SpecialCharTok{$}\NormalTok{Robs,}
@@ -780,7 +765,7 @@ Ricker relationship.
 \NormalTok{  dfR4    }\OtherTok{\textless{}{-}}  \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{model =} \StringTok{"Rec 4"}\NormalTok{,}
                      \AttributeTok{estimate  =} \FunctionTok{as.vector}\NormalTok{(mm}\SpecialCharTok{$}\NormalTok{sim),}
                      \AttributeTok{parameter =} \FunctionTok{names}\NormalTok{( mm}\SpecialCharTok{$}\NormalTok{mle)[}\FunctionTok{row}\NormalTok{(mm}\SpecialCharTok{$}\NormalTok{sim)])}
-\NormalTok{  df      }\OtherTok{\textless{}{-}} \FunctionTok{rbind}\NormalTok{(df,dfR3)}
+\NormalTok{  df      }\OtherTok{\textless{}{-}} \FunctionTok{rbind}\NormalTok{(dfR4)}
 \NormalTok{  r4\_fit  }\OtherTok{\textless{}{-}} \FunctionTok{getFit}\NormalTok{(mm, }\AttributeTok{nm =} \StringTok{"recType = 4"}\NormalTok{)}
 \NormalTok{  rec\_fit }\OtherTok{\textless{}{-}} \FunctionTok{rbind}\NormalTok{(rec\_fit,r4\_fit)}
  \FunctionTok{rm}\NormalTok{(mm)}
@@ -794,9 +779,8 @@ Ricker relationship.
 
 \includegraphics[width=0.6\textwidth,height=\textheight]{../Figs/recplot4.jpg}
 
-\hypertarget{rectype-4-with-covariates}{%
 \subsubsection{rectype = 4 with
-covariates}\label{rectype-4-with-covariates}}
+covariates}\label{rectype-4-with-covariates}
 
 Ricker relationship fit with covariates on pre-spawning success and
 post-spawning survival.
@@ -806,9 +790,13 @@ post-spawning survival.
 \begin{Shaded}
 \begin{Highlighting}[]
   \CommentTok{\# read in the data and create a datlist (rather than hand code it)}
-\NormalTok{  datlist }\OtherTok{\textless{}{-}} \FunctionTok{makefutR\_data}\NormalTok{(}\StringTok{"data/in/futR\_Inputs.xlsx"}\NormalTok{ )}
-  
-  
+  \CommentTok{\#datlist \textless{}{-} makefutR\_data("data/in/futR\_Inputs.xlsx" )}
+\NormalTok{  datlist }\OtherTok{\textless{}{-}} \FunctionTok{makefutR\_data}\NormalTok{(}\FunctionTok{file.path}\NormalTok{(}\StringTok{"data{-}raw"}\NormalTok{,}\StringTok{"in"}\NormalTok{,}\StringTok{"futR\_Inputs.xlsx"}\NormalTok{ ))}
+
+\NormalTok{  datlist\_post }\OtherTok{\textless{}{-}}\NormalTok{ datlist}
+\NormalTok{  datlist\_pre  }\OtherTok{\textless{}{-}}\NormalTok{ datlist}
+\NormalTok{  datlist\_post}\SpecialCharTok{$}\NormalTok{estparams[}\StringTok{"beta"}\NormalTok{] }\OtherTok{\textless{}{-}} \ConstantTok{FALSE}
+\NormalTok{  datlist\_pre}\SpecialCharTok{$}\NormalTok{estparams[}\StringTok{"lambda"}\NormalTok{] }\OtherTok{\textless{}{-}} \ConstantTok{FALSE}
   \CommentTok{\# run the basic model}
 \NormalTok{  Rec4\_covar }\OtherTok{\textless{}{-}}\NormalTok{  mm }\OtherTok{\textless{}{-}}\FunctionTok{runRecMod}\NormalTok{(}\AttributeTok{dlistIN   =}\NormalTok{ datlist,}
                           \AttributeTok{version   =} \StringTok{\textquotesingle{}futR\textquotesingle{}}\NormalTok{,                           }
@@ -821,10 +809,48 @@ post-spawning survival.
 \NormalTok{  dfR4\_c    }\OtherTok{\textless{}{-}}  \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{model =} \StringTok{"Rec 4 with covar"}\NormalTok{,}
                      \AttributeTok{estimate  =} \FunctionTok{as.vector}\NormalTok{(mm}\SpecialCharTok{$}\NormalTok{sim),}
                      \AttributeTok{parameter =} \FunctionTok{names}\NormalTok{( mm}\SpecialCharTok{$}\NormalTok{mle)[}\FunctionTok{row}\NormalTok{(mm}\SpecialCharTok{$}\NormalTok{sim)])}
-\NormalTok{  df      }\OtherTok{\textless{}{-}} \FunctionTok{rbind}\NormalTok{(dfR4,dfR4\_c)}
-\NormalTok{  r4\_fit\_c  }\OtherTok{\textless{}{-}} \FunctionTok{getFit}\NormalTok{(mm, }\AttributeTok{nm =} \StringTok{"recType = 4 with covar"}\NormalTok{)}
-\NormalTok{  rec\_fit }\OtherTok{\textless{}{-}} \FunctionTok{rbind}\NormalTok{(r4\_fit,r4\_fit\_c)}
- \FunctionTok{rm}\NormalTok{(mm)}
+\NormalTok{  df        }\OtherTok{\textless{}{-}} \FunctionTok{rbind}\NormalTok{(dfR4,dfR4\_c)}
+\NormalTok{  r4\_fit\_c  }\OtherTok{\textless{}{-}} \FunctionTok{getFit}\NormalTok{(mm, }\AttributeTok{nm =} \StringTok{"recType = 4 with pre{-} and post{-} covar"}\NormalTok{)}
+\NormalTok{  rec\_fit   }\OtherTok{\textless{}{-}} \FunctionTok{rbind}\NormalTok{(r4\_fit,r4\_fit\_c)}
+  \FunctionTok{rm}\NormalTok{(mm)}
+  
+  
+  \CommentTok{\# run the basic model}
+\NormalTok{   mm }\OtherTok{\textless{}{-}}\FunctionTok{runRecMod}\NormalTok{(}\AttributeTok{dlistIN   =}\NormalTok{ datlist\_pre,}
+                          \AttributeTok{version   =} \StringTok{\textquotesingle{}futR\textquotesingle{}}\NormalTok{,                           }
+                          \AttributeTok{src\_fldr   =} \StringTok{"src/TMB"}\NormalTok{,}
+                          \AttributeTok{recompile =} \ConstantTok{FALSE}\NormalTok{,}
+                          \AttributeTok{simulate  =} \ConstantTok{TRUE}\NormalTok{,}
+                          \AttributeTok{sim\_nitr  =} \DecValTok{1000}\NormalTok{)}
+
+  \CommentTok{\# summarize results}
+\NormalTok{  dfR4\_c\_pre    }\OtherTok{\textless{}{-}}  \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{model =} \StringTok{"Rec 4 with covar on pre"}\NormalTok{,}
+                     \AttributeTok{estimate  =} \FunctionTok{as.vector}\NormalTok{(mm}\SpecialCharTok{$}\NormalTok{sim),}
+                     \AttributeTok{parameter =} \FunctionTok{names}\NormalTok{( mm}\SpecialCharTok{$}\NormalTok{mle)[}\FunctionTok{row}\NormalTok{(mm}\SpecialCharTok{$}\NormalTok{sim)])}
+\NormalTok{  df      }\OtherTok{\textless{}{-}} \FunctionTok{rbind}\NormalTok{(df,dfR4\_c\_pre)}
+\NormalTok{  r4\_fit\_c\_pre  }\OtherTok{\textless{}{-}} \FunctionTok{getFit}\NormalTok{(mm, }\AttributeTok{nm =} \StringTok{"recType = 4 with pre{-}covar"}\NormalTok{)}
+\NormalTok{  rec\_fit }\OtherTok{\textless{}{-}} \FunctionTok{rbind}\NormalTok{(rec\_fit,r4\_fit\_c\_pre)}
+  
+  \FunctionTok{rm}\NormalTok{(mm)}
+  \CommentTok{\# run the basic model}
+\NormalTok{   mm }\OtherTok{\textless{}{-}}\FunctionTok{runRecMod}\NormalTok{(}\AttributeTok{dlistIN   =}\NormalTok{ datlist\_post,}
+                          \AttributeTok{version   =} \StringTok{\textquotesingle{}futR\textquotesingle{}}\NormalTok{,                           }
+                          \AttributeTok{src\_fldr   =} \StringTok{"src/TMB"}\NormalTok{,}
+                          \AttributeTok{recompile =} \ConstantTok{FALSE}\NormalTok{,}
+                          \AttributeTok{simulate  =} \ConstantTok{TRUE}\NormalTok{,}
+                          \AttributeTok{sim\_nitr  =} \DecValTok{1000}\NormalTok{)}
+
+  \CommentTok{\# summarize results}
+\NormalTok{  dfR4\_c\_post    }\OtherTok{\textless{}{-}}  \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{model =} \StringTok{"Rec 4 with covar on post"}\NormalTok{,}
+                     \AttributeTok{estimate  =} \FunctionTok{as.vector}\NormalTok{(mm}\SpecialCharTok{$}\NormalTok{sim),}
+                     \AttributeTok{parameter =} \FunctionTok{names}\NormalTok{( mm}\SpecialCharTok{$}\NormalTok{mle)[}\FunctionTok{row}\NormalTok{(mm}\SpecialCharTok{$}\NormalTok{sim)])}
+\NormalTok{  df      }\OtherTok{\textless{}{-}} \FunctionTok{rbind}\NormalTok{(df,dfR4\_c\_post)}
+\NormalTok{  r4\_fit\_c\_post  }\OtherTok{\textless{}{-}} \FunctionTok{getFit}\NormalTok{(mm, }\AttributeTok{nm =} \StringTok{"recType = 4 with post{-}covar"}\NormalTok{)}
+\NormalTok{  rec\_fit }\OtherTok{\textless{}{-}} \FunctionTok{rbind}\NormalTok{(rec\_fit,r4\_fit\_c\_post)}
+  
+  \FunctionTok{rm}\NormalTok{(mm)}
+  
+  
  \ControlFlowTok{if}\NormalTok{(updatePlots)\{}
    \FunctionTok{jpeg}\NormalTok{(}\StringTok{"Figs/recplot5.jpg"}\NormalTok{, }\AttributeTok{width =}\NormalTok{ W, }\AttributeTok{height=}\NormalTok{ H1, }\AttributeTok{res =} \DecValTok{250}\NormalTok{, }\AttributeTok{units =} \StringTok{"in"}\NormalTok{)}
    \FunctionTok{print}\NormalTok{(}\FunctionTok{plot\_rs}\NormalTok{(rec\_fit))}
@@ -835,9 +861,8 @@ post-spawning survival.
 
 \includegraphics[width=0.6\textwidth,height=\textheight]{../Figs/recplot5.jpg}
 
-\hypertarget{explore-obs.-error-options}{%
 \subsection{Explore obs. error
-options}\label{explore-obs.-error-options}}
+options}\label{explore-obs.-error-options}
 
 Let's start by fitting based models (no climate covariates) with
 different options for observation error.
@@ -877,8 +902,7 @@ different options for observation error.
 Now explore different sigMethod settings starting with sigMethod = 0.
 Note comparitive plots at the bottom of each tab.
 
-\hypertarget{sigmethod-1-1}{%
-\subsubsection{sigMethod = 1}\label{sigmethod-1-1}}
+\subsubsection{sigMethod = 1}\label{sigmethod-1-1}
 
 The base model fits the lognormally distributed process error for
 recruitment (\(\sigma\)) using maximum likelihood (i.e., ordinary least
@@ -930,8 +954,7 @@ estimated for either spawners (S) or recruitment (R) estimates.
 
 \includegraphics[width=0.9\textwidth,height=\textheight]{../Figs/plotpar1.jpg}
 
-\hypertarget{sigmethod-2-1}{%
-\subsubsection{sigMethod = 2}\label{sigmethod-2-1}}
+\subsubsection{sigMethod = 2}\label{sigmethod-2-1}
 
 The base model fits the lognormally distributed process error for
 recruitment (\(\sigma\)) using maximum likelihood (i.e., ordinary least
@@ -996,8 +1019,7 @@ distributed observation error as:
 
 \includegraphics[width=0.9\textwidth,height=\textheight]{../Figs/plotpar2.jpg}
 
-\hypertarget{sigmethod-3-1}{%
-\subsubsection{sigMethod = 3}\label{sigmethod-3-1}}
+\subsubsection{sigMethod = 3}\label{sigmethod-3-1}
 
 As in sigMethod = 2, except when sigMethod = 3 \(\sigma\) is estimated
 using the unbiased sigma estimate (sensu Ludwig and Walters 1982):
@@ -1056,8 +1078,7 @@ where
 
 \includegraphics[width=0.9\textwidth,height=\textheight]{../Figs/plotpar3.jpg}
 
-\hypertarget{sigmethod-4-1}{%
-\subsubsection{sigMethod = 4}\label{sigmethod-4-1}}
+\subsubsection{sigMethod = 4}\label{sigmethod-4-1}
 
 As in sigMethod = 2 with observation error (random effects) on S if
 \(\tau >0\), but with defined measurement error (\(\gamma_{R,i}\)) for
@@ -1114,8 +1135,7 @@ that:
 
 \includegraphics[width=0.9\textwidth,height=\textheight]{../Figs/plotpar4.jpg}
 
-\hypertarget{sigmethod-5-1}{%
-\subsubsection{sigMethod = 5}\label{sigmethod-5-1}}
+\subsubsection{sigMethod = 5}\label{sigmethod-5-1}
 
 As in sigMethod = 2 with observation error (random effects) on S and R
 if \(\tau >0\), but with defined measurement errors (\(\gamma_{R,i}\)

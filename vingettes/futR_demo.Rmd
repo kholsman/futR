@@ -2,14 +2,14 @@
 title: "futR()"
 author: "Kirstin Holsman"
 output:
-  html_document:
-    df_print: paged
-    toc: true
-    toc_depth: 4
-    number_sections: true
-    toc_float:
-      collapsed: false
-      smooth_scroll: true
+  pdf_document:
+    toc: TRUE
+    fig_caption: yes
+    fig_height: 4
+    fig_width: 5
+    highlight: tango
+    keep_tex: yes
+    latex_engine: xelatex
   header-includes:
   - \usepackage{knputenc}
   - \usepackage{unicode-math}
@@ -20,14 +20,14 @@ output:
     fig_caption: yes
     fig_width: 4
     keep_md: yes
-  pdf_document:
-    toc: TRUE
-    fig_caption: yes
-    fig_height: 4
-    fig_width: 5
-    highlight: tango
-    keep_tex: yes
-    latex_engine: xelatex
+  html_document:
+    df_print: paged
+    toc: true
+    toc_depth: 4
+    number_sections: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
 ---
 
 
@@ -69,6 +69,11 @@ NOAA Fisheries, Seattle WA
 <!-- *Last updated: `r today`*   -->
    
 ---
+
+
+![](../Figs/futR_icon.png){width=25%}
+
+
 
 <!-- # Overview {.tabset .tabset-dropdown} -->
 # Overview

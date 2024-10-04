@@ -13,9 +13,11 @@ Repo maintained by: Kirstin Holsman
 Alaska Fisheries Science Center  
 NOAA Fisheries, Seattle WA  
 **<kirstin.holsman@noaa.gov>**  
-<!-- *Last updated: Nov 29, 2023*   -->
+<!-- *Last updated: Oct 04, 2024*   -->
 
 ------------------------------------------------------------------------
+
+<img src="../Figs/futR_icon.png" style="width:25.0%" />
 
 <!-- # Overview {.tabset .tabset-dropdown} -->
 
@@ -95,15 +97,15 @@ recruitment, and *θ*<sup>*β*</sup> is a binary vector of length
 
 $$\mathbf{X} = \left\[\begin{array}
 {rrr}
-x\_{1,1} & \dots  & b\_{1,n_y} \\\\
-\vdots & \ddots & \vdots \\\\
+x\_{1,1} & \dots  & b\_{1,n_y} \\
+\vdots & \ddots & \vdots \\
 x\_{n_k,1} & \dots  & x\_{n_k,n_y} 
 \end{array}\right\]
-,\\; \mathbf{\beta} = \left\[\begin{array}
+,\\ \mathbf{\beta} = \left\[\begin{array}
 {rrr}
-\beta_1 \\\\
-\vdots  \\\\
-\beta\_{n_k} \\\\
+\beta_1 \\
+\vdots  \\
+\beta\_{n_k} \\
 \end{array}\right\]
 $$
 
@@ -129,21 +131,21 @@ recommended $\hat{R_i}\sim0$ as $\hat{S_i}\to0$)
 
 $$\mathbf{X} = \left\[\begin{array}
 {rrr}
-x\_{1,1} & \dots  & b\_{1,n_y} \\\\
-\vdots & \ddots & \vdots \\\\
+x\_{1,1} & \dots  & b\_{1,n_y} \\
+\vdots & \ddots & \vdots \\
 x\_{n_k,1} & \dots  & x\_{n_k,n_y} 
-\end{array}\right\],\\; 
+\end{array}\right\],\\ 
 \mathbf{\beta} = \left\[\begin{array}
 {rrr}
-\beta_1 \\\\
-\vdots  \\\\
-\beta\_{n_k} \\\\
-\end{array}\right\],\\; 
+\beta_1 \\
+\vdots  \\
+\beta\_{n_k} \\
+\end{array}\right\],\\ 
 \mathbf{\lambda} = \left\[\begin{array}
 {rrr}
-\lambda_1 \\\\
-\vdots  \\\\
-\lambda\_{n_k}\\\\
+\lambda_1 \\
+\vdots  \\
+\lambda\_{n_k}\\
 \end{array}\right\]
 $$
 
@@ -182,21 +184,21 @@ binary vectors of length *n*<sub>*k*</sub> of covariate inclusion (i.e.,
 
 $$\mathbf{X} = \left\[\begin{array}
 {rrr}
-x\_{1,1} & \dots  & b\_{1,n_y} \\\\
-\vdots & \ddots & \vdots \\\\
+x\_{1,1} & \dots  & b\_{1,n_y} \\
+\vdots & \ddots & \vdots \\
 x\_{n_k,1} & \dots  & x\_{n_k,n_y}
-\end{array}\right\],\\;
+\end{array}\right\],\\
 \mathbf{\beta} = \left\[\begin{array}
 {rrr}
-\beta_1 \\\\
-\vdots  \\\\
-\beta\_{n_k} \\\\
-\end{array}\right\],\\;
+\beta_1 \\
+\vdots  \\
+\beta\_{n_k} \\
+\end{array}\right\],\\
 \mathbf{\lambda} = \left\[\begin{array}
 {rrr}
-\lambda_1 \\\\
-\vdots  \\\\
-\lambda\_{n_k}\\\\
+\lambda_1 \\
+\vdots  \\
+\lambda\_{n_k}\\
 \end{array}\right\]
 $$
 
@@ -238,21 +240,21 @@ covariate effects on pre- and post-spawning success, respectively,and
 
 $$\mathbf{X} = \left\[\begin{array}
 {rrr}
-x\_{1,1} & \dots  & b\_{1,n_y} \\\\
-\vdots & \ddots & \vdots \\\\
+x\_{1,1} & \dots  & b\_{1,n_y} \\
+\vdots & \ddots & \vdots \\
 x\_{n_k,1} & \dots  & x\_{n_k,n_y}
-\end{array}\right\],\\;
+\end{array}\right\],\\
 \mathbf{\beta} = \left\[\begin{array}
 {rrr}
-\beta_1 \\\\
-\vdots  \\\\
-\beta\_{n_k} \\\\
-\end{array}\right\],\\;
+\beta_1 \\
+\vdots  \\
+\beta\_{n_k} \\
+\end{array}\right\],\\
 \mathbf{\lambda} = \left\[\begin{array}
 {rrr}
-\lambda_1 \\\\
-\vdots  \\\\
-\lambda\_{n_k}\\\\
+\lambda_1 \\
+\vdots  \\
+\lambda\_{n_k}\\
 \end{array}\right\]
 $$
 
@@ -373,14 +375,14 @@ The base function for fitting recruitment requires a data.frame of
 recruitment and spawning biomass:
 
 ``` r
-  # rm(list=ls()); setwd("/Users/kholsman/Documents/GitHub/futR")
+  # rm(list=ls()); setwd("/Volumes/LaCie/GitHub_cloud/futR")
   #___________________________________________
   # 1. Set things up
   #___________________________________________
   # rm(list=ls()) ; dir()
 
   # load data, packages, setup, etc.
-  source("R/01_make.R")
+  source(file.path("R","01_make.R"))
 
   #___________________________________________
   # 2. Compile futR (first time through - can skip this step after )
@@ -402,8 +404,8 @@ instructions [here](https://cran.r-project.org/bin/windows/Rtools/).*
 
 ``` r
  # read in the data and create a datlist
-  datlist <- makefutR_data("data/in/futR_Inputs.xlsx" )
-  
+  datlist <- makefutR_data(file.path("data-raw","in","futR_Inputs.xlsx" ))
+
   # recruitment data:
   datlist$rs_dat$R_obs
   datlist$rs_dat$S_obs
@@ -416,19 +418,18 @@ instructions [here](https://cran.r-project.org/bin/windows/Rtools/).*
   # which parameters to estimate with futR?
   datlist$estparams
   
-  # starting values? 
+  # starting values
   datlist$parameters
   
-  # parameter map:
+  # parameter map
   datlist$maplist
   
-  # which phases to estimate in (not yet coded up)
+  # which phases to estimate in  
   datlist$phases
 
  
   # set some global values for the demo below:
   estparams <-  datlist$estparams[1:6]
-  rec       <-  data.frame(readxl::read_xlsx("data/in/futR_Inputs.xlsx" , sheet = "rec_data" ))
 ```
 
 ## Explore recruitment models
@@ -593,12 +594,14 @@ Ricker relationship.
 $$\mathrm{ln}\hat{R_i}= \left(a+ \sum\_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X\_{k,i}} \right)-\left(b+ \sum\_{k=1}^{n_k}{\theta_i^{\lambda}\lambda_k X\_{k,i}}\right)\hat{S_i}+\mathrm{ln}\hat{S_i}+\varepsilon_i $$
 
 ``` r
+  estparams_0 <- estparams
+  estparams_0$beta <- estparams_0$lambda <- FALSE
   # makeDat will make the input values, data, and phases for the model:
   datlist  <-  makeDat(
                     rectype    =  4,
                     tauIN      =  0,
                     sigMethod  =  1, # (default, no random effects)
-                    estparams  =  estparams,
+                    estparams  =  estparams_0,
                     estMode    =  1,
                     rec_years  =  rec$rec_year,
                     Rec        =  rec$Robs,
@@ -620,7 +623,7 @@ $$\mathrm{ln}\hat{R_i}= \left(a+ \sum\_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X\_{k
   dfR4    <-  data.frame(model = "Rec 4",
                      estimate  = as.vector(mm$sim),
                      parameter = names( mm$mle)[row(mm$sim)])
-  df      <- rbind(df,dfR3)
+  df      <- rbind(dfR4)
   r4_fit  <- getFit(mm, nm = "recType = 4")
   rec_fit <- rbind(rec_fit,r4_fit)
  rm(mm)
@@ -644,9 +647,13 @@ $$\mathrm{ln}\hat{R_i}= \left(a+ \sum\_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X\_{k
 
 ``` r
   # read in the data and create a datlist (rather than hand code it)
-  datlist <- makefutR_data("data/in/futR_Inputs.xlsx" )
-  
-  
+  #datlist <- makefutR_data("data/in/futR_Inputs.xlsx" )
+  datlist <- makefutR_data(file.path("data-raw","in","futR_Inputs.xlsx" ))
+
+  datlist_post <- datlist
+  datlist_pre  <- datlist
+  datlist_post$estparams["beta"] <- FALSE
+  datlist_pre$estparams["lambda"] <- FALSE
   # run the basic model
   Rec4_covar <-  mm <-runRecMod(dlistIN   = datlist,
                           version   = 'futR',                           
@@ -659,10 +666,48 @@ $$\mathrm{ln}\hat{R_i}= \left(a+ \sum\_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X\_{k
   dfR4_c    <-  data.frame(model = "Rec 4 with covar",
                      estimate  = as.vector(mm$sim),
                      parameter = names( mm$mle)[row(mm$sim)])
-  df      <- rbind(dfR4,dfR4_c)
-  r4_fit_c  <- getFit(mm, nm = "recType = 4 with covar")
-  rec_fit <- rbind(r4_fit,r4_fit_c)
- rm(mm)
+  df        <- rbind(dfR4,dfR4_c)
+  r4_fit_c  <- getFit(mm, nm = "recType = 4 with pre- and post- covar")
+  rec_fit   <- rbind(r4_fit,r4_fit_c)
+  rm(mm)
+  
+  
+  # run the basic model
+   mm <-runRecMod(dlistIN   = datlist_pre,
+                          version   = 'futR',                           
+                          src_fldr   = "src/TMB",
+                          recompile = FALSE,
+                          simulate  = TRUE,
+                          sim_nitr  = 1000)
+
+  # summarize results
+  dfR4_c_pre    <-  data.frame(model = "Rec 4 with covar on pre",
+                     estimate  = as.vector(mm$sim),
+                     parameter = names( mm$mle)[row(mm$sim)])
+  df      <- rbind(df,dfR4_c_pre)
+  r4_fit_c_pre  <- getFit(mm, nm = "recType = 4 with pre-covar")
+  rec_fit <- rbind(rec_fit,r4_fit_c_pre)
+  
+  rm(mm)
+  # run the basic model
+   mm <-runRecMod(dlistIN   = datlist_post,
+                          version   = 'futR',                           
+                          src_fldr   = "src/TMB",
+                          recompile = FALSE,
+                          simulate  = TRUE,
+                          sim_nitr  = 1000)
+
+  # summarize results
+  dfR4_c_post    <-  data.frame(model = "Rec 4 with covar on post",
+                     estimate  = as.vector(mm$sim),
+                     parameter = names( mm$mle)[row(mm$sim)])
+  df      <- rbind(df,dfR4_c_post)
+  r4_fit_c_post  <- getFit(mm, nm = "recType = 4 with post-covar")
+  rec_fit <- rbind(rec_fit,r4_fit_c_post)
+  
+  rm(mm)
+  
+  
  if(updatePlots){
    jpeg("Figs/recplot5.jpg", width = W, height= H1, res = 250, units = "in")
    print(plot_rs(rec_fit))
