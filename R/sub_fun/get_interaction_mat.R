@@ -1,7 +1,6 @@
-#'
-#'
-#'
-#'get_interaction_mat.R
+#' get_interaction_mat.R
+#' 
+#' Function to get the interaction matrix for env covariates
 #'
 #'@param covIN    covars (matrix with cols for each covar) e.g., pre_spawning_covs[,-1]
 #'@param maxIN    max number of interactions
@@ -9,7 +8,10 @@
 #'@param cor_cutoff  cut off value for correlation matrix (e.g., 0.5), those with cor > than this value will be excluded
 #' get full set of 4 interactions (max_interactions)
 #' returns a list with data.frames of all possible combinations
-
+#' @export
+#'
+#' @examples
+#' 
 get_interaction_mat<-function(covIN, maxIN,ADDTEMP2=TRUE,cor_cutoff=0.5){
   mod_mat <- list()
   cor_mat <- abs(cor(covIN,covIN))

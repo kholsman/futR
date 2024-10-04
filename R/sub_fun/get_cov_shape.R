@@ -1,7 +1,25 @@
+#' get_cov_shape.R
 #'
+#' This is the description.
 #'
+#' These are further details.
 #'
-#'get_cov_shape.R
+#' @section A Custom Section:
+#'
+#' Text accompanying the custom section.
+#'
+#' @param AIC_summryIN summary table input
+#' @param s species number; default = 1
+#' @param SD_range  ; default = 3
+#' @param simulateIN T/F default = F
+#' @param sim_nitrIN number of iterations for the simulation, 
+#'      used if simulateIN == T, default = 200
+#' @param futR_path local file path for the futR directory
+#' @returns The sum of `x` and `y`.
+#' @export
+#'
+#' @examples
+#'
 #'
   get_cov_shape <- function(
                       AIC_summryIN,
@@ -9,7 +27,7 @@
                       SD_range =3,
                       simulateIN=F,
                       sim_nitrIN = 200,
-                      futR_path = "../../futR/"){
+                      futR_path = file.path("..","..","futR")){
     
       tmdir <- getwd()
       setwd(futR_path)

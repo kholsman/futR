@@ -1,8 +1,25 @@
+#' get_SSB_shape.R
 #'
+#' get the SSB / R shape
 #'
+#' @param x A description of the parameter 'x'. The
+#'   description can span multiple lines.
+#' @param y A description of the parameter 'y'
+#' @param AIC_summryIN ,
+#' @param simname = "hindcast 2020",
+#' @param SD_range = 7,
+#' @param modIN = AIC_summry[[1]]$topRicker_R2,
+#' @param recfitIN = AIC_summry[[1]]$topRicker_R2_rec_fit,
+#' @param simulateIN= F,
+#' @param sim_nitrIN = 200,
+#' @param NewCovsIN =hind%>%filter(year==2020)%>%data.frame(), 
+#' @param steps   = 100,
+#' @param futR_path = "../../futR")
+#' 
+#' @returns The sum of `x` and `y`.
+#' @export
 #'
-#'get_SSB_shape.R
-#'
+#' @examples
 
 get_SSB_shape <- function(
     AIC_summryIN,

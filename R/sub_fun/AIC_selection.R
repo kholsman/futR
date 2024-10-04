@@ -1,9 +1,7 @@
-#-------------------------------------
-# AICselection
-#-------------------------------------
+#' AICselection
+#'
 #' AICselection runs AIC information criterion analysis on resulting set of recruitment models
-#' For more information contact  Kirstin Holsman (kirstin.holsman@noaa.gov)
-#' @weblink 
+#' 
 #' @param data data.frame with models = rows and the following data for each model (columns):
 #' * data$LL  vector of logliklihoods of each model
 #' * data$npar number of parameteris in a given model
@@ -15,9 +13,13 @@
 #' @param LnDet default = NULL
 #' @param CE Climate enhanced model? default = NULL
 #'    list of input data from makeDat() function: "parameters" "rs_dat"     "maplist"    "estparams"  "phases"  
-#' @return   tmp1 a dataframe of summary statistics for AICc of submodels         
-#' @examples
+#' @return   a dataframe of summary statistics for AICc of submodels         
+#' 
 #' @export
+#'
+#'@examples
+#' 
+#' 
 AICselection <- function (LL, 
                           npar, 
                           n, 

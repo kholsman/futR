@@ -1,11 +1,21 @@
-#'
-#'
 #' get_model.R
 #' 
 #' get the model from the meta evaluation 
 #' 
-
-
+#' @param mod The model name
+#' @param recIN recruitment values input
+#' @param simulateIN T/F simulate random noise? default = FALSE,
+#' @param sim_nitrIN if simulateIN == T, number of random draws, default =  1000,
+#' @param futR_fldr  local path for tht futR directory, default =   NULL,
+#' @param phasesIN   number of phases default =  phases
+#' 
+#' @returns List with two objects : lobject and dlist
+#' 
+#' @export
+#'
+#' @examples
+#' 
+#' 
 get_model <- function(
     mod        ,
     recIN      ,

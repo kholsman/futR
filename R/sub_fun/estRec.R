@@ -1,6 +1,4 @@
-#-------------------------------------
-# estRec
-#-------------------------------------
+#'
 #' estRec estimate recruitment with options for phasing
 #'
 #' This function prepares the ceattle estimated data for futR
@@ -9,7 +7,11 @@
 #' @param datlistIN   list of input data from makeDat() function: "parameters" "rs_dat"     "maplist"    "estparams"  "phases"  
 #' @param returnAll   return all phases? TRUE/FALSE
 #' @param quiet       print out phases
+#' 
+#' @returns a list with final (final phase) dlistfinal, dlist (all phases), phase
+#' 
 #' @export            
+#' 
 #' @examples
 #' mod<-estRec(dataINUSE  =  dataIN_admb)
 #' 

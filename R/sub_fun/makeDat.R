@@ -2,22 +2,33 @@
 #'
 #' This function prepares the ceattle estimated data for futR
 #' For more information contact author Kirstin Holsman (kirstin.holsman@noaa.gov)
-#' @weblink 
+#'  
+#' @param estMode     estimation mode, 0 = don't est, 1 = estimate par
 #' @param rec_years   required 'years' that match SSB and Rec vectors
 #' @param SSB         required vector of SSB (usually previous yr if Rec = age 1)
 #' @param Rec         required vector of Rec (usually previous yr if Rec = age 1)
 #' @param sdRec       optional sd of rec vector 
 #' @param sdSSB       optional sd of SSB vector a
-#' @param sigMethod   if set to 2 it will not estimate logsigma
-#' @param rectype      default is 3; Recruitment model formulation based Climate enhanced Rec~SSB functions from Holsman et al. 2019; 1 = Linear with biomass (y-1), 2 =  linear, 3 = Beverton holt, 4 = Ricker
-#' @param estparams   TRUE / FALSE for if parm will be estimated (default is init vals) c(log_a = TRUE, log_b=TRUE, rs_parm=FALSE, logsigma=TRUE)
+#' @param sigMethod   default = 1, if set to 2 it will not estimate logsigma
+#' @param rectype     default is 3; Recruitment model formulation based Climate enhanced Rec~SSB functions from Holsman et al. 2019; 
+#'  1 = Linear with biomass (y-1), 
+#'  2 =  linear, 
+#'  3 = Beverton holt, 
+#'  4 = Ricker
+#' @param estparams   vector of TRUE / FALSE for each parm,  if parm will be estimated (default is init vals) c(log_a = TRUE, log_b=TRUE, rs_parm=FALSE, logsigma=TRUE)
 #' @param covars      default is NULL; data.frame of covariates (rows) of z-score scaled environmental covariates to evaluate in Rec for each year (columns). Must match  Rec and SSB row index
 #' @param covars_sd   default is NULL; data.frame of sd for covariates (rows) of z-score scaled environmental covariates to evaluate in Rec for each year (columns). Must match Rec and SSB row index
-#' @param startVal    default is NULL; starting values for parameters can be a subset list but names must match
-#' @param phases      default is 1 for all parms except sigma (phase 2), but can be specified.
-#' @param fityrs      default is NULL; which years to fit (can be all or subset for out of sample analyses)
-#' @param REcompile   default is TRUE; if true will recompile futR.cpp in TMB TRUE/FALSE
-#' @export            list with :
+#' @param beta_0    = NULL,
+#' @param lambda_0  = NULL
+#' @param startVal default is NULL; starting values for parameters can be a subset list but names must match
+#' @param phases default is 1 for all parms except sigma (phase 2), but can be specified.
+#' @param fityrs default is NULL; which years to fit (can be all or subset for out of sample analyses)
+#' @param REcompile default is TRUE; if true will recompile futR.cpp in TMB TRUE/FALSE
+#' @param sigMethod sigma R method
+#' 
+#' @export
+#' 
+#' @returns list with :
 #' *  parameters      list of parameters and starting vlaues
 #' *  rs_dat          data.frame data.frame of 'years', 'SSB', 'R_obs' and optionally, 'sdSSB','sdR_obs'
 #' *  maplist         list with map values for calling tmb
