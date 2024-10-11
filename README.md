@@ -19,7 +19,7 @@ NOAA Fisheries, Seattle WA
 
 github repo: <https://github.com/kholsman/futR>
 
-<img src="Figs/futR_icon.png" style="width:25.0%" />
+<img src="Figs/futR_icon.png" style="width:.25" />
 
 <!-- # Overview {.tabset .tabset-dropdown} -->
 
