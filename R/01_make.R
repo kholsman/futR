@@ -1,7 +1,7 @@
 # ----------------------------------------
 # make.R
 # subset of Holsman et al. 2022 
-# kirstin.holsman@noaa.gov
+# kirstin.holsman at noaa.gov
 # updated 2022
 # ----------------------------------------
 cat("-- loading packages ...\n")

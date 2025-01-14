@@ -1,10 +1,8 @@
-#' get_SSB_shape.R
+#' get the shape of the recruitment curve
 #'
-#' get the SSB / R shape
-#'
-#' @param x A description of the parameter 'x'. The
-#'   description can span multiple lines.
-#' @param y A description of the parameter 'y'
+#' This function will get the SSB R shape
+#' For more information contact author Kirstin Holsman (kirstin.holsman at noaa.gov)
+#' 
 #' @param AIC_summryIN ,
 #' @param simname = "hindcast 2020",
 #' @param SD_range = 7,

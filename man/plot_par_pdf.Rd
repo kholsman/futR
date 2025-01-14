@@ -19,7 +19,7 @@ list
 plot the pdf of each parameter estimated in the model
 }
 \details{
-For more information contact author Kirstin Holsman (kirstin.holsman@noaa.gov)
+For more information contact author Kirstin Holsman (kirstin.holsman at noaa.gov)
 }
 \examples{
 # read in the data

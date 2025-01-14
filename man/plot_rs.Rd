@@ -18,7 +18,7 @@ list
 }
 \description{
 plot the recruitment model in two panels a) R~f(S) and b) R~f(Year)
-For more information contact author Kirstin Holsman (kirstin.holsman@noaa.gov)
+For more information contact author Kirstin Holsman (kirstin.holsman at noaa.gov)
 }
 \examples{
 # read in the data

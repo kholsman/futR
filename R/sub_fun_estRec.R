@@ -2,7 +2,7 @@
 #' estRec estimate recruitment with options for phasing
 #'
 #' This function prepares the ceattle estimated data for futR
-#' For more information contact author Kirstin Holsman (kirstin.holsman@noaa.gov)
+#' For more information contact author Kirstin Holsman (kirstin.holsman at noaa.gov)
 #'  
 #' @param datlistIN   list of input data from makeDat() function: "parameters" "rs_dat"     "maplist"    "estparams"  "phases"  
 #' @param returnAll   return all phases? TRUE/FALSE

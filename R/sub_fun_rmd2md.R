@@ -4,7 +4,7 @@
 #'
 #' 
 #' 
-#' For more information contact author Kirstin Holsman (kirstin.holsman@noaa.gov)
+#' For more information contact author Kirstin Holsman (kirstin.holsman at noaa.gov)
 #'  
 #' @param rmd_fl name of the markdown file (without the .Rmd)
 #' @param md_fl  name of the output; default is 'README'

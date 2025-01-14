@@ -1,7 +1,7 @@
 #' makeDat set up data list and map for futR
 #'
 #' This function prepares the ceattle estimated data for futR
-#' For more information contact author Kirstin Holsman (kirstin.holsman@noaa.gov)
+#' For more information contact author Kirstin Holsman (kirstin.holsman at noaa.gov)
 #'  
 #' @param estMode     estimation mode, 0 = don't est, 1 = estimate par
 #' @param rec_years   required 'years' that match SSB and Rec vectors
@@ -37,6 +37,8 @@
 #' *  inputs          List of inputs to makeDat()
 #' @examples
 #'  makeDat()
+#'  
+
 makeDat <- function(
   estMode = 1,  # estimate parameters
   rec_years,
@@ -54,7 +56,7 @@ makeDat <- function(
     beta         = FALSE,
     lambda       = TRUE,
     epsi_s       = FALSE,
-    logsigma     = TRUE),
+    logsigma     = TRUE), 
   covars    = NULL,
   covars_sd = NULL,
   beta_0    = NULL,
@@ -67,9 +69,10 @@ makeDat <- function(
   
   if(tauIN == 0) 
     tauIN <- 1e-3  # tau = 0 returns NAN
+    datIN <- data.frame(rec_years,SSB,Rec,sdSSB,sdRec)
 
     inputs<-list(
-      dataIN     = data.frame(rec_years,SSB,Rec,sdSSB,sdRec), 
+      dataIN     = datIN, 
       rectype    = rectype,
       tauIN      = tauIN,
       estparams  = estparams,

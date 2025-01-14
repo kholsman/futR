@@ -1,7 +1,7 @@
 # ----------------------------------------
 # load_data.R
 # subset of futR
-# kirstin.holsman@noaa.gov
+# kirstin.holsman at noaa.gov
 # updated 2020
 # ----------------------------------------
 

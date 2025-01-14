@@ -2,7 +2,7 @@
 % Please edit documentation in R/sub_fun_profile_SSB.R
 \name{profile_ssb}
 \alias{profile_ssb}
-\title{profile_SSB.R}
+\title{profile the SSB to get partial effects}
 \usage{
 profile_ssb(
   cov_nm_list = c("Spring_temp_surface5m", "Summer_temp_surface5m",

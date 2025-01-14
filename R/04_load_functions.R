@@ -5,7 +5,7 @@
 #'  ----------------------------------------
 #' load_functions.R
 #' subset of futR
-#' kirstin.holsman@noaa.gov
+#' kirstin.holsman at noaa.gov
 #' updated 2024
 #' ----------------------------------------
 #' 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/sub_fun_get_SSB_shape.R
 \name{get_SSB_shape}
 \alias{get_SSB_shape}
-\title{get_SSB_shape.R}
+\title{get the shape of the recruitment curve}
 \usage{
 get_SSB_shape(
   AIC_summryIN,
@@ -36,18 +36,14 @@ get_SSB_shape(
 
 \item{futR_path}{= "../../futR")}
 
-\item{x}{A description of the parameter 'x'. The
-description can span multiple lines.}
-
-\item{y}{A description of the parameter 'y'}
-
 \item{simulateIN=}{F,}
 }
 \value{
 The sum of `x` and `y`.
 }
 \description{
-get the SSB / R shape
+This function will get the SSB R shape
+For more information contact author Kirstin Holsman (kirstin.holsman at noaa.gov)
 }
 \examples{
 get_SSB_shape()

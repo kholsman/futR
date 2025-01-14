@@ -1,13 +1,13 @@
 #' extract the model fits from the runmod() results
 #'
 #' This function prepares data for plot_rs()
-#' For more information contact author Kirstin Holsman (kirstin.holsman@noaa.gov)
+#' For more information contact author Kirstin Holsman (kirstin.holsman at noaa.gov)
 #' 
 #' @param mm  output from the model
 #' @param nm  model name to assign to the model
 #' 
 #' @returns maplist a list with map values
-
+#' 
 #' @export 
 #' 
 #' @examples

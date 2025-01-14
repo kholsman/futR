@@ -17,7 +17,7 @@ makeMap will create a map list for reading into the runmod() function
 \details{
 This function prepares the estimated data for futR
 This function is a subset of makeDat()
-For more information contact author Kirstin Holsman (kirstin.holsman@noaa.gov)
+For more information contact author Kirstin Holsman (kirstin.holsman at noaa.gov)
 }
 \examples{
 

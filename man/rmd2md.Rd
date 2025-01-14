@@ -15,7 +15,7 @@ rmd2md(rmd_fl, md_fl = "README")
 convert markdown doc to readme file for github
 }
 \details{
-For more information contact author Kirstin Holsman (kirstin.holsman@noaa.gov)
+For more information contact author Kirstin Holsman (kirstin.holsman at noaa.gov)
 }
 \examples{
 # convert the mymarkdown.Rmd to README.md

@@ -16,7 +16,7 @@ list
 recompiles the model
 }
 \details{
-For more information contact author Kirstin Holsman (kirstin.holsman@noaa.gov)
+For more information contact author Kirstin Holsman (kirstin.holsman at noaa.gov)
 }
 \examples{
 recompile(model="futR")

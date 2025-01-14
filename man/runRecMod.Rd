@@ -76,7 +76,7 @@ returns  summary of the model including the mle
 }
 \description{
 runRecMod() will run the futR() recruitment model
-For more information contact author Kirstin Holsman (kirstin.holsman@noaa.gov)
+For more information contact author Kirstin Holsman (kirstin.holsman at noaa.gov)
 }
 \examples{
 datlist <- readMake_futR_data("data/in/futR_Inputs.xlsx" )

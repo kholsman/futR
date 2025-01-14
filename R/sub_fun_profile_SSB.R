@@ -1,6 +1,5 @@
-#'profile_SSB.R
-#' 
 #' profile the SSB to get partial effects
+#' 
 #' 
 #' @param cov_nm_list = c("Spring_temp_surface5m","Summer_temp_surface5m","Winter_temp_bottom5m"),
 #' @param nameIN      = "hindcast 2020",

@@ -2,7 +2,7 @@
 #' 
 #' plot the pdf of each parameter estimated in the model
 #' 
-#' For more information contact author Kirstin Holsman (kirstin.holsman@noaa.gov)
+#' For more information contact author Kirstin Holsman (kirstin.holsman at noaa.gov)
 #' 
 #' @param df   dataframe of outputs from runmod(), e.g., mm <- runmod(...)
 #' * model     model name to be displayed on the legend

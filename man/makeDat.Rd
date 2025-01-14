@@ -77,8 +77,9 @@ list with :
 }
 \description{
 This function prepares the ceattle estimated data for futR
-For more information contact author Kirstin Holsman (kirstin.holsman@noaa.gov)
+For more information contact author Kirstin Holsman (kirstin.holsman at noaa.gov)
 }
 \examples{
  makeDat()
+ 
 }

@@ -16,7 +16,7 @@ maplist a list with map values
 }
 \description{
 This function prepares data for plot_rs()
-For more information contact author Kirstin Holsman (kirstin.holsman@noaa.gov)
+For more information contact author Kirstin Holsman (kirstin.holsman at noaa.gov)
 }
 \examples{
  datlist <- readMake_futR_data("data/in/futR_Inputs.xlsx" )
