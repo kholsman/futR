@@ -38,7 +38,6 @@
 #' @examples
 #'  makeDat()
 #'  
-
 makeDat <- function(
   estMode = 1,  # estimate parameters
   rec_years,

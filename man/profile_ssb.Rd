@@ -21,29 +21,32 @@ profile_ssb(
 )
 }
 \arguments{
-\item{cov_nm_list}{= c("Spring_temp_surface5m","Summer_temp_surface5m","Winter_temp_bottom5m"),}
+\item{cov_nm_list}{vector of covariate names character string}
 
-\item{nameIN}{= "hindcast 2020",}
+\item{nameIN}{simulation input}
 
-\item{newdataIN}{= hind%>%filter(year==2020)%>%data.frame(),}
+\item{newdataIN}{hindcast data input}
 
-\item{T2}{= T,}
+\item{T2}{use temperature squared T or F}
 
-\item{SD_range}{= 7,}
+\item{SD_range}{range of SD}
 
-\item{steps}{= 100,}
+\item{steps}{number of steps}
 
-\item{sim_nitrIN}{= 100,}
+\item{sim_nitrIN}{number of iterations}
 
-\item{simulateIN}{= TRUE,}
+\item{simulateIN}{simulate it T or F}
 
-\item{hind_yearsIN}{= 1980:2023,}
+\item{hind_yearsIN}{years of the hindcast}
 
-\item{modIN}{= AIC_summry[[s]]$topRicker_R2,}
+\item{modIN}{rec model in}
 
-\item{recIN}{= AIC_summry[[s]]$topRicker_R2_rec_fit,}
+\item{recIN}{fit recruitment estimates}
 
-\item{phasesIN}{= phases description}
+\item{phasesIN}{phases}
+}
+\value{
+list of ssb profiles
 }
 \description{
 profile the SSB to get partial effects

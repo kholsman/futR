@@ -1,6 +1,7 @@
 #' @title datlist
 #'
 #' @description A data input file for the futR model
+#' 
 #'
 #' @format A list with the following objects
 #' \describe{
@@ -46,7 +47,7 @@
 
 #' @title rec
 #'
-#' @description 
+#' @description A data frame with recruitment
 #'
 #' @format A dataframe with the following columns
 #' \describe{

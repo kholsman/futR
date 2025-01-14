@@ -2,7 +2,7 @@
 % Please edit documentation in R/sub_fun_makefutR_data.R
 \name{makefutR_data}
 \alias{makefutR_data}
-\title{makefutR_data.R}
+\title{makefutR_dataR}
 \usage{
 makefutR_data(fn = "data/in/futR_Inputs.xlsx", export_all = F)
 }

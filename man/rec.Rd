@@ -22,6 +22,6 @@ K. Holsman et al. 2024
 rec
 }
 \description{
-rec
+A data frame with recruitment
 }
 \keyword{datasets}

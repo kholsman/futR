@@ -3,19 +3,21 @@
 #' This function will get the SSB R shape
 #' For more information contact author Kirstin Holsman (kirstin.holsman at noaa.gov)
 #' 
-#' @param AIC_summryIN ,
-#' @param simname = "hindcast 2020",
-#' @param SD_range = 7,
-#' @param modIN = AIC_summry[[1]]$topRicker_R2,
-#' @param recfitIN = AIC_summry[[1]]$topRicker_R2_rec_fit,
-#' @param simulateIN= F,
-#' @param sim_nitrIN = 200,
-#' @param NewCovsIN =hind%>%filter(year==2020)%>%data.frame(), 
-#' @param steps   = 100,
-#' @param futR_path = "../../futR")
 #' 
-#' @returns The sum of `x` and `y`.
 #' @export
+#' 
+#' @param AIC_summryIN AIC summary to input
+#' @param simname simulation name
+#' @param SD_range range of the SD
+#' @param modIN model input
+#' @param recfitIN recruitment model fit
+#' @param simulateIN simulate T or F
+#' @param sim_nitrIN number of simulations
+#' @param NewCovsIN covariates to input
+#' @param steps   number of steps
+#' @param futR_path = path for the futR model
+#' 
+#' @returns The sum of `x` and `y`
 #'
 #' @examples
 #' get_SSB_shape()

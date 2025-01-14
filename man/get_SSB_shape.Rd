@@ -18,28 +18,28 @@ get_SSB_shape(
 )
 }
 \arguments{
-\item{AIC_summryIN}{,}
+\item{AIC_summryIN}{AIC summary to input}
 
-\item{simname}{= "hindcast 2020",}
+\item{simname}{simulation name}
 
-\item{SD_range}{= 7,}
+\item{SD_range}{range of the SD}
 
-\item{modIN}{= AIC_summry[[1]]$topRicker_R2,}
+\item{modIN}{model input}
 
-\item{recfitIN}{= AIC_summry[[1]]$topRicker_R2_rec_fit,}
+\item{recfitIN}{recruitment model fit}
 
-\item{sim_nitrIN}{= 200,}
+\item{simulateIN}{simulate T or F}
 
-\item{NewCovsIN}{=hind%>%filter(year==2020)%>%data.frame(),}
+\item{sim_nitrIN}{number of simulations}
 
-\item{steps}{= 100,}
+\item{NewCovsIN}{covariates to input}
 
-\item{futR_path}{= "../../futR")}
+\item{steps}{number of steps}
 
-\item{simulateIN=}{F,}
+\item{futR_path}{= path for the futR model}
 }
 \value{
-The sum of `x` and `y`.
+The sum of `x` and `y`
 }
 \description{
 This function will get the SSB R shape

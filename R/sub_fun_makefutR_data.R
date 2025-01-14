@@ -1,4 +1,4 @@
-#' makefutR_data.R
+#' makefutR_dataR
 #' 
 #' reads an xlxs input file and creates the datlist for input into runmod()
 #' For more information contact author Kirstin Holsman (kirstin.holsman at noaa.gov)
@@ -6,7 +6,7 @@
 #' @param fn path to data input sheet; default is 'data/in/futR_Inputs.xlsx'
 #'
 #' @return datlist  list of input data and parameters used for the runmod() dependency
-#' * datlist$parameters  list of parameters for the TMB futR model:
+#' *  datlist$parameters  list of parameters for the TMB futR model:
 #'    [] datlist$parameters$log_a    scalar starting value for log_a (intercept)
 #'    [] datlist$parameters$log_b    scalar starting value for log_b (slope) 
 #'    [] datlist$parameters$beta     vector of starting values for lambda (env. effects on pre-spawning)   
