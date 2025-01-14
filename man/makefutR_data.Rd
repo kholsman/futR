@@ -4,7 +4,7 @@
 \alias{makefutR_data}
 \title{makefutR_data.R}
 \usage{
-makefutR_data(fn = "data/in/futR_Inputs.xlsx")
+makefutR_data(fn = "data/in/futR_Inputs.xlsx", export_all = F)
 }
 \arguments{
 \item{fn}{path to data input sheet; default is 'data/in/futR_Inputs.xlsx'}

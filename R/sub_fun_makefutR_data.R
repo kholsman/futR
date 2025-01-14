@@ -43,7 +43,9 @@
 #' datlist <- readMake_futR_data("data/in/futR_Inputs.xlsx" )
 #' mm      <- runmod(datlist   = datlist, version   = 'futR',recompile = TRUE,simulate  = TRUE,sim_nitr  = 1000)  
 #' @export
-makefutR_data <- function(fn= "data/in/futR_Inputs.xlsx"){
+#' 
+
+makefutR_data <- function(fn = "data/in/futR_Inputs.xlsx",export_all=F){
   
   tmp            <- data.frame(readxl::read_xlsx(fn, sheet = "rec_data" ))
   ec             <- data.frame(readxl::read_xlsx(fn, sheet = "covar_val" )) 
@@ -63,6 +65,17 @@ makefutR_data <- function(fn= "data/in/futR_Inputs.xlsx"){
   tt             <- ec_sd[,-1]
   rownames(tt)   <- as.character(ec_sd[,1])
   ec_sd <- t(tt)
+  
+  datIN <-list()
+  datIN$ec      <- ec
+  datIN$ec_sd   <- ec_sd
+  
+  datIN$beta_0IN   <- beta_0IN
+  datIN$lambda_0IN <- lambda_0IN
+  datIN$switches   <- switches
+  datIN$rec_dat    <- rec_dat
+  datIN$fityears   <- fityears
+  
   
   datlist  <-  makeDat(
     rectype    =  as.numeric(switches["rectype"]),
@@ -85,6 +98,8 @@ makefutR_data <- function(fn= "data/in/futR_Inputs.xlsx"){
     #startVal  = tibble::deframe(estparams[,c(1,4)]),
     startVal  = NULL,
     phases    = tibble::deframe(estparams[,c(1,2)]))
-  
-  return(datlist = datlist)
+  if(!export_all)
+    return(datlist = datlist)
+  if(export_all)
+    return(list(datlist = datlist,datIN = datIN))
 }
