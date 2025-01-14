@@ -1,4 +1,4 @@
-#' makefutR_dataR
+#' makefutR_data
 #' 
 #' reads an xlxs input file and creates the datlist for input into runmod()
 #' For more information contact author Kirstin Holsman (kirstin.holsman at noaa.gov)

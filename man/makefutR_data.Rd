@@ -2,7 +2,7 @@
 % Please edit documentation in R/sub_fun_makefutR_data.R
 \name{makefutR_data}
 \alias{makefutR_data}
-\title{makefutR_dataR}
+\title{makefutR_data}
 \usage{
 makefutR_data(fn = "data/in/futR_Inputs.xlsx", export_all = F)
 }
@@ -11,7 +11,7 @@ makefutR_data(fn = "data/in/futR_Inputs.xlsx", export_all = F)
 }
 \value{
 datlist  list of input data and parameters used for the runmod() dependency
-* datlist$parameters  list of parameters for the TMB futR model:
+*  datlist$parameters  list of parameters for the TMB futR model:
    [] datlist$parameters$log_a    scalar starting value for log_a (intercept)
    [] datlist$parameters$log_b    scalar starting value for log_b (slope) 
    [] datlist$parameters$beta     vector of starting values for lambda (env. effects on pre-spawning)   
