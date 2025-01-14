@@ -309,7 +309,7 @@ install.packages("devtools")
 The projection package can then be installed to R directly:
 
 ```{r install, echo=T,eval=F}
-devtools::install_github("kholsman/futR")
+devtools::install_github("kholsman/futR",force=TRUE)
 ```
 
 ### Step 2: Set up the workspace
@@ -322,6 +322,7 @@ The base function for fitting recruitment requires a data.frame of recruitment a
   # 1. Set things up
   #___________________________________________
   # rm(list=ls()) ; dir()
+   library(futR)
 
   # load data, packages, setup, etc.
   source(file.path("R","01_make.R"))
@@ -334,8 +335,8 @@ The base function for fitting recruitment requires a data.frame of recruitment a
 
    if(recompile_model){
     wd0 <- getwd()
-    setwd("src/TMB")
-      recompile('futR')
+    setwd(file.path("src","TMB"))
+      futR::recompile('futR')
     setwd(wd0)
    }
   # this will generate warnings - they can be ignored if "0" is returned
@@ -347,7 +348,8 @@ The base function for fitting recruitment requires a data.frame of recruitment a
 ```{r setup3, echo=T,eval=F,message=F,results='hide'}
   
  # read in the data and create a datlist
-  datlist <- makefutR_data(fn = file.path("data-raw","in","futR_Inputs.xlsx" ), export_all=F)
+  futR_path <- "../"
+  datlist <- futR::makefutR_data(fn = file.path(futR_path,"data-raw","in","futR_Inputs.xlsx" ), export_all=F)
 
   # recruitment data:
   datlist$rs_dat$R_obs
@@ -370,7 +372,6 @@ The base function for fitting recruitment requires a data.frame of recruitment a
   # which phases to estimate in  
   datlist$phases
 
- 
   # set some global values for the demo below:
   estparams <-  datlist$estparams[1:6]
   
@@ -388,8 +389,8 @@ $$ \mathrm{log}(\hat{R_i})= a+\sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i}}+
 
   # makeDat will make the input values, data, and phases for the model:
   
-  # hand code datlist:
-  datlist  <-  makeDat(
+  # # hand code datlist:
+  datlist  <-  futR::makeDat(
                     rectype    =  1,
                     tauIN      =  0,
                     sigMethod  =  1, # (default, no random effects)
@@ -404,9 +405,9 @@ $$ \mathrm{log}(\hat{R_i})= a+\sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i}}+
                     covars_sd  =  NULL)
 
   # run the basic model
-  Rec1 <-  mm <-runRecMod(dlistIN   = datlist,
+  Rec1 <-  mm <-futR::runRecMod(dlistIN   = datlist,
                           version   = 'futR',
-                          src_fldr   = "src/TMB",
+                          src_fldr   = file.path(futR_path,"src","TMB"),
                           recompile = FALSE,
                           simulate  = TRUE,
                           sim_nitr  = 1000)
@@ -415,14 +416,15 @@ $$ \mathrm{log}(\hat{R_i})= a+\sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i}}+
                      estimate  = as.vector(mm$sim),
                      parameter = names( mm$mle)[row(mm$sim)])
   df      <- dfR1
-  r1_fit  <- getFit(mm, nm = "recType = 1")
+  r1_fit  <- futR::getFit(mm, nm = "recType = 1")
   rec_fit <- r1_fit
   rm(mm)
   
+  W <- 6; H1 = 4
   if(1 == 10){
    print(rec_fit)
    jpeg("Figs/recplot1.jpg", width = W, height= H1, res = 250, units = "in")
-   print(plot_rs(r1_fit))
+   print( futR::plot_rs(r1_fit))
    dev.off()
   }
    
@@ -464,7 +466,7 @@ $$\mathrm{log}(\hat{R_i})= a + \sum_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X_{k,i}}
                     covars_sd  =  NULL)
 
   # run the basic model
-  Rec2 <-  mm <-runRecMod(dlistIN   = datlist,
+  Rec2 <-  mm <-futR::runRecMod(dlistIN   = datlist,
                           version   = 'futR',
                           src_fldr   = "src/TMB",
                           recompile = FALSE,

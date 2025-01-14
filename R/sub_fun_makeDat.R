@@ -262,6 +262,11 @@ makeDat <- function(
     maplist <- makeMap(param=parameters,estpar=estparams)
     parameters$beta   <- rs_dat$beta_0[,1]*0
     parameters$lambda <- rs_dat$lambda_0[,1]*0
+    
+    if(length(maplist$beta)==0)
+     maplist$beta <-  factor(rep(NA,1))
+    if(length(maplist$lambda)==0)
+      maplist$lambda <-  factor(rep(NA,1))
 
  
     return(list(parameters = parameters, 
