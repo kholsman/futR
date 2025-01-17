@@ -1,5 +1,5 @@
 #' get_interaction_mat.R
-#' 
+#'
 #' Function to get the interaction matrix for env covariates
 #'
 #'@param covIN    covars (matrix with cols for each covar) e.g., pre_spawning_covs[,-1]
@@ -10,12 +10,12 @@
 #' returns a list with data.frames of all possible combinations
 #' @export
 #' @importFrom stats cor
-#' @importFrom stats combn
+#' @importFrom utils combn
 #'
 #' @examples
 #' #get_interaction_mat()
-#' 
-get_interaction_mat<-function(covIN, 
+#'
+get_interaction_mat<-function(covIN,
                               maxIN,
                               ADDTEMP2=TRUE,
                               cor_cutoff=0.5){

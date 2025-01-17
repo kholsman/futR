@@ -13,7 +13,6 @@ Figs_old
 **/figure-latex
 *nul
 **.cpp*
-
 .Rhistory
 .Rdata
 .httr-oauth

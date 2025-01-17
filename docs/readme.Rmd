@@ -1,16 +1,14 @@
 ---
-title: "futR()"
+title: "futR Overview"
 author: "Kirstin Holsman"
-output:
-  md_document:
-    variant: markdown_github
-  pdf_document: 
-    toc: true
-    fig_caption: true
+output: 
+  pdf_document:
+    toc: TRUE
+    fig_caption: yes
     fig_height: 4
     fig_width: 5
     highlight: tango
-    keep_tex: true
+    keep_tex: yes
     latex_engine: xelatex
   header-includes:
   - \usepackage{knputenc}
@@ -30,8 +28,13 @@ output:
     toc_float:
       collapsed: false
       smooth_scroll: true
+  html_vignette:
+  vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+  
 ---
-
 
 <!--   # html_notebook: -->
 <!--   #   toc: TRUE -->

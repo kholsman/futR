@@ -2,16 +2,16 @@
 #'
 #' runRecMod() will run the futR() recruitment model
 #' For more information contact author Kirstin Holsman (kirstin.holsman at noaa.gov)
-#'  
+#'
 #' @import futR
-#'  
+#'
 #' @param dlistIN     list of input data and parameters used for the makeADfun() dependency
 #' * dlistIN$parameters  list of parameters for the TMB futR model:
 #'    [] dlistIN$parameters$log_a    scalar starting value for log_a (intercept)
-#'    [] dlistIN$parameters$log_b    scalar starting value for log_b (slope) 
-#'    [] dlistIN$parameters$beta     vector of starting values for lambda (env. effects on pre-spawning)   
-#'    [] dlistIN$parameters$lambda   vector of starting values for beta (env. effects on post-spawning)   
-#'    [] dlistIN$parameters$epsi_s   starting value for epsi_s (error around S estimates) 
+#'    [] dlistIN$parameters$log_b    scalar starting value for log_b (slope)
+#'    [] dlistIN$parameters$beta     vector of starting values for lambda (env. effects on pre-spawning)
+#'    [] dlistIN$parameters$lambda   vector of starting values for beta (env. effects on post-spawning)
+#'    [] dlistIN$parameters$epsi_s   starting value for epsi_s (error around S estimates)
 #'    [] dlistIN$parameters$logsigma starting value for logsigma (process error)
 #'    [] dlistIN$parameters$skipFit  starting value for skipFit (switch used for projecting)
 #' * dlistIN$rs_dat list of data to read into the model
@@ -52,16 +52,16 @@
 #' @importFrom TMB compile
 #' @importFrom TMB dynlib
 #' @importFrom TMB MakeADFun
-#' @importFrom TMB nlminb
+#' @importFrom stats nlminb
 #' @importFrom TMB sdreport
-#' 
-#' 
-#' 
+#'
+#'
+#'
 #' @examples
 #' #datlist <- readMake_futR_data("data/in/futR_Inputs.xlsx" )
-#' #mm      <- runRecMod(dlistIN   = datlist, 
+#' #mm      <- runRecMod(dlistIN   = datlist,
 #' #version   = 'futR',recompile = FALSE,
-#' #simulate  = TRUE,sim_nitr  = 1000)  
+#' #simulate  = TRUE,sim_nitr  = 1000)
 #' @export
 runRecMod<-function(
   dlistIN,
@@ -74,23 +74,23 @@ runRecMod<-function(
   recompile  = FALSE,
   maxitr     = 10000,
   maxeval    = 10000){
-  
-  
+
+
   wd0 <- getwd()
   if(!is.null(src_fldr))
     setwd(src_fldr)
   tryCatch(
     {
-      if(recompile){  
+      if(recompile){
         if(file.exists(paste0(version,".o")))
           file.remove(paste0(version,".o"))
         if(file.exists(paste0(version,".so")))
           file.remove(paste0(version,".so"))
-        compile(paste0(version, ".cpp")) 
+        compile(paste0(version, ".cpp"))
       }
-      
-      dyn.load( dynlib(version) ) 
-      
+
+      dyn.load( dynlib(version) )
+
       model  <- MakeADFun(
         data                 =  dlistIN$rs_dat,
         parameters           =  dlistIN$parameters,
@@ -99,16 +99,16 @@ runRecMod<-function(
         hessian              =  TRUE,
         map                  =  dlistIN$maplist,
         silent               =  silentIN)
-      
+
       tmpmod  <- list()
       tmpmod$model    <-  model
       tmpmod$fit      <-  nlminb(model$env$last.par.best,
                                  model$fn,
-                                 model$gr, 
+                                 model$gr,
                                  control=list(iter.max=maxitr,eval.max=maxeval))
-      if(tmpmod$fit$objective==Inf) 
+      if(tmpmod$fit$objective==Inf)
         stop("Problem with objective function (Inf)")
-      if(is.na(tmpmod$fit$objective)) 
+      if(is.na(tmpmod$fit$objective))
         stop("Problem with objective function (NaN)")
       tmpmod$objFun   <-  model$fn()
       tmpmod$report   <-  model$report()
@@ -120,7 +120,7 @@ runRecMod<-function(
       tmpmod$Hessian  <-  with(model,optimHess(tmpmod$mle,model$fn,model$gr))
       tmpmod$LnDet    <-  sum(determinant(tmpmod$Hessian, logarithm=TRUE)$modulus[[1]])
       lp              <-  model$env$last.par
-      
+
       if (!se.fit) {
         pred          <- unlist(model$report(lp))
         tmpmod$pred   <- data.frame(def= names(pred),pred=pred,pred.se=NA)
@@ -132,12 +132,12 @@ runRecMod<-function(
         se            <- tmpmod$sdrsum[,"Std. Error"]
         tmpmod$pred   <- data.frame(def= names(pred),pred=pred,pred.se=se)
       }
-      
+
       if(simulate){
         #tmpmod$simdat <- array(sim_nitr)
         sim <- replicate(sim_nitr, {
           simdata <- model$simulate(par = model$par, complete=TRUE)
-          
+
           obj2    <- MakeADFun(data       = simdata,
                                parameters = dlistIN$parameters,
                                DLL        = version,
@@ -150,7 +150,7 @@ runRecMod<-function(
         })
         tmpmod$sim_df <- data.frame(estimate=as.vector(sim), parameter=names(model$par)[row(sim)])
         tmpmod$sim    <- sim
-        
+
       }
       return(tmpmod)
     },

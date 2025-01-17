@@ -82,7 +82,7 @@ For more information contact author Kirstin Holsman (kirstin.holsman at noaa.gov
 }
 \examples{
 #datlist <- readMake_futR_data("data/in/futR_Inputs.xlsx" )
-#mm      <- runRecMod(dlistIN   = datlist, 
+#mm      <- runRecMod(dlistIN   = datlist,
 #version   = 'futR',recompile = FALSE,
-#simulate  = TRUE,sim_nitr  = 1000)  
+#simulate  = TRUE,sim_nitr  = 1000)
 }
