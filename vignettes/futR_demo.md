@@ -13,7 +13,7 @@ Repo maintained by: Kirstin Holsman
 Alaska Fisheries Science Center  
 NOAA Fisheries, Seattle WA  
 **<kirstin.holsman@noaa.gov>**  
-<!-- *Last updated: Oct 04, 2024*   -->
+<!-- *Last updated: Jan 16, 2025*   -->
 
 ------------------------------------------------------------------------
 
@@ -368,7 +368,7 @@ install.packages("devtools")
 The projection package can then be installed to R directly:
 
 ``` r
-devtools::install_github("kholsman/futR")
+devtools::install_github("kholsman/futR",force=TRUE)
 ```
 
 ### Step 2: Set up the workspace
@@ -382,6 +382,7 @@ recruitment and spawning biomass:
   # 1. Set things up
   #___________________________________________
   # rm(list=ls()) ; dir()
+   library(futR)
 
   # load data, packages, setup, etc.
   source(file.path("R","01_make.R"))
@@ -394,8 +395,8 @@ recruitment and spawning biomass:
 
    if(recompile_model){
     wd0 <- getwd()
-    setwd("src/TMB")
-      recompile('futR')
+    setwd(file.path("src","TMB"))
+      futR::recompile('futR')
     setwd(wd0)
    }
   # this will generate warnings - they can be ignored if "0" is returned
@@ -406,7 +407,8 @@ instructions [here](https://cran.r-project.org/bin/windows/Rtools/).*
 
 ``` r
  # read in the data and create a datlist
-  datlist <- makefutR_data(file.path("data-raw","in","futR_Inputs.xlsx" ))
+  getwd()
+  datlist <- futR::makefutR_data(fn = file.path("data-raw","in","futR_Inputs.xlsx" ), export_all=F)
 
   # recruitment data:
   datlist$rs_dat$R_obs
@@ -429,7 +431,6 @@ instructions [here](https://cran.r-project.org/bin/windows/Rtools/).*
   # which phases to estimate in  
   datlist$phases
 
- 
   # set some global values for the demo below:
   estparams <-  datlist$estparams[1:6]
 ```
@@ -443,9 +444,9 @@ $$ \mathrm{log}(\hat{R_i})= a+\sum\_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X\_{k,i}
 
 ``` r
   # makeDat will make the input values, data, and phases for the model:
-  
-  # hand code datlist:
-  datlist  <-  makeDat(
+  updatePlots <- 1
+  # # hand code datlist:
+  datlist  <-  futR::makeDat(
                     rectype    =  1,
                     tauIN      =  0,
                     sigMethod  =  1, # (default, no random effects)
@@ -460,9 +461,9 @@ $$ \mathrm{log}(\hat{R_i})= a+\sum\_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X\_{k,i}
                     covars_sd  =  NULL)
 
   # run the basic model
-  Rec1 <-  mm <-runRecMod(dlistIN   = datlist,
+  Rec1 <-  mm <-futR::runRecMod(dlistIN   = datlist,
                           version   = 'futR',
-                          src_fldr   = "src/TMB",
+                          src_fldr   = file.path("src","TMB"),
                           recompile = FALSE,
                           simulate  = TRUE,
                           sim_nitr  = 1000)
@@ -471,14 +472,15 @@ $$ \mathrm{log}(\hat{R_i})= a+\sum\_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X\_{k,i}
                      estimate  = as.vector(mm$sim),
                      parameter = names( mm$mle)[row(mm$sim)])
   df      <- dfR1
-  r1_fit  <- getFit(mm, nm = "recType = 1")
+  r1_fit  <- futR::getFit(mm, nm = "recType = 1")
   rec_fit <- r1_fit
   rm(mm)
   
-  if(1 == 10){
+  W <- 6; H1 = 4
+  if(updatePlots){
    print(rec_fit)
    jpeg("Figs/recplot1.jpg", width = W, height= H1, res = 250, units = "in")
-   print(plot_rs(r1_fit))
+   print( futR::plot_rs(r1_fit))
    dev.off()
   }
 ```
@@ -516,7 +518,7 @@ $$\mathrm{log}(\hat{R_i})= a + \sum\_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X\_{k,i
                     covars_sd  =  NULL)
 
   # run the basic model
-  Rec2 <-  mm <-runRecMod(dlistIN   = datlist,
+  Rec2 <-  mm <-futR::runRecMod(dlistIN   = datlist,
                           version   = 'futR',
                           src_fldr   = "src/TMB",
                           recompile = FALSE,
@@ -597,7 +599,7 @@ $$\mathrm{ln}\hat{R_i}= \left(a+ \sum\_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X\_{k
 
 ``` r
   estparams_0 <- estparams
-  estparams_0$beta <- estparams_0$lambda <- FALSE
+  estparams_0[["beta"]] <- estparams_0[["lambda"]] <- FALSE
   # makeDat will make the input values, data, and phases for the model:
   datlist  <-  makeDat(
                     rectype    =  4,
@@ -654,8 +656,8 @@ $$\mathrm{ln}\hat{R_i}= \left(a+ \sum\_{k=1}^{n_k}{\theta_i^{\beta}\beta_k X\_{k
 
   datlist_post <- datlist
   datlist_pre  <- datlist
-  datlist_post$estparams["beta"] <- FALSE
-  datlist_pre$estparams["lambda"] <- FALSE
+  datlist_post$estparams[["beta"]] <- FALSE
+  datlist_pre$estparams[["lambda"]] <- FALSE
   # run the basic model
   Rec4_covar <-  mm <-runRecMod(dlistIN   = datlist,
                           version   = 'futR',                           
@@ -795,6 +797,7 @@ estimated for either spawners (S) or recruitment (R) estimates.
     count(parameter,round(estimate,1))%>%
     slice(which.max(n))
   names(peak)<- c("model","parameter","freq","n")
+  H2 <- 5
  if(updatePlots){
     jpeg("Figs/plotpar1.jpg", width = W, height= H2, res = 250, units = "in")
     print(plot_par_pdf(df_S1))

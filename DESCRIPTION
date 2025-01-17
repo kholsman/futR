@@ -1,18 +1,44 @@
 Package: futR
-Title: A State-Space Model to Fit and Predict Fish Recruitment
-Version: 0.0.0.9000
+Type: Package
+Title: R package for fitting and evaluating environmentally enhanced recruitment models 
+Version: 0.1.0
 Authors@R: 
-    person("Kirstin", "Holsman", , "kirstin.holsman@noaa.gov", role = c("aut", "cre"),
-           comment = c(ORCID = "https://orcid.org/0000-0001-6361-2256"))
-Description: futR() is a generic Rpackage for fitting recruitment models to indices of spawning biomass (or numbers) and recruitment with or without climate covariates. The recruitment model is based on Template Model Builder (`TMB`) and standard stock-recruitment models modified to include the effects of environmental covariates (Deriso 1980; Schnute 1985). This includes Ricker (logistic), Beverton Holt, log-linear, and log-linear with biomass lagged by year 'y-1'. The model can be fit with and with out random effects on spawning stock biomass (SSB) and recruitment (R) (i.e., measurement error on SSB and rec) using the methods of  Porch and Lauretta (2016) and with the optional unbiased estimate of sigma (sensu Ludwid and Walters 1981, Porch and Lauretta 2016). Environmental covariates are optional and can be included to influence pre-spawning and post-spawning success. 
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+    person(given = "Kirstin",
+           family = "Holsman",
+           role = c("aut", "cre"),
+           email = "kirstin.holsman@noaa.gov")
+Maintainer: The package maintainer <kirstin.holsman@noaa.gov>
+Description: futR() is a generic Rpackage for fitting recruitment models to indices of spawning biomass (or numbers) and recruitment with or without climate covariates. The recruitment model is based on Template Model Builder (`TMB`) and standard stock-recruitment models modified to include the effects of environmental covariates (Deriso 1980; Schnute 1985). This includes Ricker (logistic), Beverton Holt, log-linear, and log-linear with biomass lagged by year 'y-1'. The model can be fit with and with out random effects on spawning stock biomass (SSB) and recruitment (R) (i.e., measurement error on SSB and rec) using the methods of  Porch and Lauretta (2016) and with the optional unbiased estimate of sigma (sensu Ludwid and Walters 1981, Porch and Lauretta 2016). Environmental covariates are optional and can be included to influence pre-spawning and post-spawning success.
+License: GPL-2
 Encoding: UTF-8
-Roxygen: list(markdown = TRUE)
+LazyData: true
 RoxygenNote: 7.3.2
+Imports: 
+    Matrix,
+    TMB,
+    writexl,
+    viridis,
+    reshape,
+    tidyr,
+    dplyr, 
+    ggplot2,
+    readxl,
+    knitr,
+    kableExtra,
+    cowplot,
+    RColorBrewer,
+    ggplot2
+LinkingTo: 
+    TMB
+Remotes: kaskr/TMB_contrib_R/TMBhelper
 Suggests: 
+    rmarkdown,
+    knitr,
     testthat (>= 3.0.0)
-Config/testthat/edition: 3
+VignetteBuilder: 
+    rmarkdown,
+    knitr
 Depends: 
     R (>= 2.10)
-LazyData: true
+Roxygen: list(markdown = TRUE)
+Config/testthat/edition: 3

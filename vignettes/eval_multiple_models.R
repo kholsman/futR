@@ -1,4 +1,6 @@
-rm(list=ls()); setwd("D:/GitHub_cloud/futR")
+
+
+#rm(list=ls()); setwd("D:/GitHub_cloud/futR")
 #___________________________________________
 # 1. Set things up
 #___________________________________________
@@ -36,7 +38,7 @@ datlist$rs_dat$rs_cov
 # which parameters to estimate with futR?
 datlist$estparams
 
-# starting values? 
+# starting values?
 datlist$parameters
 
 # parameter map:

@@ -10,3 +10,4 @@
 #
 # # update documentation
 # devtools::document(roclets = c('rd', 'collate', 'namespace'))
+# usethis::use_test()
