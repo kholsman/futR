@@ -76,7 +76,7 @@ theme_kir(
 \item{grid}{panel grid (\code{TRUE}, \code{FALSE}, or a combination of
 \code{X}, \code{x}, \code{Y}, \code{y})}
 
-\item{axis}{axis \code{TRUE}, \code{FALSE}, [\code{xy}]}
+\item{axis}{axis \code{TRUE}, \code{FALSE}, \link{\code{xy}}}
 
 \item{ticks}{ticks}
 

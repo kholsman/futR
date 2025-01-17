@@ -26,9 +26,9 @@ profile_covars(
 
 \item{simulateIN}{simulate random iterations sim_nitrIN}
 
-\item{modIN}{rec model e.g., AIC_summry[[s]]$topRicker_R2}
+\item{modIN}{rec model e.g., AIC_summry[\link{s}]$topRicker_R2}
 
-\item{recIN}{recruitment fit from the rec model, e.g., AIC_summry[[s]]$topRicker_R2_rec_fit}
+\item{recIN}{recruitment fit from the rec model, e.g., AIC_summry[\link{s}]$topRicker_R2_rec_fit}
 
 \item{phasesIN}{phases for each parm}
 }

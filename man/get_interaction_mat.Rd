@@ -7,7 +7,7 @@
 get_interaction_mat(covIN, maxIN, ADDTEMP2 = TRUE, cor_cutoff = 0.5)
 }
 \arguments{
-\item{covIN}{covars (matrix with cols for each covar) e.g., pre_spawning_covs[,-1]}
+\item{covIN}{covars (matrix with cols for each covar) e.g., pre_spawning_covs\link{,-1}}
 
 \item{maxIN}{max number of interactions}
 

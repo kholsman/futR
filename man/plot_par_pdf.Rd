@@ -8,9 +8,11 @@ plot_par_pdf(df = df1_t0)
 }
 \arguments{
 \item{df}{dataframe of outputs from runmod(), e.g., mm <- runmod(...)
-* model     model name to be displayed on the legend
-* estimate  as.vector(mm$sim)
-* parameter names( mm$mle)[row(mm$sim)]}
+\itemize{
+\item model     model name to be displayed on the legend
+\item estimate  as.vector(mm$sim)
+\item parameter names( mm$mle)\link{row(mm$sim)}
+}}
 }
 \value{
 list

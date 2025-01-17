@@ -40,10 +40,10 @@ makeDat(
 
 \item{sdRec}{optional sd of rec vector}
 
-\item{rectype}{default is 3; Recruitment model formulation based Climate enhanced Rec~SSB functions from Holsman et al. 2019; 
-1 = Linear with biomass (y-1), 
-2 =  linear, 
-3 = Beverton holt, 
+\item{rectype}{default is 3; Recruitment model formulation based Climate enhanced Rec~SSB functions from Holsman et al. 2019;
+1 = Linear with biomass (y-1),
+2 =  linear,
+3 = Beverton holt,
 4 = Ricker}
 
 \item{tauIN}{default is 0;}
@@ -72,12 +72,14 @@ makeDat(
 }
 \value{
 list with :
-*  parameters      list of parameters and starting vlaues
-*  rs_dat          data.frame data.frame of 'years', 'SSB', 'R_obs' and optionally, 'sdSSB','sdR_obs'
-*  maplist         list with map values for calling tmb
-*  estparams       vecctor of TRUE/ FALSE for each parameter 
-*  phases          vector of phases for each parameter
-*  inputs          List of inputs to makeDat()
+\itemize{
+\item parameters      list of parameters and starting vlaues
+\item rs_dat          data.frame data.frame of 'years', 'SSB', 'R_obs' and optionally, 'sdSSB','sdR_obs'
+\item maplist         list with map values for calling tmb
+\item estparams       vecctor of TRUE/ FALSE for each parameter
+\item phases          vector of phases for each parameter
+\item inputs          List of inputs to makeDat()
+}
 }
 \description{
 This function prepares the ceattle estimated data for futR

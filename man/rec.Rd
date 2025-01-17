@@ -7,12 +7,12 @@
 \format{
 A dataframe with the following columns
 \describe{
-  \item{rec_year}{ year of recruitment}
-  \item{SSB}{Spawning biomass in the previous year}
-  \item{Robs}{Recruitment in the year}
-  \item{sdSSB}{Error in the Spawning biomass estimate}
-  \item{sdRobs}{Error in the recruitment estimate}
-  \item{fit}{0/1 no/yes fit in the model?}
+\item{rec_year}{ year of recruitment}
+\item{SSB}{Spawning biomass in the previous year}
+\item{Robs}{Recruitment in the year}
+\item{sdSSB}{Error in the Spawning biomass estimate}
+\item{sdRobs}{Error in the recruitment estimate}
+\item{fit}{0/1 no/yes fit in the model?}
 }
 }
 \source{

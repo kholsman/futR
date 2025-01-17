@@ -25,15 +25,15 @@ get_SSB_shape(
 
 \item{SD_range}{range of the SD}
 
-\item{modIN}{model input, e.g., AIC_summry[[1]]$topRicker_R2}
+\item{modIN}{model input, e.g., AIC_summry[\link{1}]$topRicker_R2}
 
-\item{recfitIN}{recruitment model fit, e.g., AIC_summry[[1]]$topRicker_R2_rec_fit}
+\item{recfitIN}{recruitment model fit, e.g., AIC_summry[\link{1}]$topRicker_R2_rec_fit}
 
 \item{simulateIN}{simulate T or F}
 
 \item{sim_nitrIN}{number of simulations}
 
-\item{NewCovsIN}{covariates to input, e.g, hind%>%dplyr::filter(year==2020)%>%data.frame()}
+\item{NewCovsIN}{covariates to input, e.g, hind\%>\%dplyr::filter(year==2020)\%>\%data.frame()}
 
 \item{steps}{number of steps}
 
@@ -42,7 +42,7 @@ get_SSB_shape(
 \item{futR_path}{= path for the futR model}
 }
 \value{
-The sum of `x` and `y`
+The sum of \code{x} and \code{y}
 }
 \description{
 This function will get the SSB R shape

@@ -22,7 +22,7 @@ get_cov_shape(
 
 \item{simulateIN}{T/F default = F}
 
-\item{sim_nitrIN}{number of iterations for the simulation, 
+\item{sim_nitrIN}{number of iterations for the simulation,
 used if simulateIN == T, default = 200}
 
 \item{futR_path}{local file path for the futR directory}
