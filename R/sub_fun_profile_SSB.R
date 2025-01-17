@@ -14,24 +14,43 @@
 #' @param modIN    rec model in
 #' @param recIN    fit recruitment estimates
 #' @param phasesIN  phases
+#' @importFrom dplyr %>%
+#' @importFrom ggplot2 aes
+#' 
 #' 
 #' @return list of ssb profiles
 #' 
 #' @export
+#' @examples
+#' #(
+#'# cov_nm_list = c("Spring_temp_surface5m","Summer_temp_surface5m","Winter_temp_bottom5m"),
+#'# nameIN      = "hindcast 2020",
+#'# newdataIN   = hind%>%filter(year==2020)%>%data.frame(),
+#'# T2          = T,
+#'# SD_range   = 7,
+#'# steps      = 100,
+#'# sim_nitrIN = 100,
+#'# simulateIN = TRUE,
+#'# hind_yearsIN = 1980:2023,
+#'# modIN    = AIC_summry[[s]]$topRicker_R2,
+#'# recIN    = AIC_summry[[s]]$topRicker_R2_rec_fit,
+#'# phasesIN = phases)
 #' 
 profile_ssb <- function(
-    cov_nm_list = c("Spring_temp_surface5m","Summer_temp_surface5m","Winter_temp_bottom5m"),
-    nameIN      = "hindcast 2020",
-    newdataIN   = hind%>%filter(year==2020)%>%data.frame(),
+    cov_nm_list ,
+    nameIN ,
+    newdataIN ,
     T2          = T,
     SD_range   = 7,
     steps      = 100,
     sim_nitrIN = 100,
     simulateIN = TRUE,
     hind_yearsIN = 1980:2023,
-    modIN    = AIC_summry[[s]]$topRicker_R2,
-    recIN    = AIC_summry[[s]]$topRicker_R2_rec_fit,
-    phasesIN = phases){
+    modIN    ,
+    recIN   ,
+    phasesIN ){
+  
+  require(dplyr)
   
   tmpmod <- get_model(
     mod        = modIN,
@@ -43,11 +62,11 @@ profile_ssb <- function(
   
   # get objects from the fitted model
   obj <- tmpmod$object$model
-  ee <- environment(obj$fn)
-  lp <- ee$last.par.best  ## used in $report() call below
-  dd <- ee$data           ## data object
+  ee  <- environment(obj$fn)
+  lp  <- ee$last.par.best  ## used in $report() call below
+  dd  <- ee$data           ## data object
   obj$report(lp)
-  nc <- dim(dd$rs_cov)  
+  nc  <- dim(dd$rs_cov)  
   
   mu <- as.numeric(apply(dd$rs_cov,1,mean))
   sd <- as.numeric(apply(dd$rs_cov,1,sd))
@@ -111,16 +130,25 @@ profile_ssb <- function(
     if(any(names(parms)==names(newpar)[i]))
       newpar[[i]] <- as.numeric(parms[which(names(parms)==names(newpar)[i])])
   }
-  report_out <- predict_futR(modelIN=tmpmod$object, newdata=newdata, newpar=newpar,src_fldr  = "src/TMB", futR_fldr = NULL)
+  report_out <- predict_futR(modelIN = tmpmod$object, 
+                             newdata = newdata, 
+                             newpar  = newpar,
+                             src_fldr = "src/TMB", 
+                             futR_fldr = NULL)
   report_out$SSB  <- tt
   report_out$year <- newdata$years
-  bb <- data.frame(SSB = report_out$S_obs,R_hat = report_out$R_hat,muSSB=muSSB,sdSSB=sdSSB,name=nameIN,type = "profile", year = report_out$year)
+  bb <- data.frame(SSB = report_out$S_obs,
+                   R_hat = report_out$R_hat,
+                   muSSB = muSSB,sdSSB=sdSSB,
+                   name = nameIN,
+                   type = "profile", 
+                   year = report_out$year)
 
   if(simulateIN){
     #tmpmod$simdat <- array(sim_nitr)
     sim <- replicate(sim_nitrIN, {
       simdata <- tmpmod$object$model$env$simulate(par = tmpmod$object$model$par, complete=TRUE)
-      obj2    <- MakeADFun(data       = simdata,
+      obj2    <- TMB::MakeADFun(data       = simdata,
                            parameters = tmpmod$dlist$parameters,
                            DLL        = tmpmod$object$model$env$DLL,
                            checkParameterOrder=TRUE,
@@ -152,22 +180,25 @@ profile_ssb <- function(
         sim_df <- rbind(sim_df,data.frame(estimate=as.vector(sim[,jj]$par),
                                           parameter=names(sim[,jj]$par),
                                           itr=jj))
-        R_hat_sim <- rbind(R_hat_sim,data.frame(cov = newdata$rs_cov[covar_n,],R_hat = report_out$R_hat,itr=jj))
+        R_hat_sim <- rbind(R_hat_sim,data.frame(cov = newdata$rs_cov[covar_n,],
+                                                R_hat = report_out$R_hat,itr=jj))
       }
       
     }
-    aa<-R_hat_sim%>%group_by(cov)%>%
-      summarize(lower=quantile(R_hat,probs = .05),
+    aa <- R_hat_sim%>%
+      dplyr::group_by(cov)%>%
+      dplyr::summarize(lower=quantile(R_hat,probs = .05),
                 upper=quantile(R_hat,probs = .95),
                 med=quantile(R_hat,probs = .5))%>%data.frame()
     
-    p <- ggplot(aa)+
-      geom_ribbon(aes(x=cov,ymin=lower,ymax=upper,fill="a_sim"),alpha=.4)+
-      geom_line(aes(x=cov,y=med,color="a_sim"),size=1)+
-      ylab("recruitment")+
-      xlab(cov_nm)+
-      geom_line(data=bb,aes(x=cov,y=R_hat,color="b_main"),size=1)+
-      theme_minimal()+scale_color_viridis_d(end=.7)+scale_fill_viridis_d(begin=.3,end=.8)
+    p <- ggplot2::ggplot(aa)+
+      ggplot2::geom_ribbon(aes(x=cov,ymin=lower,ymax=upper,fill="a_sim"),alpha=.4)+
+      ggplot2::geom_line(aes(x=cov,y=med,color="a_sim"),size=1)+
+      ggplot2::ylab("recruitment")+
+      ggplot2::xlab(cov_nm)+
+      ggplot2::geom_line(data=bb,aes(x=cov,y=R_hat,color="b_main"),size=1)+
+      ggplot2::theme_minimal()+scale_color_viridis_d(end=.7)+
+      ggplot2::scale_fill_viridis_d(begin=.3,end=.8)
     
     return(list(sim_df=sim_df,R_hat_sim=R_hat_sim, poly=aa,main = bb,p=p))
     

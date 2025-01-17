@@ -9,37 +9,37 @@
 #' * estimate  as.vector(mm$sim)
 #' * parameter names( mm$mle)[row(mm$sim)]
 #' @return list
+#' @importFrom dplyr %>%
+#' @importFrom ggplot2 aes
 #'
 #' @examples
 #' # read in the data
-#' datlist <- datlist2 <-  readMake_futR_data("data/in/futR_Inputs.xlsx" )
+#' 
+#' #datlist <- datlist2 <-  
+#' #readMake_futR_data("data/in/futR_Inputs.xlsx" )
 #' 
 #' # set the sigMethod to 1
-#' datlist2$rs_dat$sigMethod <-1
-#' mm      <- runmod(dlistIN   = datlist, version   = 'futR',recompile = FALSE,simulate  = TRUE,sim_nitr  = 1000)
-#' dfR4_s1 <-  data.frame(model = "sigMethod 1",estimate  = as.vector(mm$sim),parameter = names( mm$mle)[row(mm$sim)])
-#' plot_par_pdf(dfR4_s1)
-#' 
-#' #set the sigMethod to 4 (unbiased sigma)
-#' datlist2$rs_dat$sigMethod <- 4
-#' mm      <- runmod(dlistIN   = datlist2, version   = 'futR',recompile = FALSE,simulate  = TRUE,sim_nitr  = 1000)
-#' dfR4_s3 <-  data.frame(model = "sigMethod 4",estimate  = as.vector(mm$sim),parameter = names( mm$mle)[row(mm$sim)])
 #' #now compare plots
-#' plot_par_pdf(rbind(dfR4_s1,dfR4_s3))
+#' # plot_par_pdf(rbind(dfR4_s1,dfR4_s3))
 #' @export
 plot_par_pdf <- function(df = df1_t0){
-  mu   <- df%>%group_by(model,parameter)%>%summarise(grp.mean=mean(estimate))
-  peak <- df%>%group_by(model,parameter)%>%
-    count(parameter,round(estimate,1))%>%
-    slice(which.max(n))
+  mu   <- df%>%
+    dplyr::group_by(model,parameter)%>%
+    dplyr::summarise(grp.mean=mean(estimate))
+  peak <- df%>%
+    dplyr::group_by(model,parameter)%>%
+    dplyr::count(parameter,round(estimate,1))%>%
+    dplyr::slice(which.max(n))
   names(peak)<- c("model","parameter","freq","n")
   
-  p <-ggplot(data=df) +
-    geom_density( aes(x=estimate, color=model))+
-    facet_wrap(~parameter,scales="free")+
-    geom_vline(data=mu,aes(xintercept=grp.mean, color = model), linetype="solid", size=1)+
-    geom_vline(data=peak,aes(xintercept=freq, color = model), linetype="dashed", size=.6)+
-    theme_minimal()
+  p <-ggplot2::ggplot(data=df) +
+    ggplot2::geom_density( aes(x=estimate, color=model))+
+    ggplot2::facet_wrap(~parameter,scales="free")+
+    ggplot2::geom_vline(data=mu,aes(xintercept=grp.mean, color = model), 
+                        linetype="solid", size=1)+
+    ggplot2::geom_vline(data=peak,aes(xintercept=freq, color = model), 
+                        linetype="dashed", size=.6)+
+    ggplot2::theme_minimal()
     # theme_kir_EBM()
   p
 }

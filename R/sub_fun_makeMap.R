@@ -9,17 +9,18 @@
 #' @param parameters  list of starting values and parameters for the TMB futR() model
 #' @param estpar      vector of T/F of which parameters will be estimated
 #' @export           
-#' 
+#'  
 #' @examples
 #' 
-#' datlist   <- readMake_futR_data("data/in/futR_Inputs.xlsx" )
+#' #datlist   <- makefutR_data("data-raw/in/futR_Inputs.xlsx" )
 #' 
-#' estparams <- datlist$estparams
-#' estparams
+#' #estparams <- datlist$estparams
+#' #estparams
 #' 
-#' parameters <- atlist$parameters
-#' parameters
-#' maplist <- makeMap(param=parameters,estpar=estparams)
+#' #parameters <- datlist$parameters
+#' #parameters
+#' #maplist <- makeMap(param=parameters,estpar=estparams)
+#' 
 #' @export
 #' 
 makeMap<-function(param=parameters,estpar=estparams){

@@ -7,7 +7,7 @@
 recompile(model = "futR")
 }
 \arguments{
-\item{model}{(without the '.cpp'); default is "futR"}
+\item{model}{model name (without the '.cpp'); default is "futR"}
 }
 \value{
 list
@@ -19,5 +19,5 @@ recompiles the model
 For more information contact author Kirstin Holsman (kirstin.holsman at noaa.gov)
 }
 \examples{
-recompile(model="futR")
+#recompile(model="futR")
 }

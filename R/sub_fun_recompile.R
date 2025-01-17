@@ -4,12 +4,12 @@
 #' 
 #' For more information contact author Kirstin Holsman (kirstin.holsman at noaa.gov)
 #'  
-#' @param model (without the '.cpp'); default is "futR"
+#' @param model model name (without the '.cpp'); default is "futR"
 #'
 #' @return list
 #'
 #' @examples
-#' recompile(model="futR")
+#' #recompile(model="futR")
 #' @export
 #' 
 recompile<-function(model="futR"){

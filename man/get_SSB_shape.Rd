@@ -8,12 +8,13 @@ get_SSB_shape(
   AIC_summryIN,
   simname = "hindcast 2020",
   SD_range = 7,
-  modIN = AIC_summry[[1]]$topRicker_R2,
-  recfitIN = AIC_summry[[1]]$topRicker_R2_rec_fit,
+  modIN,
+  recfitIN,
   simulateIN = F,
   sim_nitrIN = 200,
-  NewCovsIN = hind \%>\% filter(year == 2020) \%>\% data.frame(),
+  NewCovsIN,
   steps = 100,
+  phases,
   futR_path = "../../futR"
 )
 }
@@ -24,17 +25,19 @@ get_SSB_shape(
 
 \item{SD_range}{range of the SD}
 
-\item{modIN}{model input}
+\item{modIN}{model input, e.g., AIC_summry[[1]]$topRicker_R2}
 
-\item{recfitIN}{recruitment model fit}
+\item{recfitIN}{recruitment model fit, e.g., AIC_summry[[1]]$topRicker_R2_rec_fit}
 
 \item{simulateIN}{simulate T or F}
 
 \item{sim_nitrIN}{number of simulations}
 
-\item{NewCovsIN}{covariates to input}
+\item{NewCovsIN}{covariates to input, e.g, hind%>%dplyr::filter(year==2020)%>%data.frame()}
 
 \item{steps}{number of steps}
+
+\item{phases}{Input of phases for each parameter}
 
 \item{futR_path}{= path for the futR model}
 }
@@ -46,5 +49,5 @@ This function will get the SSB R shape
 For more information contact author Kirstin Holsman (kirstin.holsman at noaa.gov)
 }
 \examples{
-get_SSB_shape()
+#get_SSB_shape()
 }

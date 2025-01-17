@@ -23,31 +23,17 @@
 #'        \code{X}, \code{x}, \code{Y}, \code{y})
 #' @param axis axis \code{TRUE}, \code{FALSE}, [\code{xy}]
 #' @param ticks ticks
+#' @importFrom ggplot2 margin
+#' @importFrom ggplot2 theme_minimal
+#' @importFrom ggplot2 element_blank
+#' @importFrom ggplot2 element_line
+#' @importFrom ggplot2 element_text
+#' @importFrom ggplot2 theme_grey
+#' @importFrom ggplot2 element_rect
+#' @importFrom ggplot2 rel
 #' 
 #' @export
 #' 
-
-# theme_kir_EBM <- function(...) {
-#   theme_kir(base_family="Helvetica",
-#             plot_title_family="Helvetica-Bold",
-#             subtitle_family="Helvetica",
-#             panel_face="bold",
-#             caption_family="Helvetica",
-#             plot_title_just ="r",
-#             axis_title_size = 12,
-#             ...)
-# }
-# theme_kir_EBM <- function(...) {
-#   theme_kir(base_family="ArialNarrow",
-#             plot_title_family="ArialNarrow-Bold",
-#             subtitle_family="ArialNarrow",
-#             panel_face="bold",
-#             caption_family="ArialNarrow",
-#             plot_title_just ="r",
-#             axis_title_size = 12,
-#             ...)
-# }
-
 
 theme_hrbrmstr <- function(base_family="Hind",
                            base_size = 11,
@@ -187,6 +173,15 @@ theme_hrbrmstr_an <- function(...) {
 #' @param subplottxt color of the subplot titles
 #' @param ticks ticks
 #' @export
+#' @importFrom ggplot2 theme
+#' @importFrom ggplot2 margin
+#' @importFrom ggplot2 theme_minimal
+#' @importFrom ggplot2 element_blank
+#' @importFrom ggplot2 element_line
+#' @importFrom ggplot2 element_text
+#' @importFrom ggplot2 theme_grey
+#' @importFrom ggplot2 element_rect
+#' @importFrom ggplot2 rel
 #' 
 
 theme_kir <- function(base_family="Hind",
@@ -319,7 +314,7 @@ theme_kir2<-function (base_size = 11, base_family = "", base_line_size = base_si
 {
   half_line <- base_size/2
   theme_grey(base_size = base_size, base_family = base_family, 
-             base_line_size = base_line_size, base_rect_size = base_rect_size) %+replace% 
+             base_line_size = base_line_size, base_rect_size = base_rect_size) # %+replace% 
     theme(panel.background = element_rect(fill = "white",colour = NA), 
           panel.border = element_rect(fill = NA,colour = "grey70", size = rel(1)), 
           panel.grid = element_line(colour = "grey87"), 

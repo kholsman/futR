@@ -1,48 +1,12 @@
 Package: futR
-Type: Package
-Title: R package for fitting and evaluating environmentally enhanced recruitment models 
-Version: 0.1.0
+Title: What the Package Does (One Line, Title Case)
+Version: 0.0.0.9000
 Authors@R: 
-    person(given = "Kirstin",
-           family = "Holsman",
-           role = c("aut", "cre"),
-           email = "kirstin.holsman@noaa.gov")
-Maintainer: The package maintainer <kirstin.holsman@noaa.gov>
-Description: futR() is a generic Rpackage for fitting recruitment models to indices of spawning biomass (or numbers) and recruitment with or without climate covariates. The recruitment model is based on Template Model Builder (`TMB`) and standard stock-recruitment models modified to include the effects of environmental covariates (Deriso 1980; Schnute 1985). This includes Ricker (logistic), Beverton Holt, log-linear, and log-linear with biomass lagged by year 'y-1'. The model can be fit with and with out random effects on spawning stock biomass (SSB) and recruitment (R) (i.e., measurement error on SSB and rec) using the methods of  Porch and Lauretta (2016) and with the optional unbiased estimate of sigma (sensu Ludwid and Walters 1981, Porch and Lauretta 2016). Environmental covariates are optional and can be included to influence pre-spawning and post-spawning success.
-License: GPL-2
+    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
+           comment = c(ORCID = "YOUR-ORCID-ID"))
+Description: What the package does (one paragraph).
+License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
+    license
 Encoding: UTF-8
-LazyData: true
+Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
-Imports: 
-    Matrix,
-    TMB,
-    writexl,
-    viridis,
-    reshape,
-    tidyr,
-    dplyr, 
-    ggplot2,
-    lattice,
-    purrr,
-    readxl,
-    knitr,
-    kableExtra,
-    cowplot,
-    RColorBrewer,
-    ggplot2, 
-    wesanderson,
-    scales,
-    ggforce,
-    grid,
-    processx,
-    plotly,
-    extrafont
-LinkingTo: 
-    TMB
-Remotes: kaskr/TMB_contrib_R/TMBhelper
-Suggests: 
-    rmarkdown,
-    knitr
-VignetteBuilder: rmarkdown
-Depends: 
-    R (>= 2.10)

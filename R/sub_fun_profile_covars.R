@@ -2,15 +2,19 @@
 #' 
 #' profile the covariates to get partial effects
 #' 
-#' @param cov_nm = "Spring_temp_surface5m",
-#' @param T2 = T,
-#' @param SD_range   =  3,
-#' @param sim_nitrIN = 100,
-#' @param simulateIN = TRUE,
-#' @param modIN    = AIC_summry[[s]]$topRicker_R2,
-#' @param recIN    = AIC_summry[[s]]$topRicker_R2_rec_fit,
-#' @param phasesIN = phases description
-#' 
+#' @param cov_nm covariate name
+#' @param T2  T/F squared term for the parameter
+#' @param SD_range    range of SD
+#' @param sim_nitrIN  number of random simulations
+#' @param simulateIN  simulate random iterations sim_nitrIN
+#' @param modIN     rec model e.g., AIC_summry[[s]]$topRicker_R2
+#' @param recIN     recruitment fit from the rec model, e.g., AIC_summry[[s]]$topRicker_R2_rec_fit
+#' @param phasesIN  phases for each parm
+#' @importFrom dplyr %>%
+#' @importFrom ggplot2 aes
+#' @importFrom stats nlminb
+#' @importFrom stats cov
+#' @importFrom stats quantile
 #' 
 #' @returns list(sim_df=sim_df,R_hat_sim=R_hat_sim, poly=aa,main = bb,p=p)
 #' 
@@ -25,8 +29,8 @@ profile_covars <- function(
     SD_range   =  3,
     sim_nitrIN = 100,
     simulateIN = TRUE,
-    modIN    = AIC_summry[[s]]$topRicker_R2,
-    recIN    = AIC_summry[[s]]$topRicker_R2_rec_fit,
+    modIN,
+    recIN,
     phasesIN = phases){
     
 
@@ -46,7 +50,7 @@ profile_covars <- function(
   obj$report(lp)
   
   mu <- as.numeric(apply(dd$rs_cov,1,mean))
-  sd <-  as.numeric(apply(dd$rs_cov,1,sd))
+  sd <- as.numeric(apply(dd$rs_cov,1,sd))
   if(any(rownames(dd$rs_cov)==cov_nm)){
     covar_n  <- which(rownames(dd$rs_cov)==cov_nm)
   }else{
@@ -66,7 +70,7 @@ profile_covars <- function(
   ny <- length(tt)-1
   tt <- tt[1:ny]
   
-  newdata         <- dd
+  newdata           <- dd
   newdata$nyrs      <- ny
   newdata$rs_cov    <- matrix(mu,nc[1], ny,byrow=F)
   rownames(newdata$rs_cov) <- rownames(dd$rs_cov)
@@ -99,7 +103,7 @@ profile_covars <- function(
     #tmpmod$simdat <- array(sim_nitr)
     sim <- replicate(sim_nitrIN, {
       simdata <- tmpmod$object$model$env$simulate(par = tmpmod$object$model$par, complete=TRUE)
-      obj2    <- MakeADFun(data       = simdata,
+      obj2    <- TMB::MakeADFun(data       = simdata,
                            parameters = tmpmod$dlist$parameters,
                            DLL        = tmpmod$object$model$env$DLL,
                            checkParameterOrder=TRUE,
@@ -135,18 +139,20 @@ profile_covars <- function(
         }
       
     }
-    aa<-R_hat_sim%>%group_by(cov)%>%
-      summarize(lower=quantile(R_hat,probs = .05),
+    aa <- R_hat_sim%>%
+      dplyr::group_by(cov)%>%
+      dplyr::summarize(lower=quantile(R_hat,probs = .05),
                 upper=quantile(R_hat,probs = .95),
                 med=quantile(R_hat,probs = .5))%>%data.frame()
    
-    p <- ggplot(aa)+
-      geom_ribbon(aes(x=cov,ymin=lower,ymax=upper,fill="a_sim"),alpha=.4)+
-      geom_line(aes(x=cov,y=med,color="a_sim"),size=1)+
-      ylab("recruitment")+
-      xlab(cov_nm)+
-      geom_line(data=bb,aes(x=cov,y=R_hat,color="b_main"),size=1)+
-      theme_minimal()+scale_color_viridis_d(end=.7)+scale_fill_viridis_d(begin=.3,end=.8)
+    p <- ggplot2::ggplot(aa)+
+      ggplot2::geom_ribbon(aes(x=cov,ymin=lower,ymax=upper,fill="a_sim"),alpha=.4)+
+      ggplot2::geom_line(aes(x=cov,y=med,color="a_sim"),size=1)+
+      ggplot2:: ylab("recruitment")+
+      ggplot2::xlab(cov_nm)+
+      ggplot2::geom_line(data=bb,aes(x=cov,y=R_hat,color="b_main"),size=1)+
+      ggplot2::theme_minimal()+scale_color_viridis_d(end=.7)+
+      ggplot2::scale_fill_viridis_d(begin=.3,end=.8)
     
     return(list(sim_df=sim_df,R_hat_sim=R_hat_sim, poly=aa,main = bb,p=p))
     

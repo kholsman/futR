@@ -2,15 +2,17 @@
 #'
 #' AICselection runs AIC information criterion analysis on resulting set of recruitment models
 #' 
-#' @param data data.frame with models = rows and the following data for each model (columns):
-#' * data$LL  vector of logliklihoods of each model
-#' * data$npar number of parameteris in a given model
-#' * data$n number of data observations (nobs)
-#' * data$mnames1 names for each model
-#' * data$type2 number 1= AIC;2 = AICc ; default = NULL
-#' * data$covnm default = NULL
-#' @param rsType default = NULL
-#' @param LnDet default = NULL
+#' @param LL vector of logliklihoods of each model
+#' @param npar number of parameteris in a given model
+#' @param n number of data observations (nobs)
+#' @param R2 default is NULL, vector of R2 values for each model
+#' @param mnames1 names for each model
+#' @param include_marginal T/F include mariginal AIC
+#' @param type2   if 1 then AIC is calculated, if 2 then AICc (for small sample sizes is calculated)
+#' @param covnm    default is NULL, covariate num
+#' @param rsType  default is NULL, recruitment type
+#' @param hypoth  default is NULL, hypothesis
+#' @param LnDet   the natural logarithm of the determinant of a matrix  X;  defualt is NULL
 #' @param CE Climate enhanced model? default = NULL
 #'    list of input data from makeDat() function: "parameters" "rs_dat"     "maplist"    "estparams"  "phases"  
 #' @return   a dataframe of summary statistics for AICc of submodels         
@@ -18,13 +20,13 @@
 #' @export
 #'
 #' @examples
-#' AICselection()
+#' #add
 #' 
 AICselection <- function (LL, 
                           npar, 
                           n, 
                           R2 = NULL,
-                          mnames1 = legend.nm, 
+                          mnames1 = NULL, 
                           include_marginal = FALSE,
                           type2   = 2, 
                           covnm   = NULL,

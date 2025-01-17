@@ -49,10 +49,19 @@
 #' @param maxitr      10000  Max iterations for fitting the objective function
 #' @param maxeval     10000  Max evaluations for fitting the objective function
 #' @return returns  summary of the model including the mle
+#' @importFrom TMB compile
+#' @importFrom TMB dynlib
+#' @importFrom TMB MakeADFun
+#' @importFrom TMB nlminb
+#' @importFrom TMB sdreport
+#' 
+#' 
 #' 
 #' @examples
-#' datlist <- readMake_futR_data("data/in/futR_Inputs.xlsx" )
-#' mm      <- runRecMod(dlistIN   = datlist, version   = 'futR',recompile = FALSE,simulate  = TRUE,sim_nitr  = 1000)  
+#' #datlist <- readMake_futR_data("data/in/futR_Inputs.xlsx" )
+#' #mm      <- runRecMod(dlistIN   = datlist, 
+#' #version   = 'futR',recompile = FALSE,
+#' #simulate  = TRUE,sim_nitr  = 1000)  
 #' @export
 runRecMod<-function(
   dlistIN,

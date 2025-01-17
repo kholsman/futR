@@ -11,13 +11,13 @@
 #' 
 #' @examples
 #' # convert the mymarkdown.Rmd to README.md
-#' rmd2md(rmd_fl="mymarkdown",md_fl = "README")  
+#' #rmd2md(rmd_fl="mymarkdown",md_fl = "README")  
 #' @export
 #' 
 #' 
 rmd2md <- function(rmd_fl ,md_fl = "README"){
   library(rmarkdown)
-  render(paste0(rmd_fl,".Rmd"), md_document(variant = "markdown_github"),params=F)
+  rmarkdown::render(paste0(rmd_fl,".Rmd"), md_document(variant = "markdown_github"),params=F)
   file.copy(from=paste0(rmd_fl,".md"),to=paste0(md_fl,".md"),overwrite=T)
 }
 

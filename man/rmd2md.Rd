@@ -19,5 +19,5 @@ For more information contact author Kirstin Holsman (kirstin.holsman at noaa.gov
 }
 \examples{
 # convert the mymarkdown.Rmd to README.md
-rmd2md(rmd_fl="mymarkdown",md_fl = "README")  
+#rmd2md(rmd_fl="mymarkdown",md_fl = "README")  
 }

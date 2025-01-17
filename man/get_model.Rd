@@ -10,7 +10,7 @@ get_model(
   simulateIN = FALSE,
   sim_nitrIN = 1000,
   futR_fldr = NULL,
-  phasesIN = phases
+  phasesIN
 )
 }
 \arguments{
@@ -24,7 +24,7 @@ get_model(
 
 \item{futR_fldr}{local path for tht futR directory, default =   NULL,}
 
-\item{phasesIN}{number of phases default =  phases}
+\item{phasesIN}{number of phases}
 }
 \value{
 List with two objects : lobject and dlist
@@ -33,6 +33,6 @@ List with two objects : lobject and dlist
 get the model from the meta evaluation
 }
 \examples{
-get_model()
+#get_model()
 
 }

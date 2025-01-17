@@ -7,14 +7,16 @@
 #' @param simulateIN T/F simulate random noise? default = FALSE,
 #' @param sim_nitrIN if simulateIN == T, number of random draws, default =  1000,
 #' @param futR_fldr  local path for tht futR directory, default =   NULL,
-#' @param phasesIN   number of phases default =  phases
+#' @param phasesIN   number of phases
+#' @importFrom dplyr %>%
+#' @importFrom ggplot2 aes
 #' 
 #' @returns List with two objects : lobject and dlist
 #' 
 #' @export
 #'
 #' @examples
-#' get_model()
+#' #get_model()
 #' 
 get_model <- function(
     mod        ,
@@ -22,7 +24,7 @@ get_model <- function(
     simulateIN = FALSE,
     sim_nitrIN = 1000,
     futR_fldr =  NULL,
-    phasesIN   = phases){
+    phasesIN){
     
     #--------------------------
     

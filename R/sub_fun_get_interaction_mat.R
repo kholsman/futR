@@ -9,11 +9,16 @@
 #' get full set of 4 interactions (max_interactions)
 #' returns a list with data.frames of all possible combinations
 #' @export
+#' @importFrom stats cor
+#' @importFrom stats combn
 #'
 #' @examples
-#' get_interaction_mat()
+#' #get_interaction_mat()
 #' 
-get_interaction_mat<-function(covIN, maxIN,ADDTEMP2=TRUE,cor_cutoff=0.5){
+get_interaction_mat<-function(covIN, 
+                              maxIN,
+                              ADDTEMP2=TRUE,
+                              cor_cutoff=0.5){
   mod_mat <- list()
   cor_mat <- abs(cor(covIN,covIN))
   for(i in 1:maxIN){

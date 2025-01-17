@@ -23,18 +23,11 @@ For more information contact author Kirstin Holsman (kirstin.holsman at noaa.gov
 }
 \examples{
 # read in the data
-datlist <- datlist2 <-  readMake_futR_data("data/in/futR_Inputs.xlsx" )
+
+#datlist <- datlist2 <-  
+#readMake_futR_data("data/in/futR_Inputs.xlsx" )
 
 # set the sigMethod to 1
-datlist2$rs_dat$sigMethod <-1
-mm      <- runmod(dlistIN   = datlist, version   = 'futR',recompile = FALSE,simulate  = TRUE,sim_nitr  = 1000)
-dfR4_s1 <-  data.frame(model = "sigMethod 1",estimate  = as.vector(mm$sim),parameter = names( mm$mle)[row(mm$sim)])
-plot_par_pdf(dfR4_s1)
-
-#set the sigMethod to 4 (unbiased sigma)
-datlist2$rs_dat$sigMethod <- 4
-mm      <- runmod(dlistIN   = datlist2, version   = 'futR',recompile = FALSE,simulate  = TRUE,sim_nitr  = 1000)
-dfR4_s3 <-  data.frame(model = "sigMethod 4",estimate  = as.vector(mm$sim),parameter = names( mm$mle)[row(mm$sim)])
 #now compare plots
-plot_par_pdf(rbind(dfR4_s1,dfR4_s3))
+# plot_par_pdf(rbind(dfR4_s1,dfR4_s3))
 }

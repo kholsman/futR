@@ -9,11 +9,13 @@
 #' @param sim_nitrIN number of iterations for the simulation, 
 #'      used if simulateIN == T, default = 200
 #' @param futR_path local file path for the futR directory
-#' @returns The sum of `x` and `y`.
+#' @returns List with plot "p" and a profile of covars
 #' @export
+#' @importFrom dplyr %>%
+#' @importFrom ggplot2 aes
 #'
 #' @examples
-#'get_cov_shape()
+#' #get_cov_shape()
 #'
   get_cov_shape <- function(
                       AIC_summryIN,
@@ -52,7 +54,9 @@
             rm(tmp)
             
           }
-          p <- ggplot(out)+geom_line(aes(x=cov,y=R_hat,color=name))+theme_minimal()
+          p <- ggplot2::ggplot(out)+
+            ggplot2::geom_line(aes(x=cov,y=R_hat,color=name))+
+            ggplot2::theme_minimal()
           return(list(p=p, out = out))
         },
         error = function(cond) {
@@ -69,8 +73,9 @@
           NULL
         },
         finally = {
-         setwd(tmpdir)
+         #
         })
+      setwd(tmpdir)
   }
   
   

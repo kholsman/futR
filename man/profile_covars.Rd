@@ -10,27 +10,27 @@ profile_covars(
   SD_range = 3,
   sim_nitrIN = 100,
   simulateIN = TRUE,
-  modIN = AIC_summry[[s]]$topRicker_R2,
-  recIN = AIC_summry[[s]]$topRicker_R2_rec_fit,
+  modIN,
+  recIN,
   phasesIN = phases
 )
 }
 \arguments{
-\item{cov_nm}{= "Spring_temp_surface5m",}
+\item{cov_nm}{covariate name}
 
-\item{T2}{= T,}
+\item{T2}{T/F squared term for the parameter}
 
-\item{SD_range}{=  3,}
+\item{SD_range}{range of SD}
 
-\item{sim_nitrIN}{= 100,}
+\item{sim_nitrIN}{number of random simulations}
 
-\item{simulateIN}{= TRUE,}
+\item{simulateIN}{simulate random iterations sim_nitrIN}
 
-\item{modIN}{= AIC_summry[[s]]$topRicker_R2,}
+\item{modIN}{rec model e.g., AIC_summry[[s]]$topRicker_R2}
 
-\item{recIN}{= AIC_summry[[s]]$topRicker_R2_rec_fit,}
+\item{recIN}{recruitment fit from the rec model, e.g., AIC_summry[[s]]$topRicker_R2_rec_fit}
 
-\item{phasesIN}{= phases description}
+\item{phasesIN}{phases for each parm}
 }
 \value{
 list(sim_df=sim_df,R_hat_sim=R_hat_sim, poly=aa,main = bb,p=p)

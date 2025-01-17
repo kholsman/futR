@@ -13,13 +13,15 @@ predict_futR(
 )
 }
 \arguments{
-\item{modelIN}{= mm,  # model output from runRecMod()}
+\item{modelIN}{model output from runRecMod()}
 
-\item{newdata, }{# new predictive data to simulate (can be new S_obs or cov)}
+\item{newdata}{new predictive data to simulate (can be new S_obs or cov)}
 
-\item{src_fldr}{= "src/TMB",}
+\item{src_fldr}{src folder path}
 
-\item{futR_fldr}{=  NULL}
+\item{futR_fldr}{NULL}
+
+\item{newpar}{new parameters to run through the mode description}
 }
 \value{
 pred_model$report()

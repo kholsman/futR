@@ -15,6 +15,8 @@
 #'  2 =  linear, 
 #'  3 = Beverton holt, 
 #'  4 = Ricker
+#' @param tauIN    default is 0; 
+#' @param gammaIN  default is NULL
 #' @param estparams   vector of TRUE / FALSE for each parm,  if parm will be estimated (default is init vals) c(log_a = TRUE, log_b=TRUE, rs_parm=FALSE, logsigma=TRUE)
 #' @param covars      default is NULL; data.frame of covariates (rows) of z-score scaled environmental covariates to evaluate in Rec for each year (columns). Must match  Rec and SSB row index
 #' @param covars_sd   default is NULL; data.frame of sd for covariates (rows) of z-score scaled environmental covariates to evaluate in Rec for each year (columns). Must match Rec and SSB row index
@@ -26,6 +28,10 @@
 #' @param REcompile default is TRUE; if true will recompile futR.cpp in TMB TRUE/FALSE
 #' @param sigMethod sigma R method
 #' 
+#' @importFrom ggplot2 theme
+#' @importFrom ggplot2 ggplot
+#' 
+#' 
 #' @export
 #' 
 #' @returns list with :
@@ -36,7 +42,7 @@
 #' *  phases          vector of phases for each parameter
 #' *  inputs          List of inputs to makeDat()
 #' @examples
-#'  makeDat()
+#'  #makeDat()
 #'  
 makeDat <- function(
   estMode = 1,  # estimate parameters

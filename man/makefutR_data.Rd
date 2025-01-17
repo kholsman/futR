@@ -8,6 +8,8 @@ makefutR_data(fn = "data/in/futR_Inputs.xlsx", export_all = F)
 }
 \arguments{
 \item{fn}{path to data input sheet; default is 'data/in/futR_Inputs.xlsx'}
+
+\item{export_all}{export all of the inputs from the xls file}
 }
 \value{
 datlist  list of input data and parameters used for the runmod() dependency
@@ -50,6 +52,5 @@ reads an xlxs input file and creates the datlist for input into runmod()
 For more information contact author Kirstin Holsman (kirstin.holsman at noaa.gov)
 }
 \examples{
-datlist <- readMake_futR_data("data/in/futR_Inputs.xlsx" )
-mm      <- runmod(datlist   = datlist, version   = 'futR',recompile = TRUE,simulate  = TRUE,sim_nitr  = 1000)  
+#add
 }

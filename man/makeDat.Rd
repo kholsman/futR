@@ -46,6 +46,10 @@ makeDat(
 3 = Beverton holt, 
 4 = Ricker}
 
+\item{tauIN}{default is 0;}
+
+\item{gammaIN}{default is NULL}
+
 \item{estparams}{vector of TRUE / FALSE for each parm,  if parm will be estimated (default is init vals) c(log_a = TRUE, log_b=TRUE, rs_parm=FALSE, logsigma=TRUE)}
 
 \item{covars}{default is NULL; data.frame of covariates (rows) of z-score scaled environmental covariates to evaluate in Rec for each year (columns). Must match  Rec and SSB row index}
@@ -80,6 +84,6 @@ This function prepares the ceattle estimated data for futR
 For more information contact author Kirstin Holsman (kirstin.holsman at noaa.gov)
 }
 \examples{
- makeDat()
+ #makeDat()
  
 }

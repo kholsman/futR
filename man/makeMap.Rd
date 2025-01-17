@@ -21,12 +21,13 @@ For more information contact author Kirstin Holsman (kirstin.holsman at noaa.gov
 }
 \examples{
 
-datlist   <- readMake_futR_data("data/in/futR_Inputs.xlsx" )
+#datlist   <- makefutR_data("data-raw/in/futR_Inputs.xlsx" )
 
-estparams <- datlist$estparams
-estparams
+#estparams <- datlist$estparams
+#estparams
 
-parameters <- atlist$parameters
-parameters
-maplist <- makeMap(param=parameters,estpar=estparams)
+#parameters <- datlist$parameters
+#parameters
+#maplist <- makeMap(param=parameters,estpar=estparams)
+
 }

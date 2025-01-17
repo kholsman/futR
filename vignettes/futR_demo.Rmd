@@ -348,7 +348,7 @@ The base function for fitting recruitment requires a data.frame of recruitment a
 ```{r setup3, echo=T,eval=F,message=F,results='hide'}
   
  # read in the data and create a datlist
-  futR_path <- "../"
+  futR_path <- ".."
   datlist <- futR::makefutR_data(fn = file.path(futR_path,"data-raw","in","futR_Inputs.xlsx" ), export_all=F)
 
   # recruitment data:

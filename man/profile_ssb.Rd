@@ -5,19 +5,18 @@
 \title{profile the SSB to get partial effects}
 \usage{
 profile_ssb(
-  cov_nm_list = c("Spring_temp_surface5m", "Summer_temp_surface5m",
-    "Winter_temp_bottom5m"),
-  nameIN = "hindcast 2020",
-  newdataIN = hind \%>\% filter(year == 2020) \%>\% data.frame(),
+  cov_nm_list,
+  nameIN,
+  newdataIN,
   T2 = T,
   SD_range = 7,
   steps = 100,
   sim_nitrIN = 100,
   simulateIN = TRUE,
   hind_yearsIN = 1980:2023,
-  modIN = AIC_summry[[s]]$topRicker_R2,
-  recIN = AIC_summry[[s]]$topRicker_R2_rec_fit,
-  phasesIN = phases
+  modIN,
+  recIN,
+  phasesIN
 )
 }
 \arguments{
@@ -50,4 +49,20 @@ list of ssb profiles
 }
 \description{
 profile the SSB to get partial effects
+}
+\examples{
+#(
+# cov_nm_list = c("Spring_temp_surface5m","Summer_temp_surface5m","Winter_temp_bottom5m"),
+# nameIN      = "hindcast 2020",
+# newdataIN   = hind\%>\%filter(year==2020)\%>\%data.frame(),
+# T2          = T,
+# SD_range   = 7,
+# steps      = 100,
+# sim_nitrIN = 100,
+# simulateIN = TRUE,
+# hind_yearsIN = 1980:2023,
+# modIN    = AIC_summry[[s]]$topRicker_R2,
+# recIN    = AIC_summry[[s]]$topRicker_R2_rec_fit,
+# phasesIN = phases)
+
 }

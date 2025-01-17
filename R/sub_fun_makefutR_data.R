@@ -4,6 +4,7 @@
 #' For more information contact author Kirstin Holsman (kirstin.holsman at noaa.gov)
 #'  
 #' @param fn path to data input sheet; default is 'data/in/futR_Inputs.xlsx'
+#' @param export_all export all of the inputs from the xls file
 #'
 #' @return datlist  list of input data and parameters used for the runmod() dependency
 #' *  datlist$parameters  list of parameters for the TMB futR model:
@@ -40,8 +41,7 @@
 #' * datlist$phases    (defunct) phases for estimating parameters
 #' * datlist$inputs    archive of intputs for this function
 #' @examples
-#' datlist <- readMake_futR_data("data/in/futR_Inputs.xlsx" )
-#' mm      <- runmod(datlist   = datlist, version   = 'futR',recompile = TRUE,simulate  = TRUE,sim_nitr  = 1000)  
+#' #add
 #' @export
 #' 
 

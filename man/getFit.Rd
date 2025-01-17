@@ -19,10 +19,7 @@ This function prepares data for plot_rs()
 For more information contact author Kirstin Holsman (kirstin.holsman at noaa.gov)
 }
 \examples{
- datlist <- readMake_futR_data("data/in/futR_Inputs.xlsx" )
- mm      <- runmod(dlistIN   = datlist, version   = 'futR',recompile = FALSE,simulate  = TRUE,sim_nitr  = 1000)  
- r_fit  <- getFit(mm, nm = paste0("recType = ",datlist$rs_dat$rectype))
- plot_rs(r_fit)
+ #add
 
 
 }

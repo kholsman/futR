@@ -3,10 +3,11 @@
 #'
 #' Predict recruitment from new data and or new par
 #' 
-#' @param modelIN = mm,  # model output from runRecMod()
-#' @param newdata,       # new predictive data to simulate (can be new S_obs or cov)                    
-#' @param src_fldr  = "src/TMB",
-#' @param futR_fldr =  NULL
+#' @param modelIN   model output from runRecMod()
+#' @param newdata   new predictive data to simulate (can be new S_obs or cov)                    
+#' @param src_fldr  src folder path
+#' @param futR_fldr NULL
+#' @param  newpar   new parameters to run through the mode description
 #' 
 #' @returns  pred_model$report()
 #' 
